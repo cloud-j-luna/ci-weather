@@ -3,9 +3,9 @@ name: Canary
 on:
   schedule:
     - cron: "0 3 * * *"
-    # TEMPORARY diagnostic: the 03:00 run did not fire on the first scheduled day.
-    # This proves whether the schedule is registered at all. Remove once answered.
-    - cron: "1 9 * * *"
+    # TEMPORARY diagnostic: no scheduled run has ever fired. Re-armed now that
+    # normal commits trigger workflows again. Remove once answered.
+    - cron: "2 10 * * *"
   workflow_dispatch:
     inputs:
       adopt:
