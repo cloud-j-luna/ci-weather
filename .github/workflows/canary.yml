@@ -89,7 +89,7 @@ jobs:
           # the public mainnet endpoints; akt fails over between them.
           akt context network create mainnet \
             --chain-id akashnet-2 \
-            --gas-prices 0.0025uakt \
+            --gas-prices 0.025uakt \
             --rpc https://rpc-akash.ecostake.com:443 \
             --rpc https://rpc.lavenderfive.com:443/akash \
             --rpc https://akash-rpc.polkachu.com \
