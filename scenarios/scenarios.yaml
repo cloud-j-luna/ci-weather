@@ -1,5 +1,7 @@
 # What the canary deploys, and how the dashboard reads the results.
 #
+# Scenario ids here drive the CI matrix; script/workflow.test.mjs fails if the two drift.
+#
 # Five scenarios. Each one answers a question nobody can currently answer about Akash
 # without deploying by hand. Adding a sixth needs a question the other five do not answer.
 
