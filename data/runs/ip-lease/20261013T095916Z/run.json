@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "scenario": "ip-lease",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-10-13T09:59:16.544Z",
+  "finishedAt": "2026-10-13T09:59:20.134Z",
+  "outcome": {
+    "kind": "failed",
+    "atStep": "create-deployment",
+    "message": "insufficient fees; got: 465uakt required: 4645uakt: insufficient fee: insufficient fee"
+  },
+  "escrow": {
+    "kind": "nothing-created"
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "failed",
+      "startedAt": "2026-10-13T09:59:17.989Z",
+      "durationMs": 853,
+      "durationSource": "akt-log",
+      "errors": [
+        "insufficient fees; got: 465uakt required: 4645uakt: insufficient fee: insufficient fee"
+      ]
+    }
+  ],
+  "lease": null,
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 1
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/38380060335",
+    "sha": "018575265c747c5976f18a89546f8d6250c7bd13",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "0"
+      },
+      {
+        "denom": "uakt",
+        "amount": "0"
+      }
+    ]
+  }
+}

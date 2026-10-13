@@ -1,0 +1,1 @@
+{"workflow":"deploy","id":"a8c6759dc73b7428","step":"create-deployment","result":"error","errors":["insufficient fees; got: 474uakt required: 4736uakt: insufficient fee: insufficient fee"],"txs":[]}

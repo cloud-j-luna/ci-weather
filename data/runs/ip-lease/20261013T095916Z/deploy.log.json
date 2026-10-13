@@ -1,0 +1,12 @@
+[
+  {
+    "ts": "2026-10-13T09:59:18.842520057Z",
+    "type": "workflow",
+    "action": "deploy",
+    "workflow_id": "8e73a276f5768656",
+    "step": 0,
+    "step_name": "create-deployment",
+    "error": "insufficient fees; got: 465uakt required: 4645uakt: insufficient fee: insufficient fee",
+    "status": "failed"
+  }
+]
