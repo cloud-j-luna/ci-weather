@@ -84,7 +84,22 @@ jobs:
           mnemonic_file="$RUNNER_TEMP/canary-mnemonic.txt"
           trap 'rm -f "$mnemonic_file"' EXIT
           printf '%s' "$CANARY_MNEMONIC" > "$mnemonic_file"
-          akt context network create mainnet --template mainnet
+          # --template mainnet configures a single RPC, and a TLS timeout on it killed
+          # every scenario in one run before any of them reached the chain. These are
+          # the public mainnet endpoints; akt fails over between them.
+          akt context network create mainnet \
+            --chain-id akashnet-2 \
+            --gas-prices 0.0025uakt \
+            --rpc https://rpc-akash.ecostake.com:443 \
+            --rpc https://rpc.lavenderfive.com:443/akash \
+            --rpc https://akash-rpc.polkachu.com \
+            --rpc https://akash-rpc.publicnode.com:443 \
+            --rpc https://rpc.akash.bronbro.io:443 \
+            --api https://rest-akash.ecostake.com \
+            --api https://akash-api.polkachu.com \
+            --api https://akash-rest.publicnode.com \
+            --grpc akash.lavenderfive.com:443 \
+            --grpc akash-grpc.publicnode.com:443
           akt context create mainnet --network mainnet --default-account ci
           akt context keys add ci --recover --source "$mnemonic_file" --no-backup --yes --context mainnet
 
