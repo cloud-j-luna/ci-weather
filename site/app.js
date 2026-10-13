@@ -1288,10 +1288,11 @@ function buildTimeline(run) {
     tip.style.left = Math.max(half, Math.min(barBox.width - half, x)) + "px";
   });
 
+  bar.appendChild(tip);
+
   const node = el("div", { class: "tl" + (missing.length ? "" : " tl--notail") }, [
     rail,
     bar,
-    tip,
     axis,
     missing.length
       ? el("div", { class: "tl-tail", title: "Never attempted: " + missing.join(", ") }, [

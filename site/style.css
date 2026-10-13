@@ -954,6 +954,7 @@ button.cell:hover {
 }
 
 .tl {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   column-gap: 10px;
@@ -1021,13 +1022,14 @@ button.cell:hover {
   transform: translateX(-50%);
 }
 
+/* Absolute, not a grid item. As a grid item it occupied row 2 and grew the
+   timeline's height on hover, so the layout moved under the cursor. */
 .tl-tip {
-  grid-column: 1;
-  grid-row: 2;
-  position: relative;
+  position: absolute;
+  bottom: calc(100% + 8px);
   z-index: 4;
-  justify-self: start;
-  transform: translate(-50%, calc(-100% - 8px));
+  pointer-events: none;
+  transform: translateX(-50%);
   max-width: 320px;
   padding: 6px 9px;
   border-radius: 6px;
@@ -1041,6 +1043,7 @@ button.cell:hover {
 }
 
 .tl-bar {
+  position: relative;
   grid-column: 1;
   grid-row: 2;
   display: flex;
