@@ -1,0 +1,536 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cloud-j-luna.github.io/ci-weather/schema/run.schema.json",
+  "title": "CI Weather canary run",
+  "description": "One canary run: a deployment to an Akash network, an HTTP probe against it, and its teardown. Written by the runner, read by the site build.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "scenario",
+    "network",
+    "startedAt",
+    "finishedAt",
+    "outcome",
+    "steps",
+    "reap",
+    "akt"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1,
+      "description": "Bumped only on a breaking change. Old runs stay readable."
+    },
+    "scenario": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "Scenario id, matching an entry in scenarios/scenarios.yaml."
+    },
+    "network": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "chainId"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "akt context name, e.g. mainnet or sandbox-2."
+        },
+        "chainId": {
+          "type": "string",
+          "description": "Chain id, e.g. akashnet-2."
+        }
+      }
+    },
+    "startedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finishedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "outcome": {
+      "$ref": "#/$defs/outcome"
+    },
+    "escrow": {
+      "$ref": "#/$defs/escrow"
+    },
+    "steps": {
+      "type": "array",
+      "description": "Timeline in execution order. Evidence for the outcome, not the source of truth for it.",
+      "items": {
+        "$ref": "#/$defs/stepResult"
+      }
+    },
+    "lease": {
+      "description": "Null until create-deployment succeeds, which is where akt first reports the dseq.",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/lease"
+        }
+      ]
+    },
+    "reap": {
+      "$ref": "#/$defs/reap"
+    },
+    "attempts": {
+      "$ref": "#/$defs/attempts"
+    },
+    "ci": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runUrl"],
+      "properties": {
+        "runUrl": {
+          "type": "string",
+          "description": "The job that produced this run."
+        },
+        "sha": {
+          "type": "string"
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "akt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "The akt that produced this run. Required, so a change in failure pattern can always be attributed to a CLI upgrade rather than to the network. A run that cannot name its own toolchain cannot support that comparison."
+        }
+      }
+    },
+    "cost": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delta"],
+      "description": "Balance change across the whole run. The account is dedicated to the canary, so the delta is the real cost of everything this run deployed. That is one deployment cycle on a run that got a lease first time, and several when attempts.count is above one, since each retried attempt funded and refunded its own deposit. Negative amounts are spend. Full before and after balances are in the cost.json sidecar.",
+      "properties": {
+        "delta": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["denom", "amount"],
+            "properties": {
+              "denom": {
+                "type": "string"
+              },
+              "amount": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "step": {
+      "description": "A step of the deployment lifecycle under test. An open string, not an enum: akt's step vocabulary changed between 0.0.4 and 1.0.1, and a closed enum would reject every run on the day akt adds one. Unknown steps are recorded and reported by doctor.\n\nexamples lists the known vocabulary, in render order. akt's names are kept verbatim.\n\nreap and close are absent on purpose. Both run on paths where the lifecycle never began, so neither fits a sequence whose invariant is 'completed up to the failure, skipped after it'. They live on the reap and escrow axes.\n\nattestation runs only for scenarios whose registry entry asks for it, so its absence from a run is not a gap. attestation precedes http-probe because the attestation verdict is the point of a TEE scenario and must not be gated on the workload serving traffic.",
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "create-deployment",
+        "wait-for-bids",
+        "select-bid",
+        "create-lease",
+        "send-manifest",
+        "wait-for-ready",
+        "attestation",
+        "http-probe"
+      ]
+    },
+    "outcome": {
+      "description": "Computed once by the runner, never recomputed by a reader.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": {
+            "kind": {
+              "const": "passed"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "atStep", "message"],
+          "properties": {
+            "kind": {
+              "const": "failed"
+            },
+            "atStep": {
+              "$ref": "#/$defs/step"
+            },
+            "message": {
+              "type": "string",
+              "description": "akt's error text, verbatim."
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "reason"],
+          "properties": {
+            "kind": {
+              "const": "aborted"
+            },
+            "reason": {
+              "type": "string",
+              "description": "The runner reached no verdict: job cancelled, budget exhausted, crash. Distinct from failed, which is a network result. Aborts are excluded from the pass rate."
+            }
+          }
+        }
+      ]
+    },
+    "stepResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["step", "result", "startedAt", "durationMs"],
+      "properties": {
+        "step": {
+          "$ref": "#/$defs/step"
+        },
+        "result": {
+          "enum": ["completed", "failed", "skipped"],
+          "description": "skipped means an earlier step failed and this one was never attempted."
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "durationMs": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "durationSource": {
+          "enum": ["akt-log", "derived", "runner"],
+          "description": "akt-log: differenced from akt's action log, the only accurate source for akt's steps, since akt flushes several jsonl events at once and arrival times misattribute them. derived: inferred from a surrounding boundary, as for wait-for-ready. runner: measured by us, as for http-probe."
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Verbatim from akt's jsonl errors[]."
+        },
+        "txs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["hash", "code"],
+            "properties": {
+              "hash": {
+                "type": "string"
+              },
+              "code": {
+                "type": "integer"
+              }
+            }
+          },
+          "description": "Transactions the step broadcast."
+        }
+      }
+    },
+    "lease": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dseq"],
+      "properties": {
+        "dseq": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string",
+          "description": "Provider that won the bid."
+        },
+        "providerAudited": {
+          "type": "boolean",
+          "description": "From akt's wait-for-bids provider_metadata."
+        },
+        "providerRegion": {
+          "type": "string",
+          "description": "Provider attributes are self-declared and inconsistent, so this is a grouping hint, not an assertion."
+        },
+        "providerOrg": {
+          "type": "string"
+        },
+        "price": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["amount", "denom"],
+          "properties": {
+            "amount": {
+              "type": "string"
+            },
+            "denom": {
+              "type": "string"
+            }
+          }
+        },
+        "bidCount": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "How many providers bid. A count trending to zero is supply leaving before it starts failing."
+        },
+        "uris": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ips": {
+          "type": "array",
+          "description": "Dedicated public IPs the provider allocated, from akt provider lease-status. Absent when the provider allocated none. The lease hostname in uris is the provider's shared ingress and is handed to every deployment, so only this field proves an IP scenario got what it asked for.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["ip", "port", "externalPort", "protocol"],
+            "properties": {
+              "ip": { "type": "string" },
+              "port": { "type": "integer", "description": "Port inside the workload." },
+              "externalPort": { "type": "integer", "description": "Port to dial on the IP." },
+              "protocol": { "type": "string" }
+            }
+          }
+        },
+        "attestation": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "From akt provider lease-attestation. The raw report, cert chain and nonce are deliberately absent: they are large and belong in akt's own output, not in every run file the site fetches.",
+          "required": [
+            "teeType",
+            "nonceVerified",
+            "mockReport",
+            "certChainPresent",
+            "gpuReportCount"
+          ],
+          "properties": {
+            "teeType": {
+              "type": "string",
+              "description": "snp, tdx, snp-gpu or tdx-gpu, as reported by the attestation sidecar."
+            },
+            "nonceVerified": {
+              "type": "boolean",
+              "description": "Whether the hardware report echoed the nonce akt generated for this request."
+            },
+            "mockReport": {
+              "type": "boolean",
+              "description": "True when the report carries the sidecar's synthetic MOCK prefix: it passes the nonce echo while being no TEE at all. A mock must never pass the run."
+            },
+            "certChainPresent": {
+              "type": "boolean",
+              "description": "Whether the quote carried a non-empty cert chain."
+            },
+            "gpuReportCount": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "How many GPU reports the quote carried."
+            },
+            "reportSizeBytes": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Size of the decoded hardware report. Roughly 1184 bytes on SNP and 5243 on TDX, so a wildly different size is worth a look even when every other field passes. Absent when akt reported none."
+            }
+          }
+        },
+        "probe": {
+          "description": "Null unless http-probe ran.",
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["attempts"],
+              "properties": {
+                "servedBy": {
+                  "enum": ["http", "https"],
+                  "description": "The scheme that answered, absent if none did. Lease hostnames carry no scheme and often serve plain HTTP, so both are tried."
+                },
+                "url": {
+                  "type": "string"
+                },
+                "attempts": {
+                  "type": "array",
+                  "description": "Every attempt against every scheme, so flapping is visible.",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["scheme", "at", "durationMs"],
+                    "properties": {
+                      "scheme": {
+                        "enum": ["http", "https"]
+                      },
+                      "url": {
+                        "type": "string"
+                      },
+                      "at": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "durationMs": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "status": {
+                        "type": "integer",
+                        "description": "Absent when the request never completed."
+                      },
+                      "bodyMatched": {
+                        "type": "boolean"
+                      },
+                      "error": {
+                        "type": "string",
+                        "description": "Transport error, verbatim."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "escrow": {
+      "description": "Whether the run got the money back. Separate from outcome because the two vary independently: a run can serve traffic and fail to close, or fail early and strand nothing.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "enum": ["nothing-created", "returned", "leaked"],
+          "description": "nothing-created: no escrow was funded. returned: everything this run created is closed. leaked: at least one deployment is still holding funds."
+        },
+        "closed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["dseq"],
+            "properties": {
+              "dseq": {
+                "type": "string"
+              },
+              "closeTxHash": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "stillActive": {
+          "type": "array",
+          "description": "Non-empty means funds are locked on chain now.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["dseq", "reason"],
+            "properties": {
+              "dseq": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string",
+                "description": "akt's close error, verbatim."
+              },
+              "depositUact": {
+                "type": "string",
+                "description": "Amount at risk."
+              }
+            }
+          }
+        }
+      }
+    },
+    "reap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["closedDseqs"],
+      "properties": {
+        "closedDseqs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Deployments left active by an earlier run and closed before this one started."
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "attempts": {
+      "description": "How many times this run deployed before it had a lease it could test. Every scenario is pinned to one provider, so a provider that is briefly full fails at bidding and produces a red cell that says nothing about Akash. The runner closes that deployment and tries again, and this records what it took.\n\nDistinct from ci.attempt, which counts re-runs of the CI job rather than deployments.\n\nAbsent on runs written before the runner retried; those made exactly one attempt.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["count"],
+      "properties": {
+        "count": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Attempts made, the final one included. More than one is supply pressure on the pinned provider, which is a result in its own right: a scenario that passes on the third attempt is not the same health as one that passes first time."
+        },
+        "earlier": {
+          "type": "array",
+          "description": "One entry per attempt before the final one, oldest first. The steps array describes the FINAL attempt only; failed attempts are never spliced into it, because its invariant is 'completed up to the failure, skipped after it' and a run with three bidding failures has no single such sequence.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["atStep", "message", "startedAt", "durationMs", "dseq"],
+            "properties": {
+              "atStep": {
+                "$ref": "#/$defs/step",
+                "description": "In practice wait-for-bids, meaning nobody bid at all, or select-bid, meaning somebody bid but not the pinned provider. Deliberately not an enum: which failures are worth retrying is runner policy that will change, and this file is published at a versioned $id."
+              },
+              "message": {
+                "type": "string",
+                "description": "akt's error text, verbatim."
+              },
+              "startedAt": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Required because steps covers only the final attempt while startedAt to finishedAt spans every attempt. Without this the earlier attempts cannot be placed on the timeline at all."
+              },
+              "durationMs": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "A bid timeout and a fast rejection are both failures and cost very different amounts of the run's budget."
+              },
+              "dseq": {
+                "type": "string",
+                "description": "The deployment this attempt created, which the runner closed before retrying. It must appear in escrow, and that is the proof the deposit came back rather than being abandoned on chain."
+              },
+              "bidCount": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "How many providers bid on this attempt. Absent when akt reported none. Zero three times running and one, four, two are different stories about the market, and this is the only place the earlier attempts' depth survives."
+              }
+            }
+          }
+        },
+        "stoppedBecause": {
+          "enum": ["attempts-exhausted", "time-budget", "cleanup-not-proven"],
+          "description": "Why the runner stopped retrying while the failure was still a bidding failure. attempts-exhausted: it used the configured budgets.bidAttempts, which is not in this file, so the reason cannot be derived from count alone. time-budget: too little of totalRunTimeout remained to finish another full lifecycle, and starting one would have ended the run as 'aborted', which is excluded from both sides of the pass rate. cleanup-not-proven: either the close of the failed attempt did not converge, or that attempt never reported a dseq to close, and retrying without proof of cleanup would risk a second deployment nobody can close.\n\nAbsent when the runner never had reason to retry, which includes every run that passed and every failure outside bidding. An abort is reported on outcome, not here."
+        }
+      }
+    }
+  }
+}

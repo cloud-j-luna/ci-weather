@@ -1,0 +1,4 @@
+{"workflow":"close","id":"c96c2d43b9cc6a84","step":"close-deployment","result":"completed","errors":[],"txs":[{"hash":"5BFE3967A87C54EFF331C927B07C0CD4828E745033A32AFE605B0D756F07D32B","code":0}],"outputs":{"dseq":"29038406","owner":"akash1r6pereplxg0j2cnnnyhqjmmkn3p3vvxfqd7ur8"}}
+{"workflow":"close","id":"c96c2d43b9cc6a84","step":"display-result","result":"completed","errors":[],"txs":[],"outputs":{"text":"Deployment closed.\n  DSEQ: 29038406"}}
+{"workflow":"close","id":"5f0ad8607fb27047","step":"close-deployment","result":"completed","errors":[],"txs":[{"hash":"9BB087FF1D22BC84258D107F77B2EFFE24CB94049137A467FC21C26B7EFDD8FB","code":0}],"outputs":{"dseq":"29038464","owner":"akash1r6pereplxg0j2cnnnyhqjmmkn3p3vvxfqd7ur8"}}
+{"workflow":"close","id":"5f0ad8607fb27047","step":"display-result","result":"completed","errors":[],"txs":[],"outputs":{"text":"Deployment closed.\n  DSEQ: 29038464"}}

@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "scenario": "persistent-storage",
+  "network": {
+    "name": "sandbox-2",
+    "chainId": "sandbox-2"
+  },
+  "startedAt": "2026-10-09T03:00:00Z",
+  "finishedAt": "2026-10-09T03:00:19.235000Z",
+  "outcome": {
+    "kind": "failed",
+    "atStep": "create-lease",
+    "message": "rpc error: code = Unknown desc = failed to execute message; message index: 0: insufficient funds"
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-09T03:00:00Z",
+      "durationMs": 6366,
+      "txs": [
+        {
+          "hash": "BCD73AA76918CF82599A2102E09D90C875E9D57DB90B68111AB7CA2EA3038CC0",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-10-09T03:00:06.366000Z",
+      "durationMs": 8168
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-10-09T03:00:14.534000Z",
+      "durationMs": 2412
+    },
+    {
+      "step": "create-lease",
+      "result": "failed",
+      "startedAt": "2026-10-09T03:00:16.946000Z",
+      "durationMs": 2289,
+      "errors": [
+        "rpc error: code = Unknown desc = failed to execute message; message index: 0: insufficient funds"
+      ]
+    }
+  ],
+  "lease": {
+    "dseq": "5715077",
+    "provider": "akash1rk090a6mq9gvm0h6ljf8kz8mrxglwwxsk4srxh",
+    "providerAudited": true,
+    "providerRegion": "na-us-west",
+    "providerOrg": "overclock",
+    "price": {
+      "amount": "2.930853000000000000",
+      "denom": "uact"
+    },
+    "bidCount": 1,
+    "uris": [
+      "074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw"
+    ],
+    "probe": null
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "5715077",
+        "closeTxHash": "1F08A11ED8C38CD5A498C0E4746F7F13A8E187EC358584639EC748198E49A12F"
+      }
+    ]
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/1009",
+    "sha": "0000000000000000000000000000000000000000",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "scenario": "persistent-storage",
+  "network": {
+    "name": "sandbox-2",
+    "chainId": "sandbox-2"
+  },
+  "startedAt": "2026-10-12T15:58:57.127Z",
+  "finishedAt": "2026-10-12T16:04:07.550Z",
+  "outcome": {
+    "kind": "failed",
+    "atStep": "wait-for-bids",
+    "message": "no bids received (at least 1 required); timed out after 5m0s"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "5715868",
+        "closeTxHash": "2DB48558449F3C5EFBF6FC0A566B25683CC1BADAA491A42707B70E1ED41207E7"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-12T15:58:58.990Z",
+      "durationMs": 1702,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "FFE5B69AE187344FAF6C5D99005BECB47F6616991EB226B0B39E7DC3197508D5",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "failed",
+      "startedAt": "2026-10-12T15:59:00.692Z",
+      "durationMs": 300002,
+      "durationSource": "akt-log",
+      "errors": [
+        "no bids received (at least 1 required); timed out after 5m0s"
+      ]
+    }
+  ],
+  "lease": {
+    "dseq": "5715868",
+    "probe": null
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "0"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-1032"
+      }
+    ]
+  }
+}

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CI Weather</title>
+    <meta
+      name="description"
+      content="Daily canary deployments to the Akash Network, one row per scenario, one column per day."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='1' width='6' height='6' rx='1.5' fill='%230ca30c'/%3E%3Crect x='9' y='1' width='6' height='6' rx='1.5' fill='%232a78d6'/%3E%3Crect x='1' y='9' width='6' height='6' rx='1.5' fill='%23fab219'/%3E%3Crect x='9' y='9' width='6' height='6' rx='1.5' fill='%23d03b3b'/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans+Condensed:wght@500;600&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to the content</a>
+
+    <div class="wrap">
+      <header class="masthead">
+        <h1 class="masthead-title">CI Weather</h1>
+        <p class="masthead-sub">
+          Every day we deploy a real workload to the Akash Network, probe it over HTTP, and tear it
+          down. One row per scenario, one column per day, one honest verdict per cell.
+        </p>
+        <div class="chips" id="masthead-chips"></div>
+      </header>
+
+      <main id="main">
+        <div id="load-error" class="loaderr" hidden="hidden">
+          <p class="loaderr-head">
+            <span class="glyph" aria-hidden="true">!</span> The dashboard could not load its data
+          </p>
+          <p class="loaderr-body">
+            It tried to fetch <code>data.json</code> from alongside this page and the request did
+            not come back.
+          </p>
+          <p class="loaderr-body">
+            <strong>Most likely cause.</strong> This page was opened straight off the filesystem by
+            double-clicking the file, rather than being served. Browsers refuse
+            <code>fetch</code> on a <code>file://</code> page, so the data never arrives. Serve the
+            folder over HTTP instead and open it through <code>http://localhost</code>.
+          </p>
+          <p class="loaderr-body">From the <code>dist</code> directory that the build produced:</p>
+          <pre class="loaderr-cmd"><code>python3 -m http.server 8000</code></pre>
+          <p class="loaderr-body">
+            The other possibility is that the build never wrote <code>data.json</code> next to this
+            page.
+          </p>
+          <p class="loaderr-detail">
+            Reported by the browser: <code id="load-error-detail"></code>
+          </p>
+        </div>
+
+        <div id="alerts"></div>
+
+        <section class="section" id="grid-section" hidden="hidden">
+          <div class="section-head">
+            <h2 class="eyebrow" id="grid-heading">The last ten days</h2>
+            <p class="section-note" id="grid-note"></p>
+          </div>
+
+          <div class="controls" id="controls">
+            <div class="tabs" id="filter-tabs" role="tablist" aria-label="Filter scenarios"></div>
+            <div class="density" id="density-control" role="group" aria-label="Rows"></div>
+          </div>
+
+          <div id="filter-empty" class="empty" hidden="hidden"></div>
+
+          <div
+            class="grid-scroll"
+            id="grid-scroll"
+            role="region"
+            tabindex="0"
+            aria-labelledby="grid-heading"
+          >
+            <table class="grid" id="grid">
+              <caption class="grid-caption">
+                <span class="sr-only"
+                  >Scenario outcomes by day, worst weather first. Select a cell to see that run in
+                  detail.</span
+                >
+              </caption>
+            </table>
+          </div>
+
+          <div id="grid-empty" class="empty" hidden="hidden">
+            <p class="empty-head">No runs yet in this window</p>
+            <p class="empty-body" id="grid-empty-body">
+              Every scenario is configured but no run landed in this window, so there is nothing to
+              grade. This is an empty dashboard, not a passing one and not a failing one.
+            </p>
+          </div>
+
+          <div class="legend">
+            <h3 class="eyebrow">How to read a cell</h3>
+            <ul class="legend-row">
+              <li class="legend-item">
+                <span class="cell cell-sample is-passed" aria-hidden="true"
+                  ><span class="cell-glyph">&#10003;</span></span
+                ><span class="legend-text"><b>Passed</b> the whole lifecycle</span>
+              </li>
+              <li class="legend-item">
+                <span class="cell cell-sample is-failed" aria-hidden="true"
+                  ><span class="cell-glyph">&#10007;</span></span
+                ><span class="legend-text"><b>Failed</b> at a named step</span>
+              </li>
+              <li class="legend-item">
+                <span class="cell cell-sample is-aborted" aria-hidden="true"
+                  ><span class="cell-glyph">&#8856;</span></span
+                ><span class="legend-text"><b>Aborted</b>, our runner stopped</span>
+              </li>
+              <li class="legend-item">
+                <span class="cell cell-sample is-none" aria-hidden="true"
+                  ><span class="cell-glyph">&#183;</span></span
+                ><span class="legend-text"><b>No run</b> that day</span>
+              </li>
+            </ul>
+            <p class="legend-rule">
+              The bar under a cell is not decoration. <b>Solid</b> means that day counts in the pass
+              rate. <b>Dashed</b> means a run happened but is left out of it, because an aborted run
+              is our own outage and never a verdict on Akash. <b>No bar</b> means no run happened,
+              which is also left out.
+            </p>
+          </div>
+        </section>
+
+        <section class="section" id="detail-section" hidden="hidden">
+          <div id="detail"></div>
+        </section>
+
+        <p class="note" id="unregistered" hidden="hidden"></p>
+      </main>
+
+      <footer class="footer">
+        <p>
+          Source of record is <code>schema/run.schema.json</code>. Each cell is one run file,
+          rendered as written, never re-graded by this page.
+        </p>
+      </footer>
+    </div>
+
+    <div class="sr-only" id="live" role="status" aria-live="polite"></div>
+
+    <script src="app.js" defer="defer"></script>
+  </body>
+</html>

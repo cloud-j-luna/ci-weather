@@ -1,0 +1,31 @@
+[
+  {
+    "ts": "2026-10-12T20:57:44.132118289Z",
+    "type": "workflow",
+    "action": "deploy",
+    "workflow_id": "24037bfac33b2241",
+    "step": 2,
+    "step_name": "select-bid",
+    "error": "no item selected",
+    "status": "failed"
+  },
+  {
+    "ts": "2026-10-12T20:57:44.131880643Z",
+    "type": "workflow",
+    "action": "deploy",
+    "workflow_id": "24037bfac33b2241",
+    "step": 1,
+    "step_name": "wait-for-bids",
+    "status": "success"
+  },
+  {
+    "ts": "2026-10-12T20:57:27.433147284Z",
+    "type": "workflow",
+    "action": "deploy",
+    "tx_hash": "F986683E6E141EB00742855DE141221465D6239E16DDB77626E325BA7BDA357B",
+    "workflow_id": "24037bfac33b2241",
+    "step": 0,
+    "step_name": "create-deployment",
+    "status": "success"
+  }
+]

@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "scenario": "persistent-storage",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-10-12T23:07:49.104Z",
+  "finishedAt": "2026-10-12T23:09:39.821Z",
+  "outcome": {
+    "kind": "failed",
+    "atStep": "select-bid",
+    "message": "no item selected"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29038374",
+        "closeTxHash": "CC9273FAB0066F6C57543613CF9671F75ACAABCA16614557FA0E605A6996275F"
+      },
+      {
+        "dseq": "29038382",
+        "closeTxHash": "248106481799529D83DBB1FC5809D5CE9ADA24D1A20CA54F4A302B40A13CA7B0"
+      },
+      {
+        "dseq": "29038390",
+        "closeTxHash": "262B5CCE3FACA8A2BE12E9D7E406DCDAD587ABFE61226EBD7A107CEE1B5B0D8E"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-12T23:09:23.194Z",
+      "durationMs": 723,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "5AD14E3C48116209FAB0D5C95EAD2783C9CB2269197884C94988F03AFCADE6CA",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-10-12T23:09:23.917Z",
+      "durationMs": 10499,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "failed",
+      "startedAt": "2026-10-12T23:09:34.416Z",
+      "durationMs": 0,
+      "durationSource": "akt-log",
+      "errors": [
+        "no item selected"
+      ]
+    }
+  ],
+  "lease": {
+    "dseq": "29038390",
+    "bidCount": 2,
+    "probe": null
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 3,
+    "earlier": [
+      {
+        "atStep": "select-bid",
+        "message": "no item selected",
+        "startedAt": "2026-10-12T23:07:50.215Z",
+        "durationMs": 11863,
+        "dseq": "29038374",
+        "bidCount": 2
+      },
+      {
+        "atStep": "select-bid",
+        "message": "no item selected",
+        "startedAt": "2026-10-12T23:08:37.033Z",
+        "durationMs": 11276,
+        "dseq": "29038382",
+        "bidCount": 2
+      }
+    ],
+    "stoppedBecause": "attempts-exhausted"
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/38320218141",
+    "sha": "d844778745dcc2dae10bc8948475634cfb94f049",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "0"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-48264"
+      }
+    ]
+  }
+}

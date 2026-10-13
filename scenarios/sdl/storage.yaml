@@ -1,0 +1,67 @@
+version: "2.0"
+services:
+  app:
+    image: nginx:1.27
+    dependencies:
+      - service: db
+    expose:
+      - port: 80
+        as: 80
+        to:
+          - global: true
+  db:
+    image: postgres:16
+    env:
+      - POSTGRES_PASSWORD=changeme
+      - POSTGRES_USER=app
+      - POSTGRES_DB=app
+    expose:
+      - port: 5432
+        to:
+          - service: app
+    params:
+      storage:
+        db-data:
+          mount: /var/lib/postgresql/data
+          readOnly: false
+profiles:
+  compute:
+    app:
+      resources:
+        cpu:
+          units: 0.1
+        memory:
+          size: 256Mi
+        storage:
+          size: 256Mi
+    db:
+      resources:
+        cpu:
+          units: 0.1
+        memory:
+          size: 256Mi
+        storage:
+          - size: 1Gi
+          - name: db-data
+            size: 10Gi
+            attributes:
+              persistent: true
+              class: beta2
+  placement:
+    dcloud:
+      pricing:
+        app:
+          denom: uact
+          amount: 10000
+        db:
+          denom: uact
+          amount: 10000
+deployment:
+  app:
+    dcloud:
+      profile: app
+      count: 1
+  db:
+    dcloud:
+      profile: db
+      count: 1

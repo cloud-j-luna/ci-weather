@@ -1,0 +1,26 @@
+{
+  "name": "ci-weather",
+  "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "validate": "node script/validate-runs.mjs",
+    "build": "node script/build-site.mjs",
+    "dev": "node script/build-site.mjs --source testdata/runs --serve",
+    "test": "node --test script/",
+    "canary": "node script/canary.mjs",
+    "doctor": "node script/canary.mjs doctor",
+    "reap": "node script/canary.mjs reap",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "prettier": "^3.9.10"
+  },
+  "dependencies": {
+    "yaml": "^2.9.1"
+  }
+}

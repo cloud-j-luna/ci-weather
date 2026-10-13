@@ -1,0 +1,50 @@
+name: Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/runs/**"
+      - "site/**"
+      - "scenarios/**"
+      - "script/build-site.mjs"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch: {}
+  # A push made with the default GITHUB_TOKEN does not trigger another workflow, so the
+  # canary's publish job committing new run data never reached the push trigger above.
+  # Chaining off the canary itself is what actually gets a day's results published.
+  workflow_run:
+    workflows: [Canary]
+    types: [completed]
+
+# The canary commits new run data on its own schedule, and that push triggers this.
+# One deployer, so a scheduled run and a manual push cannot race.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26"
+      - run: npm ci
+      - run: npm run validate
+      - run: node script/build-site.mjs
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/dist
+      - id: deploy
+        uses: actions/deploy-pages@v4

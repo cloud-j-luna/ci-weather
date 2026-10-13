@@ -1,0 +1,22 @@
+[
+  {
+    "ts": "2026-10-12T16:09:11.567076Z",
+    "type": "workflow",
+    "action": "deploy",
+    "workflow_id": "fa6adf711ced55ff",
+    "step": 1,
+    "step_name": "wait-for-bids",
+    "error": "no bids received (at least 1 required); timed out after 5m0s",
+    "status": "failed"
+  },
+  {
+    "ts": "2026-10-12T16:04:11.56413Z",
+    "type": "workflow",
+    "action": "deploy",
+    "tx_hash": "60475E5224A25516ED636D2055772DBFC5800D92D3D0449B6034C03812E1399F",
+    "workflow_id": "fa6adf711ced55ff",
+    "step": 0,
+    "step_name": "create-deployment",
+    "status": "success"
+  }
+]

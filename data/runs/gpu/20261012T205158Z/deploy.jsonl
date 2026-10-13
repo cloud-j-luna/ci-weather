@@ -1,0 +1,2 @@
+{"workflow":"deploy","id":"66454b3519bd5d0f","step":"create-deployment","result":"completed","errors":[],"txs":[{"hash":"56CD862F1331D1F7577E55D6C52B17EE8C96AA26B74796E47E2B2D6AD32BE82C","code":0}],"outputs":{"dseq":"29036990","owner":"akash1r6pereplxg0j2cnnnyhqjmmkn3p3vvxfqd7ur8","sdl_path":"/home/runner/work/ci-weather/ci-weather/scenarios/sdl/gpu.yaml"}}
+{"workflow":"deploy","id":"66454b3519bd5d0f","step":"wait-for-bids","result":"error","errors":["no bids received (at least 1 required); timed out after 5m0s"],"txs":[],"dseq":29036990,"cleanup":"akt close 29036990"}

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "scenario": "web",
+  "network": {
+    "name": "sandbox-2",
+    "chainId": "sandbox-2"
+  },
+  "startedAt": "2026-10-05T03:00:00Z",
+  "finishedAt": "2026-10-05T03:00:22.850000Z",
+  "outcome": {
+    "kind": "passed"
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-05T03:00:00Z",
+      "durationMs": 4343,
+      "txs": [
+        {
+          "hash": "BCD73AA76918CF82599A2102E09D90C875E9D57DB90B68111AB7CA2EA3038CC0",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-10-05T03:00:04.343000Z",
+      "durationMs": 1886
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-10-05T03:00:06.229000Z",
+      "durationMs": 7355
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-10-05T03:00:13.584000Z",
+      "durationMs": 1368,
+      "txs": [
+        {
+          "hash": "44BAA7A0F9F117A011967F6A1077014FE71DD594E621BC2EFB7AB120BFCB5BB6",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-10-05T03:00:14.952000Z",
+      "durationMs": 2428
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "completed",
+      "startedAt": "2026-10-05T03:00:17.380000Z",
+      "durationMs": 4057
+    },
+    {
+      "step": "http-probe",
+      "result": "completed",
+      "startedAt": "2026-10-05T03:00:21.437000Z",
+      "durationMs": 1413
+    }
+  ],
+  "lease": {
+    "dseq": "5715077",
+    "provider": "akash1rk090a6mq9gvm0h6ljf8kz8mrxglwwxsk4srxh",
+    "providerAudited": true,
+    "providerRegion": "na-us-west",
+    "providerOrg": "overclock",
+    "price": {
+      "amount": "2.930853000000000000",
+      "denom": "uact"
+    },
+    "bidCount": 1,
+    "uris": [
+      "074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw"
+    ],
+    "probe": {
+      "servedBy": "http",
+      "url": "http://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/",
+      "attempts": [
+        {
+          "scheme": "https",
+          "url": "https://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/",
+          "at": "2026-10-05T03:00:22.850000Z",
+          "durationMs": 380,
+          "error": "dial tcp: connect: connection refused"
+        },
+        {
+          "scheme": "http",
+          "url": "http://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/",
+          "at": "2026-10-05T03:00:22.850000Z",
+          "durationMs": 710,
+          "status": 200,
+          "bodyMatched": true
+        }
+      ]
+    }
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "5715077",
+        "closeTxHash": "1F08A11ED8C38CD5A498C0E4746F7F13A8E187EC358584639EC748198E49A12F"
+      }
+    ]
+  },
+  "reap": {
+    "closedDseqs": [
+      "5554813"
+    ]
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/1005",
+    "sha": "0000000000000000000000000000000000000000",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  }
+}

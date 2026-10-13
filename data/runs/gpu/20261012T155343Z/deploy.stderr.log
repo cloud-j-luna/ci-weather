@@ -1,0 +1,3 @@
+workflow "deploy" failed: step "wait-for-bids" failed: no bids received (at least 1 required); timed out after 5m0s
+deployment DSEQ 5715811 remains open; escrow may continue to be consumed.
+explicit cleanup: akt close 5715811

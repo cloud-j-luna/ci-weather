@@ -1,0 +1,9 @@
+workflow "deploy" failed: step "select-bid" failed: no item selected
+deployment DSEQ 29038374 remains open; escrow may continue to be consumed.
+explicit cleanup: akt close 29038374
+workflow "deploy" failed: step "select-bid" failed: no item selected
+deployment DSEQ 29038382 remains open; escrow may continue to be consumed.
+explicit cleanup: akt close 29038382
+workflow "deploy" failed: step "select-bid" failed: no item selected
+deployment DSEQ 29038390 remains open; escrow may continue to be consumed.
+explicit cleanup: akt close 29038390

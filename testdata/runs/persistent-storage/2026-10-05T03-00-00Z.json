@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "scenario": "persistent-storage",
+  "network": {
+    "name": "sandbox-2",
+    "chainId": "sandbox-2"
+  },
+  "startedAt": "2026-10-05T03:00:00Z",
+  "finishedAt": "2026-10-05T03:00:05.260000Z",
+  "outcome": {
+    "kind": "failed",
+    "atStep": "wait-for-bids",
+    "message": "no bids received for order 5715103/1/1, timed out after 5m0s"
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-05T03:00:00Z",
+      "durationMs": 3059,
+      "txs": [
+        {
+          "hash": "BCD73AA76918CF82599A2102E09D90C875E9D57DB90B68111AB7CA2EA3038CC0",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "failed",
+      "startedAt": "2026-10-05T03:00:03.059000Z",
+      "durationMs": 2201,
+      "errors": [
+        "no bids received for order 5715103/1/1, timed out after 5m0s"
+      ]
+    }
+  ],
+  "lease": null,
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "5715077",
+        "closeTxHash": "1F08A11ED8C38CD5A498C0E4746F7F13A8E187EC358584639EC748198E49A12F"
+      }
+    ]
+  },
+  "reap": {
+    "closedDseqs": [
+      "5554813"
+    ]
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/1005",
+    "sha": "0000000000000000000000000000000000000000",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  }
+}

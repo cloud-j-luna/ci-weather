@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "scenario": "ip-lease",
+  "network": {
+    "name": "sandbox-2",
+    "chainId": "sandbox-2"
+  },
+  "startedAt": "2026-10-07T03:00:00Z",
+  "finishedAt": "2026-10-07T03:00:33.947000Z",
+  "outcome": {
+    "kind": "passed"
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-07T03:00:00Z",
+      "durationMs": 8307,
+      "txs": [
+        {
+          "hash": "BCD73AA76918CF82599A2102E09D90C875E9D57DB90B68111AB7CA2EA3038CC0",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-10-07T03:00:08.307000Z",
+      "durationMs": 431
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-10-07T03:00:08.738000Z",
+      "durationMs": 8255
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-10-07T03:00:16.993000Z",
+      "durationMs": 6036,
+      "txs": [
+        {
+          "hash": "44BAA7A0F9F117A011967F6A1077014FE71DD594E621BC2EFB7AB120BFCB5BB6",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-10-07T03:00:23.029000Z",
+      "durationMs": 1789
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "completed",
+      "startedAt": "2026-10-07T03:00:24.818000Z",
+      "durationMs": 2364
+    },
+    {
+      "step": "http-probe",
+      "result": "completed",
+      "startedAt": "2026-10-07T03:00:27.182000Z",
+      "durationMs": 6765
+    }
+  ],
+  "lease": {
+    "dseq": "5715077",
+    "provider": "akash1rk090a6mq9gvm0h6ljf8kz8mrxglwwxsk4srxh",
+    "providerAudited": true,
+    "providerRegion": "na-us-west",
+    "providerOrg": "overclock",
+    "price": {
+      "amount": "2.930853000000000000",
+      "denom": "uact"
+    },
+    "bidCount": 1,
+    "uris": [
+      "074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw"
+    ],
+    "ips": [
+      {
+        "ip": "45.33.12.7",
+        "port": 80,
+        "externalPort": 80,
+        "protocol": "TCP"
+      }
+    ],
+    "probe": {
+      "servedBy": "http",
+      "url": "http://45.33.12.7:80/",
+      "attempts": [
+        {
+          "scheme": "https",
+          "url": "https://45.33.12.7:80/",
+          "at": "2026-10-07T03:00:33.947000Z",
+          "durationMs": 380,
+          "error": "dial tcp: connect: connection refused"
+        },
+        {
+          "scheme": "http",
+          "url": "http://45.33.12.7:80/",
+          "at": "2026-10-07T03:00:33.947000Z",
+          "durationMs": 848,
+          "status": 200,
+          "bodyMatched": true
+        }
+      ]
+    }
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "5715077",
+        "closeTxHash": "1F08A11ED8C38CD5A498C0E4746F7F13A8E187EC358584639EC748198E49A12F"
+      }
+    ]
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/1007",
+    "sha": "0000000000000000000000000000000000000000",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  }
+}

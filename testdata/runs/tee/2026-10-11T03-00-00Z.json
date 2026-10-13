@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "scenario": "tee",
+  "network": {
+    "name": "sandbox-2",
+    "chainId": "sandbox-2"
+  },
+  "startedAt": "2026-10-11T03:00:00Z",
+  "finishedAt": "2026-10-11T03:00:58.311000Z",
+  "outcome": {
+    "kind": "failed",
+    "atStep": "attestation",
+    "message": "the provider returned a mock attestation report, which echoes the nonce with no TEE hardware behind it"
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-11T03:00:00Z",
+      "durationMs": 4120,
+      "txs": [
+        {
+          "hash": "7C41E0B6D9A4F8E31B2C5D7A09F4E68B13C7A5D2E9F0B4C6A8D1E3F5B7C9D0A2",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-10-11T03:00:04Z",
+      "durationMs": 6734
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-10-11T03:00:11Z",
+      "durationMs": 3180
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-10-11T03:00:14Z",
+      "durationMs": 8902,
+      "txs": [
+        {
+          "hash": "2B9D4F7A1C6E8035A7D9F2B4C6E8A0D2F4B6C8E0A2D4F6B8C0E2A4D6F8B0C2E4",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-10-11T03:00:23Z",
+      "durationMs": 4015
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "completed",
+      "startedAt": "2026-10-11T03:00:27Z",
+      "durationMs": 21488
+    },
+    {
+      "step": "attestation",
+      "result": "failed",
+      "startedAt": "2026-10-11T03:00:48Z",
+      "durationMs": 884,
+      "errors": [
+        "the provider returned a mock attestation report, which echoes the nonce with no TEE hardware behind it"
+      ]
+    }
+  ],
+  "lease": {
+    "dseq": "5715309",
+    "provider": "akash1rk090a6mq9gvm0h6ljf8kz8mrxglwwxsk4srxh",
+    "providerAudited": true,
+    "providerRegion": "na-us-central",
+    "providerOrg": "overclock",
+    "price": {
+      "amount": "41.620000000000000000",
+      "denom": "uact"
+    },
+    "bidCount": 1,
+    "uris": [
+      "074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw"
+    ],
+    "attestation": {
+      "teeType": "snp-gpu",
+      "reportSizeBytes": 1184,
+      "nonceVerified": true,
+      "mockReport": true,
+      "certChainPresent": false,
+      "gpuReportCount": 1
+    },
+    "probe": null
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "5715309",
+        "closeTxHash": "9E3A1C5F7B0D2468A0C2E4F6B8D0A2C4E6F8B0D2A4C6E8F0B2D4A6C8E0F2B4D6"
+      }
+    ]
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/1041",
+    "sha": "0000000000000000000000000000000000000000",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  }
+}

@@ -1,0 +1,425 @@
+[
+  {
+    "why": "passed outcome carrying a failure step, the anti-pattern the sum type exists to forbid",
+    "mutate": {
+      "outcome": {
+        "kind": "passed",
+        "atStep": "close",
+        "message": "boom"
+      }
+    }
+  },
+  {
+    "why": "failed outcome with no step named, which would make a red cell unattributable",
+    "mutate": {
+      "outcome": {
+        "kind": "failed"
+      }
+    }
+  },
+  {
+    "why": "failed outcome with no message, losing akt's verbatim error",
+    "mutate": {
+      "outcome": {
+        "kind": "failed",
+        "atStep": "send-manifest"
+      }
+    }
+  },
+  {
+    "why": "outcome kind outside the three the site knows how to render",
+    "mutate": {
+      "outcome": {
+        "kind": "degraded",
+        "atStep": "close"
+      }
+    }
+  },
+  {
+    "why": "close recorded as a lifecycle step, which would force the timeline to lie: close runs even when the lifecycle never began, so it cannot be 'skipped after the failure'",
+    "mutate": {
+      "steps": [
+        {
+          "step": "close",
+          "result": "completed",
+          "startedAt": "2026-10-03T03:00:00Z",
+          "durationMs": 1
+        }
+      ]
+    }
+  },
+  {
+    "why": "step result outside the three-state vocabulary",
+    "mutate": {
+      "steps": [
+        {
+          "step": "reap",
+          "result": "flaky",
+          "startedAt": "2026-10-03T03:00:00Z",
+          "durationMs": 1
+        }
+      ]
+    }
+  },
+  {
+    "why": "negative duration",
+    "mutate": {
+      "steps": [
+        {
+          "step": "reap",
+          "result": "completed",
+          "startedAt": "2026-10-03T03:00:00Z",
+          "durationMs": -5
+        }
+      ]
+    }
+  },
+  {
+    "why": "a future schema version this build does not know how to render",
+    "mutate": {
+      "schemaVersion": 2
+    }
+  },
+  {
+    "why": "scenario id that does not match the registry's id pattern",
+    "mutate": {
+      "scenario": "Web Service"
+    }
+  },
+  {
+    "why": "probe recording a scheme outside http and https",
+    "mutate": {
+      "lease": {
+        "dseq": "1",
+        "probe": {
+          "url": "ftp://x/",
+          "scheme": "ftp",
+          "status": 200,
+          "latencyMs": 1,
+          "bodyMatched": true
+        }
+      }
+    }
+  },
+  {
+    "why": "network named but with no chain id, so runs from different chains could be conflated",
+    "mutate": {
+      "network": {
+        "name": "mainnet"
+      }
+    }
+  },
+  {
+    "why": "a typo'd top-level key, which additionalProperties:false must catch rather than silently drop",
+    "mutate": {
+      "outcomes": {
+        "kind": "passed"
+      }
+    }
+  },
+  {
+    "why": "reap block missing, so a run cannot claim it checked for orphans when it did not",
+    "remove": ["reap"]
+  },
+  {
+    "why": "no ci run url on a run that has a ci block, leaving a red cell with nowhere to click",
+    "mutate": {
+      "ci": {
+        "sha": "abc"
+      }
+    }
+  },
+  {
+    "why": "verdict names a step the timeline shows completing",
+    "mutate": {
+      "outcome": {
+        "kind": "failed",
+        "atStep": "create-lease",
+        "message": "nope"
+      }
+    }
+  },
+  {
+    "why": "passed verdict on a run where a step was skipped, so it never reached the end",
+    "mutate": {
+      "outcome": {
+        "kind": "passed"
+      },
+      "steps": [
+        {
+          "step": "reap",
+          "result": "completed",
+          "startedAt": "2026-10-03T03:00:00Z",
+          "durationMs": 1
+        },
+        {
+          "step": "close",
+          "result": "skipped",
+          "startedAt": "2026-10-03T03:00:00Z",
+          "durationMs": 0
+        }
+      ]
+    }
+  },
+  {
+    "why": "escrow claims it returned while still naming an open deployment",
+    "mutate": {
+      "escrow": {
+        "kind": "returned",
+        "closed": [
+          {
+            "dseq": "1"
+          }
+        ],
+        "stillActive": [
+          {
+            "dseq": "2",
+            "reason": "close failed"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "why": "escrow claims nothing was created although create-deployment completed",
+    "mutate": {
+      "escrow": {
+        "kind": "nothing-created"
+      }
+    }
+  },
+  {
+    "why": "steps listed out of lifecycle order",
+    "mutate": {
+      "steps": [
+        {
+          "step": "close",
+          "result": "completed",
+          "startedAt": "2026-10-03T03:00:00Z",
+          "durationMs": 1
+        },
+        {
+          "step": "reap",
+          "result": "completed",
+          "startedAt": "2026-10-03T03:00:01Z",
+          "durationMs": 1
+        }
+      ]
+    }
+  },
+  {
+    "why": "run that finished before it started",
+    "mutate": {
+      "finishedAt": "2020-01-01T00:00:00Z"
+    }
+  },
+  {
+    "why": "passed verdict although no scheme ever served the workload",
+    "mutate": {
+      "lease": {
+        "dseq": "1",
+        "probe": {
+          "attempts": []
+        }
+      }
+    }
+  },
+  {
+    "why": "reap recorded as a lifecycle step rather than on its own axis",
+    "mutate": {
+      "steps": [
+        {
+          "step": "reap",
+          "result": "completed",
+          "startedAt": "2026-10-03T03:00:00Z",
+          "durationMs": 1
+        }
+      ]
+    }
+  },
+  {
+    "why": "the same dseq recorded as both closed and still holding funds",
+    "mutate": {
+      "escrow": {
+        "kind": "leaked",
+        "closed": [
+          {
+            "dseq": "5715546"
+          }
+        ],
+        "stillActive": [
+          {
+            "dseq": "5715546",
+            "reason": "close failed"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "why": "run with no akt version, which makes a CLI upgrade impossible to rule out as the cause of a failure",
+    "remove": ["akt"]
+  },
+  {
+    "why": "a lease.ips entry missing externalPort, so a recorded IP can never lack the port the probe dialled",
+    "mutate": {
+      "lease": {
+        "dseq": "1",
+        "ips": [
+          {
+            "ip": "45.33.12.7",
+            "port": 80,
+            "protocol": "TCP"
+          }
+        ],
+        "probe": {
+          "servedBy": "http",
+          "url": "http://45.33.12.7:80/",
+          "attempts": [
+            {
+              "scheme": "http",
+              "url": "http://45.33.12.7:80/",
+              "at": "2026-10-03T03:00:05Z",
+              "durationMs": 120,
+              "status": 200,
+              "bodyMatched": true
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "why": "outcome is passed but the attestation report is a mock, echoing the nonce with no TEE hardware behind it",
+    "mutate": {
+      "lease": {
+        "dseq": "5715077",
+        "probe": {
+          "servedBy": "http",
+          "url": "http://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/",
+          "attempts": [
+            {
+              "scheme": "http",
+              "url": "http://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/",
+              "at": "2026-10-03T03:00:26.554000Z",
+              "durationMs": 716,
+              "status": 200,
+              "bodyMatched": true
+            }
+          ]
+        },
+        "attestation": {
+          "teeType": "snp-gpu",
+          "nonceVerified": true,
+          "mockReport": true,
+          "certChainPresent": true,
+          "gpuReportCount": 1
+        }
+      }
+    }
+  },
+  {
+    "why": "outcome is passed but the attestation nonce was never verified, so the report cannot be tied to this request",
+    "mutate": {
+      "lease": {
+        "dseq": "5715077",
+        "probe": {
+          "servedBy": "http",
+          "url": "http://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/",
+          "attempts": [
+            {
+              "scheme": "http",
+              "url": "http://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/",
+              "at": "2026-10-03T03:00:26.554000Z",
+              "durationMs": 716,
+              "status": 200,
+              "bodyMatched": true
+            }
+          ]
+        },
+        "attestation": {
+          "teeType": "snp-gpu",
+          "nonceVerified": false,
+          "mockReport": false,
+          "certChainPresent": true,
+          "gpuReportCount": 1
+        }
+      }
+    }
+  },
+  {
+    "why": "attempts.count disagrees with the single earlier attempt recorded",
+    "mutate": {
+      "attempts": {
+        "count": 3,
+        "earlier": [
+          {
+            "atStep": "wait-for-bids",
+            "message": "no bids received",
+            "startedAt": "2026-10-03T03:00:00Z",
+            "durationMs": 300000,
+            "dseq": "5715077"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "why": "attempts.earlier names a dseq escrow never closed or reported active, an unexplained deposit",
+    "mutate": {
+      "attempts": {
+        "count": 2,
+        "earlier": [
+          {
+            "atStep": "select-bid",
+            "message": "no bid from the pinned provider",
+            "startedAt": "2026-10-03T03:00:00Z",
+            "durationMs": 120000,
+            "dseq": "9999999"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "why": "an earlier attempt entry missing dseq entirely",
+    "mutate": {
+      "attempts": {
+        "count": 2,
+        "earlier": [
+          {
+            "atStep": "wait-for-bids",
+            "message": "no bids received",
+            "startedAt": "2026-10-03T03:00:00Z",
+            "durationMs": 300000
+          }
+        ]
+      }
+    }
+  },
+  {
+    "why": "failed outcome whose message contradicts the failing step's own error, which would let the runner invent a reason akt never gave",
+    "mutate": {
+      "outcome": {
+        "kind": "failed",
+        "atStep": "send-manifest",
+        "message": "the provider was slow"
+      },
+      "steps": [
+        {
+          "step": "create-deployment",
+          "result": "completed",
+          "startedAt": "2026-10-03T03:00:00Z",
+          "durationMs": 1
+        },
+        {
+          "step": "send-manifest",
+          "result": "failed",
+          "startedAt": "2026-10-03T03:00:01Z",
+          "durationMs": 1,
+          "errors": ["provider refused the manifest"]
+        }
+      ]
+    }
+  }
+]

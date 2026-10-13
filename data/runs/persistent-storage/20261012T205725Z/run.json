@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "scenario": "persistent-storage",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-10-12T20:57:25.873Z",
+  "finishedAt": "2026-10-12T20:57:52.479Z",
+  "outcome": {
+    "kind": "failed",
+    "atStep": "select-bid",
+    "message": "no item selected"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29037046",
+        "closeTxHash": "0EB1B4AB981E65A7E26E241C778E8EED00DA25446C5B5BDCABEF8912E0C07B47"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-12T20:57:26.815Z",
+      "durationMs": 618,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "F986683E6E141EB00742855DE141221465D6239E16DDB77626E325BA7BDA357B",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-10-12T20:57:27.433Z",
+      "durationMs": 16698,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "failed",
+      "startedAt": "2026-10-12T20:57:44.131Z",
+      "durationMs": 1,
+      "durationSource": "akt-log",
+      "errors": [
+        "no item selected"
+      ]
+    }
+  ],
+  "lease": {
+    "dseq": "29037046",
+    "bidCount": 2,
+    "probe": null
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/38306835035",
+    "sha": "827ab1e60c1046ca4f0bcf1605195eb8dca988c7",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "0"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-16090"
+      }
+    ]
+  }
+}

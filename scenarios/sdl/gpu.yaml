@@ -1,0 +1,48 @@
+version: "2.0"
+services:
+  app:
+    image: pytorch/pytorch:2.2.0-cuda12.1-cudnn8-runtime
+    # The stock image's command exits immediately and it serves nothing, so the
+    # container would crashloop and no probe could ever pass. This asks CUDA for
+    # the device it was given and serves the answer, so a pass means the GPU was
+    # really usable rather than merely allocated.
+    command:
+      - sh
+      - -c
+    args:
+      - >-
+        mkdir -p /srv && python -c "import torch; print('cuda',
+        torch.cuda.is_available(), torch.cuda.get_device_name(0))"
+        > /srv/index.html 2>&1; cd /srv && python -m http.server 8080
+    expose:
+      - port: 8080
+        as: 80
+        to:
+          - global: true
+profiles:
+  compute:
+    app:
+      resources:
+        cpu:
+          units: 1
+        memory:
+          size: 4Gi
+        storage:
+          size: 16Gi
+        gpu:
+          units: 1
+          attributes:
+            vendor:
+              nvidia:
+                - model: a100
+  placement:
+    dcloud:
+      pricing:
+        app:
+          denom: uact
+          amount: 100000
+deployment:
+  app:
+    dcloud:
+      profile: app
+      count: 1

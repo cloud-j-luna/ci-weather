@@ -1,0 +1,169 @@
+name: Canary
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+    # TEMPORARY diagnostic: the 03:00 run did not fire on the first scheduled day.
+    # This proves whether the schedule is registered at all. Remove once answered.
+    - cron: "1 9 * * *"
+  workflow_dispatch:
+    inputs:
+      adopt:
+        description: >-
+          Space separated dseqs to take ownership of and close, then stop without
+          deploying. For recovering a deployment whose run record was lost, which the
+          reaper would otherwise refuse to touch.
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: canary
+  cancel-in-progress: false
+
+env:
+  AKT_KEYRING_BACKEND: test
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    # The runner's own budget is budgets.totalRunTimeout and it writes an "aborted" record
+    # when that fires. This has to stay above it with room for checkout, npm ci, the akt
+    # install, doctor and the always() reap, so the runner and not its killer is what stops
+    # the run. A killed job skips the reap, which strands a lease. script/workflow.test.mjs
+    # pins the gap, because this comment claimed 20m against an actual 25m for a while.
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      # One funded account for all five scenarios, and one account has one tx sequence.
+      # Parallel legs would broadcast against it at once and draw code 32. A sibling leg's
+      # lease is not at risk from another leg's reap: that leg closes only what its own
+      # run history proves it created.
+      max-parallel: 1
+      matrix:
+        scenario: ${{ inputs.adopt == '' && fromJSON('["web","gpu","persistent-storage","ip-lease","tee"]') || fromJSON('["web"]') }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26"
+
+      # The runner imports validate-runs.mjs to self-check every document before writing
+      # it, so without ajv it cannot produce a file at all.
+      - run: npm ci
+
+      - name: Install akt v1.0.1
+        env:
+          AKT_RELEASE_URL: https://github.com/akash-network/akt/releases/download/v1.0.1
+          AKT_ZIP_SHA256: 62b7eb88b2335bacdd8317beb244a4ddb3c32452dcc52776fb7be4bca4932d99
+        run: |
+          set -e
+          install_dir="$RUNNER_TEMP/akt-install"
+          mkdir -p "$install_dir"
+          cd "$install_dir"
+          curl -fsSL -o akt_1.0.1_linux_amd64.zip "$AKT_RELEASE_URL/akt_1.0.1_linux_amd64.zip"
+          curl -fsSL -o akt_1.0.1_checksums.txt "$AKT_RELEASE_URL/akt_1.0.1_checksums.txt"
+          echo "$AKT_ZIP_SHA256  akt_1.0.1_linux_amd64.zip" | sha256sum -c -
+          grep -F "akt_1.0.1_linux_amd64.zip" akt_1.0.1_checksums.txt | sha256sum -c -
+          unzip -q akt_1.0.1_linux_amd64.zip -d extracted
+          mkdir -p "$install_dir/bin"
+          find extracted -type f -name akt -exec cp {} "$install_dir/bin/akt" \;
+          chmod +x "$install_dir/bin/akt"
+          echo "$install_dir/bin" >> "$GITHUB_PATH"
+
+      - run: akt version
+
+      - name: Provision akt context
+        env:
+          CANARY_MNEMONIC: ${{ secrets.CANARY_MNEMONIC }}
+        run: |
+          set -e
+          mnemonic_file="$RUNNER_TEMP/canary-mnemonic.txt"
+          trap 'rm -f "$mnemonic_file"' EXIT
+          printf '%s' "$CANARY_MNEMONIC" > "$mnemonic_file"
+          akt context network create mainnet --template mainnet
+          akt context create mainnet --network mainnet --default-account ci
+          akt context keys add ci --recover --source "$mnemonic_file" --no-backup --yes --context mainnet
+
+      - run: node script/canary.mjs doctor --context mainnet
+
+      # Sandbox is the runner's default. CI opts into mainnet by appending the flag, so a
+      # laptop cannot spend from this wallet by forgetting one.
+      - name: Run scenario
+        if: inputs.adopt == ''
+        run: node script/canary.mjs run --scenario ${{ matrix.scenario }} --context mainnet
+
+      # Runs even when the scenario failed or the job was cancelled, so nothing is left
+      # holding escrow until the next scheduled run.
+      - name: Reap
+        if: always()
+        env:
+          ADOPT: ${{ inputs.adopt }}
+        run: |
+          args=""
+          for d in $ADOPT; do args="$args --adopt $d"; done
+          # shellcheck disable=SC2086
+          node script/canary.mjs reap --context mainnet $args
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: data-runs-${{ matrix.scenario }}
+          path: data/runs
+          if-no-files-found: warn
+
+  # One writer to git, after the matrix, so the legs cannot race on a commit.
+  publish:
+    needs: run
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: data-runs-*
+          path: data/runs
+          merge-multiple: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26"
+
+      - run: npm ci
+      - run: npm run validate
+
+      - name: Commit run data
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add --force data/runs
+          if git diff --cached --quiet; then
+            echo "no new run data to commit"
+          else
+            git commit -m "canary: record run data"
+            git pull --rebase
+            git push
+          fi
+
+  site:
+    needs: publish
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26"
+      - run: npm ci
+      - run: node script/build-site.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: site/dist

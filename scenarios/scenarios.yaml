@@ -1,0 +1,149 @@
+# What the canary deploys, and how the dashboard reads the results.
+#
+# Five scenarios. Each one answers a question nobody can currently answer about Akash
+# without deploying by hand. Adding a sixth needs a question the other five do not answer.
+
+weather:
+  # One lookback and one pass-rate definition, used by the runner, the site and any
+  # summary. Defining it twice is how a dashboard ends up disagreeing with its own
+  # sort order.
+  lookbackDays: 10
+
+  # A day with no run is "no data". It is drawn distinctly in the strip and excluded from
+  # BOTH sides of the pass rate, so a day the CI was down never reads as a day Akash was
+  # down. Canary coverage is reported as its own number instead of being smuggled into
+  # the weather.
+  passRate:
+    denominator: days-with-a-run
+
+  # Pass rate to icon.
+  thresholds:
+    - { minPassRate: 100, icon: "☀️", label: clear }
+    - { minPassRate: 85, icon: "🌤️", label: fair }
+    - { minPassRate: 70, icon: "⛅", label: cloudy }
+    - { minPassRate: 50, icon: "🌧️", label: rain }
+    - { minPassRate: 0, icon: "⛈️", label: storm }
+
+# Which provider the workloads run on, keyed by akt context. "cheapest" takes the
+# lowest bid from anyone; "provider=<bech32>" accepts only that provider's bid and
+# fails the run if it does not bid. Keyed by network because a mainnet provider does
+# not exist on sandbox, and a single pinned value would make the safe local default
+# fail at select-bid every time. Any scenario can override this.
+placement:
+  bidSelect:
+    default: cheapest
+    # hurricane, provider.hurricane.akash.pub
+    mainnet: provider=akash15tl6v6gd0nte0syyxnv57zmmspgju4c3xfmdhk
+
+budgets:
+  # Hard caps. Exceeding one aborts the run rather than letting a job hang for hours
+  # holding an open lease. An abort is recorded as "aborted", never as a network failure.
+  bidTimeout: 5m
+  leaseReadyTimeout: 8m
+  probeTimeout: 30s
+  bidAttempts: 3
+  # The account-sequence settle, not politeness: tozero.mjs keeps BETWEEN_CLOSES_MS = 7000
+  # because back-to-back broadcasts against one account draw code 32, and the close that
+  # precedes a retry is followed immediately by the next create-deployment. Must stay
+  # above one block.
+  bidRetryDelay: 30s
+  # Three bid attempts at a 5m bidTimeout, plus the 8m leaseReadyTimeout the winning
+  # attempt still needs, plus two inter-attempt closes, does not fit in 25m, and an
+  # attempt that runs out of clock mid-lifecycle seals as aborted, which this file
+  # excludes from BOTH sides of the pass rate. That turns an honest failure into no
+  # data at all.
+  totalRunTimeout: 35m
+  # The deposit only bounds the loss when a close fails. The lease then keeps billing
+  # until the next reap, and the chain closes it itself once escrow empties. `auto`
+  # asks akt to pick, which is a conservative 20 ACT on mainnet against a 0.5 ACT chain
+  # minimum. A leaked gpu lease burns roughly 46 ACT/day at the measured 3182 uact/block,
+  # so 1 ACT empties in about half an hour instead of ten hours. Any scenario can
+  # override this.
+  deposit: 1000000uact
+
+scenarios:
+  - id: web
+    title: Web service
+    question: Can anyone deploy an ordinary web workload to Akash right now?
+    sdl: sdl/web.yaml
+    tags: [baseline]
+    probe:
+      path: /
+      expectStatus: 200
+      expectBodyContains: "Welcome to nginx!"
+
+  - id: gpu
+    title: GPU workload
+    question: Is GPU supply actually leasable, not just advertised?
+    sdl: sdl/gpu.yaml
+    # A100 fleet in Houston. Hurricane advertises a single T4 and it is leased
+    # out, so this scenario goes somewhere with real GPU headroom instead.
+    bidSelect:
+      default: cheapest
+      mainnet: provider=akash172k755dd82elslzcgkgtk3ux5ytdqvx5wq2a98
+    tags: [gpu]
+    probe:
+      path: /
+      expectStatus: 200
+      # The workload reports what CUDA handed it. Asserting the body is what
+      # separates "a GPU was allocated" from "a GPU actually worked".
+      expectBodyContains: "cuda True"
+
+  - id: persistent-storage
+    title: Persistent storage
+    question: Do the providers advertising persistent volumes honour a lease that uses one?
+    # Open to the whole fleet rather than pinned. Hurricane advertises
+    # feat-persistent-storage=true but declined three attempts in a row while two
+    # other providers bid each time, so pinning it measured one provider's appetite
+    # rather than whether persistent storage is leasable on Akash at all.
+    sdl: sdl/storage.yaml
+    bidSelect: cheapest
+    tags: [storage]
+    probe:
+      path: /
+      expectStatus: 200
+      expectBodyContains: "Welcome to nginx!"
+
+  - id: ip-lease
+    title: Dedicated IP
+    question: Can a workload still obtain a dedicated public IP endpoint?
+    sdl: sdl/ip.yaml
+    tags: [ip]
+    probe:
+      # uris is the provider's shared ingress hostname, handed to every deployment whether
+      # or not an IP was allocated. Only a probe against the allocated IP can tell the two
+      # apart, so this scenario dials that instead.
+      target: ip
+      path: /
+      expectStatus: 200
+      expectBodyContains: "Welcome to nginx!"
+
+  - id: tee
+    title: Confidential compute
+    question: Is a confidential-compute lease actually backed by TEE hardware, or only labelled as one?
+    sdl: sdl/tee.yaml
+    bidSelect:
+      default: cheapest
+      # Exactly one mainnet provider advertises a TEE, and placement matches that
+      # attribute exactly, so nothing else can win this order.
+      mainnet: provider=akash1wcuwjuu59t22xp56a40jg3dty64xlyp4wkqcwd
+    # Confidential GPU, and this provider's bid price has never been measured, so 2 ACT
+    # is deliberate headroom over the 1 ACT default rather than a measured figure.
+    deposit: 2000000uact
+    tags: [tee, gpu]
+    # Two live runs both 404'd after only ~32s of probing, which is the shared 30s
+    # budget. That is too short to tell "the provider never created a route" from
+    # "a Kata pod's route takes longer than that to appear". Three minutes makes the
+    # next run answer it instead of leaving it a guess.
+    probeTimeout: 3m
+    attestation:
+      # Attestation is a provider API answered by a sidecar Akash injects into the pod,
+      # not something the workload can prove about itself. The sidecar names itself
+      # snp-gpu when it attests GPUs alongside the CPU, so a bare snp here would mean
+      # the GPU went unattested.
+      teeType: snp-gpu
+    probe:
+      target: uri
+      path: /
+      expectStatus: 200
+      expectBodyContains: "Welcome to nginx!"

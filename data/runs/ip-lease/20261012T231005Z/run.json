@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "scenario": "ip-lease",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-10-12T23:10:05.409Z",
+  "finishedAt": "2026-10-12T23:10:37.376Z",
+  "outcome": {
+    "kind": "failed",
+    "atStep": "http-probe",
+    "message": "the lease status that reports the dedicated IP could not be read: (parsed.ips ?? []).filter is not a function"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29038397",
+        "closeTxHash": "9DC6EF2AFD7B08A6FB28865C8D1BDFDA98280AF6B7EC57923D625B4F16B761B1"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-12T23:10:06.240Z",
+      "durationMs": 538,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "340876F12E7DC71FCEDCE65E6BC526C6569DC069D03AAA93C266DB611018BA29",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-10-12T23:10:06.778Z",
+      "durationMs": 15370,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-10-12T23:10:22.148Z",
+      "durationMs": 0,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-10-12T23:10:22.148Z",
+      "durationMs": 205,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "FE1D2DC90548862A921164EDBFC57096B95F15BE535B7B0028DF648447BC155D",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-10-12T23:10:22.353Z",
+      "durationMs": 5954,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "completed",
+      "startedAt": "2026-10-12T23:10:28.307Z",
+      "durationMs": 762,
+      "durationSource": "derived"
+    },
+    {
+      "step": "http-probe",
+      "result": "failed",
+      "startedAt": "2026-10-12T23:10:29.069Z",
+      "durationMs": 561,
+      "durationSource": "runner",
+      "errors": [
+        "the lease status that reports the dedicated IP could not be read: (parsed.ips ?? []).filter is not a function"
+      ]
+    }
+  ],
+  "lease": {
+    "dseq": "29038397",
+    "bidCount": 2,
+    "provider": "akash15tl6v6gd0nte0syyxnv57zmmspgju4c3xfmdhk",
+    "price": {
+      "amount": "12.711993000000000000",
+      "denom": "uact"
+    },
+    "uris": [
+      "g9tfuk27gtdknaqtn9gba7rcd8.ingress.hurricane.akash.pub"
+    ],
+    "providerAudited": true,
+    "providerRegion": "na-us-west",
+    "providerOrg": "overclock",
+    "probe": {
+      "attempts": []
+    }
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 1
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/38320218141",
+    "sha": "d844778745dcc2dae10bc8948475634cfb94f049",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "-25"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-21712"
+      }
+    ]
+  }
+}

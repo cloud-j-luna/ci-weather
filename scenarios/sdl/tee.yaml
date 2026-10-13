@@ -1,0 +1,49 @@
+---
+version: "2.1"
+
+services:
+  web:
+    # Alpine rather than distroless or scratch: Kata's guest agent needs a real
+    # filesystem inside the VM, and nginx runs as root so no named USER has to be
+    # resolved against a filesystem the host cannot see.
+    image: nginx:1.27-alpine
+    expose:
+      - port: 80
+        as: 80
+        to:
+          - global: true
+    params:
+      # The only TEE provider on mainnet advertises tee/type=cpu-gpu, and placement
+      # matches that attribute exactly, so a cpu-only request draws no bids anywhere.
+      tee: cpu-gpu
+
+profiles:
+  compute:
+    web:
+      resources:
+        cpu:
+          units: 1
+        # The image is unpacked into guest RAM, and with shared_fs disabled the
+        # writable layer lives there too, so memory covers the extracted image plus
+        # anything written rather than just the working set.
+        memory:
+          size: 2Gi
+        storage:
+          size: 1Gi
+        gpu:
+          units: 1
+          attributes:
+            vendor:
+              nvidia:
+  placement:
+    dcloud:
+      pricing:
+        web:
+          denom: uact
+          amount: 100000
+
+deployment:
+  web:
+    dcloud:
+      profile: web
+      count: 1
