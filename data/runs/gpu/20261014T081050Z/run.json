@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "scenario": "gpu",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-10-14T08:10:50.269Z",
+  "finishedAt": "2026-10-14T08:13:55.360Z",
+  "outcome": {
+    "kind": "passed"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29058600",
+        "closeTxHash": "D8BE67CE104D99643529DA710CB47FBA3ED623B6C9BA4A2355092DD14FCE1720"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-14T08:10:51.822Z",
+      "durationMs": 1188,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "164481AAA64346877866730A98C6C2A6D89C9E0EA0852E52CE15FA7E16881855",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-10-14T08:10:53.010Z",
+      "durationMs": 15487,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-10-14T08:11:08.497Z",
+      "durationMs": 0,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-10-14T08:11:08.497Z",
+      "durationMs": 307,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "42715DF2ED70A4EBBF99AA36959A341E91263A75CA841750F9CF1EF1856819FC",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-10-14T08:11:08.804Z",
+      "durationMs": 5898,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "completed",
+      "startedAt": "2026-10-14T08:11:14.702Z",
+      "durationMs": 153361,
+      "durationSource": "derived"
+    },
+    {
+      "step": "http-probe",
+      "result": "completed",
+      "startedAt": "2026-10-14T08:13:48.063Z",
+      "durationMs": 1626,
+      "durationSource": "runner"
+    }
+  ],
+  "lease": {
+    "dseq": "29058600",
+    "bidCount": 1,
+    "provider": "akash172k755dd82elslzcgkgtk3ux5ytdqvx5wq2a98",
+    "price": {
+      "amount": "3182.464196000000000000",
+      "denom": "uact"
+    },
+    "uris": [
+      "r4l4eh23hdeepes7d8h953ngc8.ingress.a100.hou2.dd.akash.pub"
+    ],
+    "providerAudited": true,
+    "providerRegion": "na-us-southwest",
+    "providerOrg": "overclock",
+    "probe": {
+      "attempts": [
+        {
+          "scheme": "https",
+          "url": "https://r4l4eh23hdeepes7d8h953ngc8.ingress.a100.hou2.dd.akash.pub/",
+          "at": "2026-10-14T08:13:48.616Z",
+          "durationMs": 923,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://r4l4eh23hdeepes7d8h953ngc8.ingress.a100.hou2.dd.akash.pub/",
+          "at": "2026-10-14T08:13:49.539Z",
+          "durationMs": 149,
+          "status": 200,
+          "bodyMatched": true
+        }
+      ],
+      "servedBy": "http",
+      "url": "http://r4l4eh23hdeepes7d8h953ngc8.ingress.a100.hou2.dd.akash.pub/"
+    }
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 1
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/38533155856",
+    "sha": "b9c1bb8f20e98fbd9ced8cd23ef8a1bd950fc6d9",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "-85926"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-20586"
+      }
+    ]
+  }
+}
