@@ -253,7 +253,7 @@ describe("sealRun", () => {
     {
       name: "an aborted run that planned to attest names attestation among the steps it never reached",
       state: base({
-        scenarioId: "tee",
+        scenarioId: "tee-snp-gpu",
         attestationExpect: "snp-gpu",
         abortReason: "wall-clock budget of 25m exhausted",
         epilogue: { closed: [{ dseq: "5715077" }], stillActive: [] },

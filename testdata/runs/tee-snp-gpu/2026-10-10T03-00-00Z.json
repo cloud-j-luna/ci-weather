@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "scenario": "tee",
+  "scenario": "tee-snp-gpu",
   "network": {
     "name": "sandbox-2",
     "chainId": "sandbox-2"

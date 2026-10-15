@@ -353,13 +353,13 @@ describe("canary run, end to end against a fake akt and a real server", () => {
     assert.equal(doc.lease.probe.url, `http://${uri}/`);
   });
 
-  it("--scenario tee passes when the attestation report verifies, recorded on the lease with an attestation step before http-probe", async () => {
+  it("--scenario tee-snp-gpu passes when the attestation report verifies, recorded on the lease with an attestation step before http-probe", async () => {
     const bin = build("tee-ok", {});
     const out = join(dir, "tee-ok-runs");
-    const r = await canary(["run", "--scenario", "tee", "--akt", bin, "--out", out]);
+    const r = await canary(["run", "--scenario", "tee-snp-gpu", "--akt", bin, "--out", out]);
     assert.equal(r.code ?? 0, 0, r.stderr ?? "");
 
-    const { doc } = onlyRun(out, "tee");
+    const { doc } = onlyRun(out, "tee-snp-gpu");
     assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
     assert.equal(doc.outcome.kind, "passed");
     assert.deepEqual(doc.lease.attestation, {
@@ -374,13 +374,13 @@ describe("canary run, end to end against a fake akt and a real server", () => {
     assert.equal(doc.steps.at(-1).result, "completed");
   });
 
-  it("--scenario tee records a completed attestation and fails at http-probe when the attestation verifies but the workload never serves", async () => {
+  it("--scenario tee-snp-gpu records a completed attestation and fails at http-probe when the attestation verifies but the workload never serves", async () => {
     const bin = build("tee-dead-ingress", { ingress: "ingress.invalid.test" });
     const out = join(dir, "tee-dead-ingress-runs");
-    const r = await canary(["run", "--scenario", "tee", "--akt", bin, "--out", out]);
+    const r = await canary(["run", "--scenario", "tee-snp-gpu", "--akt", bin, "--out", out]);
     assert.equal(r.code, 1, r.stderr ?? "");
 
-    const { doc } = onlyRun(out, "tee");
+    const { doc } = onlyRun(out, "tee-snp-gpu");
     assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
     assert.equal(doc.outcome.kind, "failed");
     assert.equal(doc.outcome.atStep, "http-probe");
@@ -396,13 +396,13 @@ describe("canary run, end to end against a fake akt and a real server", () => {
     });
   });
 
-  it("--scenario tee fails at attestation when mock_report is true, naming the mock and still recording the report", async () => {
+  it("--scenario tee-snp-gpu fails at attestation when mock_report is true, naming the mock and still recording the report", async () => {
     const bin = build("tee-mock", { attestMockReport: true });
     const out = join(dir, "tee-mock-runs");
-    const r = await canary(["run", "--scenario", "tee", "--akt", bin, "--out", out]);
+    const r = await canary(["run", "--scenario", "tee-snp-gpu", "--akt", bin, "--out", out]);
     assert.equal(r.code, 1, r.stderr ?? "");
 
-    const { doc } = onlyRun(out, "tee");
+    const { doc } = onlyRun(out, "tee-snp-gpu");
     assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
     assert.equal(doc.outcome.kind, "failed");
     assert.equal(doc.outcome.atStep, "attestation");
@@ -410,39 +410,39 @@ describe("canary run, end to end against a fake akt and a real server", () => {
     assert.equal(doc.lease.attestation.mockReport, true);
   });
 
-  it("--scenario tee fails at attestation when nonce_verified is false", async () => {
+  it("--scenario tee-snp-gpu fails at attestation when nonce_verified is false", async () => {
     const bin = build("tee-nonce", { attestNonceVerified: false });
     const out = join(dir, "tee-nonce-runs");
-    const r = await canary(["run", "--scenario", "tee", "--akt", bin, "--out", out]);
+    const r = await canary(["run", "--scenario", "tee-snp-gpu", "--akt", bin, "--out", out]);
     assert.equal(r.code, 1, r.stderr ?? "");
 
-    const { doc } = onlyRun(out, "tee");
+    const { doc } = onlyRun(out, "tee-snp-gpu");
     assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
     assert.equal(doc.outcome.kind, "failed");
     assert.equal(doc.outcome.atStep, "attestation");
     assert.match(doc.outcome.message, /did not echo akt's challenge nonce/);
   });
 
-  it("--scenario tee fails at attestation when the platform is snp against the expected snp-gpu, naming both", async () => {
+  it("--scenario tee-snp-gpu fails at attestation when the platform is snp against the expected snp-gpu, naming both", async () => {
     const bin = build("tee-platform", { attestPlatform: "snp" });
     const out = join(dir, "tee-platform-runs");
-    const r = await canary(["run", "--scenario", "tee", "--akt", bin, "--out", out]);
+    const r = await canary(["run", "--scenario", "tee-snp-gpu", "--akt", bin, "--out", out]);
     assert.equal(r.code, 1, r.stderr ?? "");
 
-    const { doc } = onlyRun(out, "tee");
+    const { doc } = onlyRun(out, "tee-snp-gpu");
     assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
     assert.equal(doc.outcome.kind, "failed");
     assert.equal(doc.outcome.atStep, "attestation");
     assert.match(doc.outcome.message, /expected a snp-gpu attestation report, got "snp"/);
   });
 
-  it("--scenario tee fails at attestation carrying akt's own stderr text verbatim when the command exits non-zero", async () => {
+  it("--scenario tee-snp-gpu fails at attestation carrying akt's own stderr text verbatim when the command exits non-zero", async () => {
     const bin = build("tee-exit", { attestFail: true });
     const out = join(dir, "tee-exit-runs");
-    const r = await canary(["run", "--scenario", "tee", "--akt", bin, "--out", out]);
+    const r = await canary(["run", "--scenario", "tee-snp-gpu", "--akt", bin, "--out", out]);
     assert.equal(r.code, 1, r.stderr ?? "");
 
-    const { doc } = onlyRun(out, "tee");
+    const { doc } = onlyRun(out, "tee-snp-gpu");
     assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
     assert.equal(doc.outcome.kind, "failed");
     assert.equal(doc.outcome.atStep, "attestation");
@@ -480,7 +480,7 @@ describe("canary run, end to end against a fake akt and a real server", () => {
     await canary([
       "run",
       "--scenario",
-      "tee",
+      "tee-snp-gpu",
       "--akt",
       teeBin,
       "--out",
@@ -697,7 +697,7 @@ describe("canary run, end to end against a fake akt and a real server", () => {
     assert.equal(r.code, 1, r.stdout);
     const failLine = r.stdout.split("\n").find((l) => /^FAIL\s+balance uact/.test(l));
     assert.ok(failLine, `no "FAIL balance uact" line in:\n${r.stdout}`);
-    for (const id of ["web", "gpu", "persistent-storage", "ip-lease", "tee"]) {
+    for (const id of ["web", "gpu", "persistent-storage", "ip-lease", "tee-snp-gpu"]) {
       assert.match(failLine, new RegExp(id));
     }
   });

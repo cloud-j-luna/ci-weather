@@ -1,20 +1,22 @@
 {
   "schemaVersion": 1,
-  "scenario": "tee",
+  "scenario": "tee-snp-gpu",
   "network": {
     "name": "sandbox-2",
     "chainId": "sandbox-2"
   },
-  "startedAt": "2026-10-12T03:00:00Z",
-  "finishedAt": "2026-10-12T03:00:58.311000Z",
+  "startedAt": "2026-10-11T03:00:00Z",
+  "finishedAt": "2026-10-11T03:00:58.311000Z",
   "outcome": {
-    "kind": "passed"
+    "kind": "failed",
+    "atStep": "attestation",
+    "message": "the provider returned a mock attestation report, which echoes the nonce with no TEE hardware behind it"
   },
   "steps": [
     {
       "step": "create-deployment",
       "result": "completed",
-      "startedAt": "2026-10-12T03:00:00Z",
+      "startedAt": "2026-10-11T03:00:00Z",
       "durationMs": 4120,
       "txs": [
         {
@@ -26,19 +28,19 @@
     {
       "step": "wait-for-bids",
       "result": "completed",
-      "startedAt": "2026-10-12T03:00:04Z",
+      "startedAt": "2026-10-11T03:00:04Z",
       "durationMs": 6734
     },
     {
       "step": "select-bid",
       "result": "completed",
-      "startedAt": "2026-10-12T03:00:11Z",
+      "startedAt": "2026-10-11T03:00:11Z",
       "durationMs": 3180
     },
     {
       "step": "create-lease",
       "result": "completed",
-      "startedAt": "2026-10-12T03:00:14Z",
+      "startedAt": "2026-10-11T03:00:14Z",
       "durationMs": 8902,
       "txs": [
         {
@@ -50,26 +52,23 @@
     {
       "step": "send-manifest",
       "result": "completed",
-      "startedAt": "2026-10-12T03:00:23Z",
+      "startedAt": "2026-10-11T03:00:23Z",
       "durationMs": 4015
     },
     {
       "step": "wait-for-ready",
       "result": "completed",
-      "startedAt": "2026-10-12T03:00:27Z",
+      "startedAt": "2026-10-11T03:00:27Z",
       "durationMs": 21488
     },
     {
       "step": "attestation",
-      "result": "completed",
-      "startedAt": "2026-10-12T03:00:48Z",
-      "durationMs": 967
-    },
-    {
-      "step": "http-probe",
-      "result": "completed",
-      "startedAt": "2026-10-12T03:00:49Z",
-      "durationMs": 1143
+      "result": "failed",
+      "startedAt": "2026-10-11T03:00:48Z",
+      "durationMs": 884,
+      "errors": [
+        "the provider returned a mock attestation report, which echoes the nonce with no TEE hardware behind it"
+      ]
     }
   ],
   "lease": {
@@ -90,31 +89,11 @@
       "teeType": "snp-gpu",
       "reportSizeBytes": 1184,
       "nonceVerified": true,
-      "mockReport": false,
-      "certChainPresent": true,
+      "mockReport": true,
+      "certChainPresent": false,
       "gpuReportCount": 1
     },
-    "probe": {
-      "servedBy": "http",
-      "url": "http://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/",
-      "attempts": [
-        {
-          "scheme": "https",
-          "url": "https://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/",
-          "at": "2026-10-12T03:00:49Z",
-          "durationMs": 412,
-          "error": "dial tcp: connect: connection refused"
-        },
-        {
-          "scheme": "http",
-          "url": "http://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/",
-          "at": "2026-10-12T03:00:49Z",
-          "durationMs": 731,
-          "status": 200,
-          "bodyMatched": true
-        }
-      ]
-    }
+    "probe": null
   },
   "escrow": {
     "kind": "returned",
