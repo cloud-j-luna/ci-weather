@@ -1,6 +1,13 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { attestationFailure, basicStamp, probeTarget, retryDecision, sealRun } from "./lib/run.mjs";
+import {
+  attestationFailure,
+  basicStamp,
+  probeTarget,
+  retryDecision,
+  sealRun,
+  leaseStatusWithRetry,
+} from "./lib/run.mjs";
 import { check } from "./validate-runs.mjs";
 
 const T0 = Date.parse("2026-10-12T03:00:00.000Z");
@@ -673,5 +680,64 @@ describe("sealRun across several attempts", () => {
     assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
     assert.equal(doc.outcome.atStep, "wait-for-bids");
     assert.equal(doc.attempts.stoppedBecause, "attempts-exhausted");
+  });
+});
+
+describe("leaseStatusWithRetry", () => {
+  it("retries a transport failure and succeeds", async () => {
+    let calls = 0;
+    const waits = [];
+    const query = async () => {
+      calls += 1;
+      if (calls < 3) throw new Error("read: connection reset by peer");
+      return { ips: [{ ip: "1.2.3.4", port: 80, externalPort: 80, protocol: "TCP" }] };
+    };
+    const got = await leaseStatusWithRetry(
+      "akt",
+      "mainnet",
+      "1",
+      async (ms) => waits.push(ms),
+      () => {},
+      query,
+    );
+    assert.equal(calls, 3);
+    assert.deepEqual(got.ips?.length, 1);
+    assert.ok(waits.length === 2 && waits[1] > waits[0], "backoff grows between attempts");
+  });
+
+  it("gives up after the last attempt and reports the transport error", async () => {
+    let calls = 0;
+    const query = async () => {
+      calls += 1;
+      throw new Error("connection reset by peer");
+    };
+    const got = await leaseStatusWithRetry(
+      "akt",
+      "mainnet",
+      "1",
+      async () => {},
+      () => {},
+      query,
+    );
+    assert.equal(calls, 3);
+    assert.match(got.error, /connection reset/);
+  });
+
+  it("never retries a successful query that reports no IPs", async () => {
+    let calls = 0;
+    const query = async () => {
+      calls += 1;
+      return { ips: [] };
+    };
+    const got = await leaseStatusWithRetry(
+      "akt",
+      "mainnet",
+      "1",
+      async () => {},
+      () => {},
+      query,
+    );
+    assert.equal(calls, 1, "an empty IP list is a real answer, not a failure to retry away");
+    assert.deepEqual(got.ips, []);
   });
 });
