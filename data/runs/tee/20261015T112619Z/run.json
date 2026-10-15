@@ -1,0 +1,1302 @@
+{
+  "schemaVersion": 1,
+  "scenario": "tee",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-10-15T11:26:19.558Z",
+  "finishedAt": "2026-10-15T11:30:21.906Z",
+  "outcome": {
+    "kind": "failed",
+    "atStep": "http-probe",
+    "message": "no scheme served the workload after 154 attempts over 179s: https fetch failed (x77); http returned 404 (x77)"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29075229",
+        "closeTxHash": "71125FB08B4990BDED1B4E91FE9A9E5462248E6B0CD7091A9E1196444D235C86"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-15T11:26:21.655Z",
+      "durationMs": 1083,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "6BF287CF5EC4FBF9966DF2FC43AE815547EFC2857731D9D94643B5A2E5466AAC",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-10-15T11:26:22.738Z",
+      "durationMs": 10483,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-10-15T11:26:33.221Z",
+      "durationMs": 0,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-10-15T11:26:33.221Z",
+      "durationMs": 316,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "992C7258CC33026119F2EA5E039FE037B99FC6FD88CE963F730B8D110CACCD16",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-10-15T11:26:33.537Z",
+      "durationMs": 13587,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "completed",
+      "startedAt": "2026-10-15T11:26:47.124Z",
+      "durationMs": 18290,
+      "durationSource": "derived"
+    },
+    {
+      "step": "attestation",
+      "result": "completed",
+      "startedAt": "2026-10-15T11:27:05.414Z",
+      "durationMs": 5148,
+      "durationSource": "runner"
+    },
+    {
+      "step": "http-probe",
+      "result": "failed",
+      "startedAt": "2026-10-15T11:27:10.562Z",
+      "durationMs": 181941,
+      "durationSource": "runner",
+      "errors": [
+        "no scheme served the workload after 154 attempts over 179s: https fetch failed (x77); http returned 404 (x77)"
+      ]
+    }
+  ],
+  "lease": {
+    "dseq": "29075229",
+    "bidCount": 1,
+    "provider": "akash1wcuwjuu59t22xp56a40jg3dty64xlyp4wkqcwd",
+    "price": {
+      "amount": "3401.347727000000000000",
+      "denom": "uact"
+    },
+    "uris": [
+      "h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub"
+    ],
+    "attestation": {
+      "teeType": "snp-gpu",
+      "nonceVerified": true,
+      "mockReport": false,
+      "certChainPresent": false,
+      "gpuReportCount": 1,
+      "reportSizeBytes": 1184
+    },
+    "probe": {
+      "attempts": [
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:11.087Z",
+          "durationMs": 140,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:11.227Z",
+          "durationMs": 58,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:11.537Z",
+          "durationMs": 58,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:11.595Z",
+          "durationMs": 18,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:12.114Z",
+          "durationMs": 58,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:12.172Z",
+          "durationMs": 18,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:13.190Z",
+          "durationMs": 3706,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:16.896Z",
+          "durationMs": 3918,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:22.816Z",
+          "durationMs": 59,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:22.875Z",
+          "durationMs": 17,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:24.892Z",
+          "durationMs": 53,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:24.945Z",
+          "durationMs": 17,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:26.962Z",
+          "durationMs": 54,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:27.016Z",
+          "durationMs": 18,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:29.036Z",
+          "durationMs": 44,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:29.080Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:31.094Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:31.137Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:33.153Z",
+          "durationMs": 39,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:33.192Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:35.209Z",
+          "durationMs": 195,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:35.404Z",
+          "durationMs": 20,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:37.423Z",
+          "durationMs": 45,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:37.468Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:39.485Z",
+          "durationMs": 52,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:39.537Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:41.552Z",
+          "durationMs": 44,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:41.596Z",
+          "durationMs": 15,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:43.613Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:43.656Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:45.672Z",
+          "durationMs": 39,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:45.711Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:47.728Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:47.771Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:49.787Z",
+          "durationMs": 3386,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:53.173Z",
+          "durationMs": 35,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:55.209Z",
+          "durationMs": 46,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:55.255Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:57.271Z",
+          "durationMs": 40,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:57.311Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:27:59.327Z",
+          "durationMs": 4020,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:03.347Z",
+          "durationMs": 34,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:05.382Z",
+          "durationMs": 44,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:05.426Z",
+          "durationMs": 15,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:07.442Z",
+          "durationMs": 39,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:07.481Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:09.498Z",
+          "durationMs": 44,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:09.542Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:11.558Z",
+          "durationMs": 45,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:11.603Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:13.618Z",
+          "durationMs": 40,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:13.658Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:15.674Z",
+          "durationMs": 58,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:15.732Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:17.748Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:17.791Z",
+          "durationMs": 15,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:19.806Z",
+          "durationMs": 40,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:19.846Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:21.863Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:21.906Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:23.922Z",
+          "durationMs": 44,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:23.966Z",
+          "durationMs": 15,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:25.981Z",
+          "durationMs": 39,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:26.020Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:28.036Z",
+          "durationMs": 44,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:28.080Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:30.096Z",
+          "durationMs": 44,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:30.140Z",
+          "durationMs": 15,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:32.155Z",
+          "durationMs": 38,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:32.193Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:34.209Z",
+          "durationMs": 44,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:34.253Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:36.269Z",
+          "durationMs": 44,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:36.313Z",
+          "durationMs": 15,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:38.328Z",
+          "durationMs": 39,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:38.367Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:40.383Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:40.426Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:42.442Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:42.485Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:44.501Z",
+          "durationMs": 39,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:44.540Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:46.556Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:46.599Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:48.615Z",
+          "durationMs": 48,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:48.663Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:50.679Z",
+          "durationMs": 40,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:50.719Z",
+          "durationMs": 15,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:52.734Z",
+          "durationMs": 46,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:52.780Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:54.797Z",
+          "durationMs": 42,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:54.839Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:56.855Z",
+          "durationMs": 40,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:56.895Z",
+          "durationMs": 15,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:58.910Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:28:58.953Z",
+          "durationMs": 15,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:00.968Z",
+          "durationMs": 44,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:01.012Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:03.027Z",
+          "durationMs": 40,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:03.067Z",
+          "durationMs": 15,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:05.082Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:05.125Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:07.141Z",
+          "durationMs": 44,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:07.185Z",
+          "durationMs": 15,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:09.200Z",
+          "durationMs": 41,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:09.241Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:11.257Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:11.300Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:13.316Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:13.359Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:15.375Z",
+          "durationMs": 39,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:15.414Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:17.429Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:17.472Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:19.488Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:19.531Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:21.546Z",
+          "durationMs": 41,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:21.587Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:23.602Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:23.645Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:25.661Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:25.704Z",
+          "durationMs": 15,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:27.720Z",
+          "durationMs": 39,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:27.759Z",
+          "durationMs": 15,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:29.774Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:29.817Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:31.834Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:31.877Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:33.893Z",
+          "durationMs": 39,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:33.932Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:35.948Z",
+          "durationMs": 53,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:36.001Z",
+          "durationMs": 15,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:38.016Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:38.059Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:40.075Z",
+          "durationMs": 40,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:40.115Z",
+          "durationMs": 15,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:42.130Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:42.173Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:44.189Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:44.232Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:46.248Z",
+          "durationMs": 170,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:46.418Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:48.433Z",
+          "durationMs": 303,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:48.736Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:50.753Z",
+          "durationMs": 4202,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:29:54.955Z",
+          "durationMs": 3496,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:30:00.453Z",
+          "durationMs": 3349,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:30:03.802Z",
+          "durationMs": 165,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:30:05.969Z",
+          "durationMs": 405,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:30:06.374Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:30:08.391Z",
+          "durationMs": 39,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:30:08.430Z",
+          "durationMs": 15,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:30:10.445Z",
+          "durationMs": 43,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://h771oc4qt5dll57rvngtgbbvig.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-15T11:30:10.488Z",
+          "durationMs": 16,
+          "status": 404,
+          "bodyMatched": false
+        }
+      ]
+    }
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 1
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/38725480281",
+    "sha": "69c27f83c68c520d8da1af29c6e614ccebe30193",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "-129251"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-20718"
+      }
+    ]
+  }
+}

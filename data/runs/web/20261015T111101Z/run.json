@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 1,
+  "scenario": "web",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-10-15T11:11:01.936Z",
+  "finishedAt": "2026-10-15T11:11:38.898Z",
+  "outcome": {
+    "kind": "passed"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29075073",
+        "closeTxHash": "2429661E76895295D8BA13295564E54ED8B5EA928026D7BCF3FE33F4F7D6CC94"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-15T11:11:04.324Z",
+      "durationMs": 1668,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "D9D4CB4C58EB080AB7C5C3DBCE082E93127E64ED53ECE5EB74FE96A212D443E9",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-10-15T11:11:05.992Z",
+      "durationMs": 10584,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-10-15T11:11:16.576Z",
+      "durationMs": 0,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-10-15T11:11:16.576Z",
+      "durationMs": 379,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "0D21021E0A1D5DF7082BA2374D4C315D22DC6FEADB7FC38D382D84F3B5F232FB",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-10-15T11:11:16.955Z",
+      "durationMs": 6079,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "completed",
+      "startedAt": "2026-10-15T11:11:23.034Z",
+      "durationMs": 3109,
+      "durationSource": "derived"
+    },
+    {
+      "step": "http-probe",
+      "result": "completed",
+      "startedAt": "2026-10-15T11:11:26.143Z",
+      "durationMs": 6832,
+      "durationSource": "runner"
+    }
+  ],
+  "lease": {
+    "dseq": "29075073",
+    "bidCount": 1,
+    "provider": "akash15tl6v6gd0nte0syyxnv57zmmspgju4c3xfmdhk",
+    "price": {
+      "amount": "0.965321000000000000",
+      "denom": "uact"
+    },
+    "uris": [
+      "cuffjd76p98ep8a2p3frtmriko.ingress.hurricane.akash.pub"
+    ],
+    "providerAudited": true,
+    "providerRegion": "na-us-west",
+    "providerOrg": "overclock",
+    "probe": {
+      "attempts": [
+        {
+          "scheme": "https",
+          "url": "https://cuffjd76p98ep8a2p3frtmriko.ingress.hurricane.akash.pub/",
+          "at": "2026-10-15T11:11:27.108Z",
+          "durationMs": 201,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://cuffjd76p98ep8a2p3frtmriko.ingress.hurricane.akash.pub/",
+          "at": "2026-10-15T11:11:27.309Z",
+          "durationMs": 43,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://cuffjd76p98ep8a2p3frtmriko.ingress.hurricane.akash.pub/",
+          "at": "2026-10-15T11:11:27.603Z",
+          "durationMs": 872,
+          "status": 503,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://cuffjd76p98ep8a2p3frtmriko.ingress.hurricane.akash.pub/",
+          "at": "2026-10-15T11:11:28.476Z",
+          "durationMs": 599,
+          "status": 503,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://cuffjd76p98ep8a2p3frtmriko.ingress.hurricane.akash.pub/",
+          "at": "2026-10-15T11:11:29.576Z",
+          "durationMs": 18,
+          "status": 503,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://cuffjd76p98ep8a2p3frtmriko.ingress.hurricane.akash.pub/",
+          "at": "2026-10-15T11:11:29.594Z",
+          "durationMs": 17,
+          "status": 503,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://cuffjd76p98ep8a2p3frtmriko.ingress.hurricane.akash.pub/",
+          "at": "2026-10-15T11:11:30.611Z",
+          "durationMs": 63,
+          "status": 503,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://cuffjd76p98ep8a2p3frtmriko.ingress.hurricane.akash.pub/",
+          "at": "2026-10-15T11:11:30.675Z",
+          "durationMs": 16,
+          "status": 503,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://cuffjd76p98ep8a2p3frtmriko.ingress.hurricane.akash.pub/",
+          "at": "2026-10-15T11:11:32.692Z",
+          "durationMs": 283,
+          "status": 200,
+          "bodyMatched": true
+        }
+      ],
+      "servedBy": "https",
+      "url": "https://cuffjd76p98ep8a2p3frtmriko.ingress.hurricane.akash.pub/"
+    }
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 1
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/38725480281",
+    "sha": "69c27f83c68c520d8da1af29c6e614ccebe30193",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "-2"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-20324"
+      }
+    ]
+  }
+}
