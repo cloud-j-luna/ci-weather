@@ -46,7 +46,10 @@ profiles:
             size: 10Gi
             attributes:
               persistent: true
-              class: beta2
+              # beta3 is NVMe. Every Overclock provider advertises beta3 and none
+              # advertises beta2, so asking for beta2 meant the scenario could not
+              # receive a single bid regardless of how many providers were willing.
+              class: beta3
   placement:
     dcloud:
       attributes:
