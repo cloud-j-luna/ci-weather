@@ -135,6 +135,31 @@ export function retryDecision({ failure, dseq, attemptsMade, maxAttempts, remain
   return { retry: true, stoppedBecause: null };
 }
 
+// A transport failure here is not an answer about the lease. A single "connection
+// reset by peer" from the gateway once turned a deployment that had leased, served and
+// reported ready into a red cell. Retry the query, but never retry a query that
+// SUCCEEDED and reported no IPs: that is a real finding about the provider and
+// retrying it away would be the dashboard lying.
+const LEASE_STATUS_ATTEMPTS = 3;
+const LEASE_STATUS_BACKOFF_MS = 3000;
+
+export async function leaseStatusWithRetry(bin, context, dseq, sleep, log = () => {}, akt) {
+  const query = akt ?? leaseStatus;
+  let last;
+  for (let attempt = 1; attempt <= LEASE_STATUS_ATTEMPTS; attempt += 1) {
+    try {
+      return await query(bin, context, dseq);
+    } catch (e) {
+      last = e;
+      if (attempt < LEASE_STATUS_ATTEMPTS) {
+        log(`  lease-status attempt ${attempt} failed, retrying: ${e.message}`);
+        await sleep(LEASE_STATUS_BACKOFF_MS * attempt);
+      }
+    }
+  }
+  return { error: last.message };
+}
+
 export function probeTarget(target, uris, status) {
   if (target !== "ip") return { hosts: uris };
   if (status.error !== undefined) {
@@ -609,9 +634,13 @@ export async function runScenario({
       }
 
       if (!abortReason && attestationOk) {
-        const status = await leaseStatus(bin, contextName, state.lease.dseq).catch((e) => ({
-          error: e.message,
-        }));
+        const status = await leaseStatusWithRetry(
+          bin,
+          contextName,
+          state.lease.dseq,
+          (ms) => abortableSleep(ms, ac.signal),
+          log,
+        );
         if (status.ips?.length) state.lease.ips = status.ips;
 
         const target = probeTarget(sc.probe.target, state.lease.uris ?? [], status);
