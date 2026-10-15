@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "scenario": "web",
+  "network": {
+    "name": "sandbox-2",
+    "chainId": "sandbox-2"
+  },
+  "startedAt": "2026-10-15T10:06:57.014Z",
+  "finishedAt": "2026-10-15T10:07:26.112Z",
+  "outcome": {
+    "kind": "passed"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "5759057",
+        "closeTxHash": "73BA92118A98F44F16C718C270387D9BC31D6E1CD5780C920413A249E9F1E3F7"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-15T10:06:58.816Z",
+      "durationMs": 1058,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "A1E99790CCDDA0A36948544889563EBCD2322013FCC4672CDC8B3EA4A8EFC16E",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-10-15T10:06:59.874Z",
+      "durationMs": 10352,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-10-15T10:07:10.226Z",
+      "durationMs": 0,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-10-15T10:07:10.226Z",
+      "durationMs": 232,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "B857F1BC1C629492702D0BDF0EA4119346F6B190A677B3B18CA36700884FB97C",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-10-15T10:07:10.458Z",
+      "durationMs": 6655,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "completed",
+      "startedAt": "2026-10-15T10:07:17.114Z",
+      "durationMs": 734,
+      "durationSource": "derived"
+    },
+    {
+      "step": "http-probe",
+      "result": "completed",
+      "startedAt": "2026-10-15T10:07:17.848Z",
+      "durationMs": 1880,
+      "durationSource": "runner"
+    }
+  ],
+  "lease": {
+    "dseq": "5759057",
+    "bidCount": 1,
+    "provider": "akash1rk090a6mq9gvm0h6ljf8kz8mrxglwwxsk4srxh",
+    "price": {
+      "amount": "0.965321000000000000",
+      "denom": "uact"
+    },
+    "uris": [
+      "i5hc5mf9ddc77646pqcd4ip0ic.ingress.provider-01.sandbox-2.aksh.pw"
+    ],
+    "providerAudited": true,
+    "providerRegion": "na-us-west",
+    "providerOrg": "overclock",
+    "probe": {
+      "attempts": [
+        {
+          "scheme": "https",
+          "url": "https://i5hc5mf9ddc77646pqcd4ip0ic.ingress.provider-01.sandbox-2.aksh.pw/",
+          "at": "2026-10-15T10:07:19.058Z",
+          "durationMs": 297,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://i5hc5mf9ddc77646pqcd4ip0ic.ingress.provider-01.sandbox-2.aksh.pw/",
+          "at": "2026-10-15T10:07:19.356Z",
+          "durationMs": 370,
+          "status": 200,
+          "bodyMatched": true
+        }
+      ],
+      "servedBy": "http",
+      "url": "http://i5hc5mf9ddc77646pqcd4ip0ic.ingress.provider-01.sandbox-2.aksh.pw/"
+    }
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "-1"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-1968"
+      }
+    ]
+  }
+}

@@ -23,6 +23,9 @@ profiles:
           size: 256Mi
   placement:
     dcloud:
+      attributes:
+        organization: overclock
+        feat-endpoint-ip: "true"
       pricing:
         web:
           denom: uact

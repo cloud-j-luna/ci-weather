@@ -68,6 +68,10 @@ scenarios:
     title: Web service
     question: Can anyone deploy an ordinary web workload to Akash right now?
     sdl: sdl/web.yaml
+    # Unpinned on purpose. The SDL requires organization=overclock, so any of the
+    # ~23 Overclock providers can win. Pinning one provider meant a single operator
+    # pausing bids showed up as Akash being unable to run a web workload.
+    bidSelect: cheapest
     tags: [baseline]
     probe:
       path: /
@@ -78,11 +82,10 @@ scenarios:
     title: GPU workload
     question: Is GPU supply actually leasable, not just advertised?
     sdl: sdl/gpu.yaml
-    # A100 fleet in Houston. Hurricane advertises a single T4 and it is leased
-    # out, so this scenario goes somewhere with real GPU headroom instead.
-    bidSelect:
-      default: cheapest
-      mainnet: provider=akash172k755dd82elslzcgkgtk3ux5ytdqvx5wq2a98
+    # Any Overclock A100 provider, not one pinned fleet. The SDL asks for an a100
+    # and organization=overclock; the Houston fleet failed to bid once already and
+    # a single operator's capacity should not read as Akash lacking GPUs.
+    bidSelect: cheapest
     tags: [gpu]
     probe:
       path: /
@@ -110,6 +113,9 @@ scenarios:
     title: Dedicated IP
     question: Can a workload still obtain a dedicated public IP endpoint?
     sdl: sdl/ip.yaml
+    # Constrained by the SDL to Overclock providers advertising feat-endpoint-ip.
+    # That pool is small, so this row is the likeliest to go red on supply alone.
+    bidSelect: cheapest
     tags: [ip]
     probe:
       # uris is the provider's shared ingress hostname, handed to every deployment whether
