@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "scenario": "ip-lease",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-10-15T16:08:16.072Z",
+  "finishedAt": "2026-10-15T16:20:14.014Z",
+  "outcome": {
+    "kind": "failed",
+    "atStep": "http-probe",
+    "message": "the lease status that reports the dedicated IP could not be read: query lease status: Get \"https://provider.hurricane.akash.pub:8443/lease/29078213/1/1/status\": read tcp 10.1.0.126:55992->184.105.162.170:8443: read: connection reset by peer"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29078098",
+        "closeTxHash": "E4056464FA506D35F55A49171EADBB914203526876F38A3A9DFFC8EE3628C4CE"
+      },
+      {
+        "dseq": "29078156",
+        "closeTxHash": "30CA9CAD732C0AD549AF9549B373CD3477B4D08CD07E202A7B99B89C498C423D"
+      },
+      {
+        "dseq": "29078213",
+        "closeTxHash": "76386271772FA916093AD92B9623922406FB25A464105C2995231A4561568B56"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-15T16:19:35.262Z",
+      "durationMs": 2238,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "D1F92AF94243BA254A56B964F5EB5D92182E54EB9F49C0C2406A204A521F3587",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-10-15T16:19:37.500Z",
+      "durationMs": 15596,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-10-15T16:19:53.096Z",
+      "durationMs": 0,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-10-15T16:19:53.096Z",
+      "durationMs": 400,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "0FBF9F5FA529092ECE3EED71D19D4487B5BCE001F0BF6BC52EFE8E53AF0B1D2A",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-10-15T16:19:53.496Z",
+      "durationMs": 6217,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "completed",
+      "startedAt": "2026-10-15T16:19:59.714Z",
+      "durationMs": 4886,
+      "durationSource": "derived"
+    },
+    {
+      "step": "http-probe",
+      "result": "failed",
+      "startedAt": "2026-10-15T16:20:04.600Z",
+      "durationMs": 2616,
+      "durationSource": "runner",
+      "errors": [
+        "the lease status that reports the dedicated IP could not be read: query lease status: Get \"https://provider.hurricane.akash.pub:8443/lease/29078213/1/1/status\": read tcp 10.1.0.126:55992->184.105.162.170:8443: read: connection reset by peer"
+      ]
+    }
+  ],
+  "lease": {
+    "dseq": "29078213",
+    "bidCount": 1,
+    "provider": "akash15tl6v6gd0nte0syyxnv57zmmspgju4c3xfmdhk",
+    "price": {
+      "amount": "12.711993000000000000",
+      "denom": "uact"
+    },
+    "uris": [
+      "mcekrfnin98ltae0do6auctvqs.ingress.hurricane.akash.pub"
+    ],
+    "providerAudited": true,
+    "providerRegion": "na-us-west",
+    "providerOrg": "overclock",
+    "probe": {
+      "attempts": []
+    }
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 3,
+    "earlier": [
+      {
+        "atStep": "wait-for-bids",
+        "message": "no bids received (at least 1 required); timed out after 5m0s",
+        "startedAt": "2026-10-15T16:08:18.111Z",
+        "durationMs": 301322,
+        "dseq": "29078098"
+      },
+      {
+        "atStep": "wait-for-bids",
+        "message": "no bids received (at least 1 required); timed out after 5m0s",
+        "startedAt": "2026-10-15T16:13:56.308Z",
+        "durationMs": 301363,
+        "dseq": "29078156"
+      }
+    ]
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/38765956153",
+    "sha": "d483105cc5f123faf65d0d3dfdc40ba6d7a0772b",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "-38"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-40099"
+      }
+    ]
+  }
+}
