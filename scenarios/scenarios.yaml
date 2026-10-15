@@ -126,8 +126,8 @@ scenarios:
       expectStatus: 200
       expectBodyContains: "Welcome to nginx!"
 
-  - id: tee
-    title: Confidential compute
+  - id: tee-snp-gpu
+    title: TEE SEV-SNP (CPU+GPU)
     question: Is a confidential-compute lease actually backed by TEE hardware, or only labelled as one?
     sdl: sdl/tee.yaml
     bidSelect:

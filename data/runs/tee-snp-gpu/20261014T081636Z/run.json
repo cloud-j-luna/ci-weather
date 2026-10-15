@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "scenario": "tee",
+  "scenario": "tee-snp-gpu",
   "network": {
     "name": "mainnet",
     "chainId": "akashnet-2"
