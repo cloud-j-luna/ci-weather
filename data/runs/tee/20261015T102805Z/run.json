@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "scenario": "tee",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-10-15T10:28:05.407Z",
+  "finishedAt": "2026-10-15T10:44:36.538Z",
+  "outcome": {
+    "kind": "failed",
+    "atStep": "wait-for-bids",
+    "message": "no bids received (at least 1 required); timed out after 5m0s"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29074636",
+        "closeTxHash": "425CDE1FAF3602FA224DFCB6AB70364A6953F82F61C09D6E43257D5E9350CF96"
+      },
+      {
+        "dseq": "29074694",
+        "closeTxHash": "46C574312638FA84FCB0016DD8E0083D15263B88B18112EDF8D161F1BFDDBF8C"
+      },
+      {
+        "dseq": "29074751",
+        "closeTxHash": "C0BFEC7881BB7C03DEF6FA1B8260FD4E39FBA0AFFD7118A16FA50575F50AEB99"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-15T10:39:24.361Z",
+      "durationMs": 1292,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "7CAEADC775AF903223F37A37BB4CB3F4D03F2D029CA1E08F3AC76A7BF2ACBE28",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "failed",
+      "startedAt": "2026-10-15T10:39:25.653Z",
+      "durationMs": 300001,
+      "durationSource": "akt-log",
+      "errors": [
+        "no bids received (at least 1 required); timed out after 5m0s"
+      ]
+    }
+  ],
+  "lease": {
+    "dseq": "29074751",
+    "probe": null
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 3,
+    "earlier": [
+      {
+        "atStep": "wait-for-bids",
+        "message": "no bids received (at least 1 required); timed out after 5m0s",
+        "startedAt": "2026-10-15T10:28:07.946Z",
+        "durationMs": 301350,
+        "dseq": "29074636"
+      },
+      {
+        "atStep": "wait-for-bids",
+        "message": "no bids received (at least 1 required); timed out after 5m0s",
+        "startedAt": "2026-10-15T10:33:46.013Z",
+        "durationMs": 301612,
+        "dseq": "29074694"
+      }
+    ],
+    "stoppedBecause": "attempts-exhausted"
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/38718072969",
+    "sha": "bb18518004651465129006579f370786af90577a",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "0"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-29232"
+      }
+    ]
+  }
+}
