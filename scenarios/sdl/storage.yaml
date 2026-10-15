@@ -49,6 +49,9 @@ profiles:
               class: beta2
   placement:
     dcloud:
+      attributes:
+        organization: overclock
+        feat-persistent-storage: "true"
       pricing:
         app:
           denom: uact

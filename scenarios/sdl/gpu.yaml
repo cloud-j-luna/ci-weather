@@ -37,6 +37,8 @@ profiles:
                 - model: a100
   placement:
     dcloud:
+      attributes:
+        organization: overclock
       pricing:
         app:
           denom: uact
