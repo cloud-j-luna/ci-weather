@@ -75,6 +75,10 @@ function invariants(run) {
         bad.push("outcome is passed but the attestation nonce was never verified");
       }
     }
+    const gpu = run.lease?.gpu;
+    if (gpu && gpu.devices.length === 0) {
+      bad.push("outcome is passed but the GPU report listed no devices");
+    }
   }
 
   const cut = steps.findIndex((s) => s.result === "failed");
@@ -103,6 +107,32 @@ function invariants(run) {
     const created = steps.find((s) => s.step === "create-deployment");
     if (e.kind === "nothing-created" && created?.result === "completed") {
       bad.push("escrow claims nothing-created but create-deployment completed");
+    }
+  }
+
+  const gpu = run.lease?.gpu;
+  if (gpu && gpu.deviceCount !== gpu.devices.length) {
+    bad.push(
+      `lease.gpu.deviceCount is ${gpu.deviceCount} but ${gpu.devices.length} device(s) are recorded`,
+    );
+  }
+  const gpuStep = steps.find((s) => s.step === "gpu-check");
+  if (gpuStep?.result === "completed" && !gpu) {
+    bad.push(
+      "gpu-check completed but no GPU report was recorded, so nothing proves a device was seen",
+    );
+  }
+  if (gpu && run.lease?.probe?.url) {
+    let sameOrigin = false;
+    try {
+      sameOrigin = new URL(gpu.url).origin === new URL(run.lease.probe.url).origin;
+    } catch {
+      sameOrigin = false;
+    }
+    if (!sameOrigin) {
+      bad.push(
+        "the GPU report was fetched from a different origin than the one that served the probe",
+      );
     }
   }
 

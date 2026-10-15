@@ -387,6 +387,118 @@ describe("sealRun", () => {
         assert.ok(doc.steps.some((s) => s.step === "verify-attestation"));
       },
     },
+    {
+      name: "a gpuCheck run whose report parsed devices seals passed, gpu-check last and completed, with lease.gpu recorded",
+      state: base({
+        probe: servedProbe,
+        probeStartedAtMs: T0 + 6000,
+        probeFinishedAtMs: T0 + 7000,
+        gpuCheckPath: "/gpu.csv",
+        gpuCheckStartedAtMs: T0 + 7000,
+        gpuCheckFinishedAtMs: T0 + 7500,
+        gpu: {
+          url: "http://host/gpu.csv",
+          status: 200,
+          lines: ["NVIDIA A100-SXM4-80GB, 535.183.01, 81920 MiB, 8.0"],
+          devices: [
+            {
+              name: "NVIDIA A100-SXM4-80GB",
+              driverVersion: "535.183.01",
+              memoryTotalMiB: 81920,
+              computeCapability: "8.0",
+            },
+          ],
+        },
+        lease: {
+          ...lease,
+          gpu: {
+            url: "http://host/gpu.csv",
+            deviceCount: 1,
+            devices: [
+              {
+                name: "NVIDIA A100-SXM4-80GB",
+                driverVersion: "535.183.01",
+                memoryTotalMiB: 81920,
+                computeCapability: "8.0",
+              },
+            ],
+          },
+        },
+        epilogue: { closed: [{ dseq: "5715077" }], stillActive: [] },
+      }),
+      expect: (doc) => {
+        assert.equal(doc.outcome.kind, "passed");
+        assert.equal(doc.steps.at(-1).step, "gpu-check");
+        assert.equal(doc.steps.at(-1).result, "completed");
+        assert.equal(doc.lease.gpu.deviceCount, 1);
+      },
+    },
+    {
+      name: "a gpuCheck run whose report had zero devices seals failed at gpu-check, outcome.message equal to the step's own error",
+      state: base({
+        probe: servedProbe,
+        probeStartedAtMs: T0 + 6000,
+        probeFinishedAtMs: T0 + 7000,
+        gpuCheckPath: "/gpu.csv",
+        gpuCheckStartedAtMs: T0 + 7000,
+        gpuCheckFinishedAtMs: T0 + 7200,
+        gpu: {
+          url: "http://host/gpu.csv",
+          status: 200,
+          lines: ["sh: nvidia-smi: command not found"],
+          devices: [],
+        },
+        lease: {
+          ...lease,
+          gpu: { url: "http://host/gpu.csv", deviceCount: 0, devices: [] },
+        },
+        epilogue: { closed: [{ dseq: "5715077" }], stillActive: [] },
+      }),
+      expect: (doc) => {
+        assert.equal(doc.outcome.kind, "failed");
+        assert.equal(doc.outcome.atStep, "gpu-check");
+        assert.equal(doc.outcome.message, doc.steps.at(-1).errors[0]);
+        assert.match(doc.outcome.message, /not nvidia-smi CSV/);
+      },
+    },
+    {
+      name: "a gpuCheck run whose fetch errored seals failed at gpu-check and records no lease.gpu",
+      state: base({
+        probe: servedProbe,
+        probeStartedAtMs: T0 + 6000,
+        probeFinishedAtMs: T0 + 7000,
+        gpuCheckPath: "/gpu.csv",
+        gpuCheckStartedAtMs: T0 + 7000,
+        gpuCheckFinishedAtMs: T0 + 7050,
+        gpu: {
+          url: "http://host/gpu.csv",
+          error: "network is unreachable",
+          lines: [],
+          devices: [],
+        },
+        epilogue: { closed: [{ dseq: "5715077" }], stillActive: [] },
+      }),
+      expect: (doc) => {
+        assert.equal(doc.outcome.kind, "failed");
+        assert.equal(doc.outcome.atStep, "gpu-check");
+        assert.match(doc.outcome.message, /could not be fetched/);
+        assert.equal(doc.lease.gpu, undefined);
+      },
+    },
+    {
+      name: "an aborted run that planned a gpuCheck names gpu-check among the steps it never reached",
+      state: base({
+        gpuCheckPath: "/gpu.csv",
+        abortReason: "wall-clock budget of 25m exhausted",
+        epilogue: { closed: [{ dseq: "5715077" }], stillActive: [] },
+      }),
+      expect: (doc) => {
+        assert.deepEqual(
+          doc.steps.filter((s) => s.result === "skipped").map((s) => s.step),
+          ["http-probe", "gpu-check"],
+        );
+      },
+    },
   ];
 
   for (const c of cases) {

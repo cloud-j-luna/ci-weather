@@ -2,6 +2,7 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { parse as parseYaml } from "yaml";
 import { loadConfig } from "./lib/config.mjs";
 
 const repoRoot = new URL("..", import.meta.url).pathname;
@@ -42,5 +43,19 @@ describe("the CI matrix and the scenario registry", () => {
       jobMs - runMs >= headroomMs,
       `the job gets ${jobMs / 60000}m against a runner budget of ${runMs / 60000}m, which leaves under ${headroomMs / 60000}m for checkout, npm ci, the akt install, doctor and the always() reap. Too little and the job timeout kills the reap step, which strands a lease holding escrow until the next scheduled run.`,
     );
+  });
+
+  it("every scenario's gpuCheck path names a file its own SDL actually writes", () => {
+    const config = loadConfig(repoRoot);
+    for (const sc of config.scenarios.values()) {
+      if (!sc.gpuCheck) continue;
+      const sdl = parseYaml(readFileSync(sc.sdlPath, "utf8"));
+      const args = sdl.services.app.args.join("\n");
+      const written = `/srv${sc.gpuCheck.path}`;
+      assert.ok(
+        args.includes(written),
+        `scenario "${sc.id}" points gpuCheck at ${sc.gpuCheck.path}, but its SDL never writes ${written}, so every run would 404`,
+      );
+    }
   });
 });

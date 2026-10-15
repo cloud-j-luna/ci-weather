@@ -135,7 +135,7 @@
   },
   "$defs": {
     "step": {
-      "description": "A step of the deployment lifecycle under test. An open string, not an enum: akt's step vocabulary changed between 0.0.4 and 1.0.1, and a closed enum would reject every run on the day akt adds one. Unknown steps are recorded and reported by doctor.\n\nexamples lists the known vocabulary, in render order. akt's names are kept verbatim.\n\nreap and close are absent on purpose. Both run on paths where the lifecycle never began, so neither fits a sequence whose invariant is 'completed up to the failure, skipped after it'. They live on the reap and escrow axes.\n\nattestation runs only for scenarios whose registry entry asks for it, so its absence from a run is not a gap. attestation precedes http-probe because the attestation verdict is the point of a TEE scenario and must not be gated on the workload serving traffic.",
+      "description": "A step of the deployment lifecycle under test. An open string, not an enum: akt's step vocabulary changed between 0.0.4 and 1.0.1, and a closed enum would reject every run on the day akt adds one. Unknown steps are recorded and reported by doctor.\n\nexamples lists the known vocabulary, in render order. akt's names are kept verbatim.\n\nreap and close are absent on purpose. Both run on paths where the lifecycle never began, so neither fits a sequence whose invariant is 'completed up to the failure, skipped after it'. They live on the reap and escrow axes.\n\nattestation runs only for scenarios whose registry entry asks for it, so its absence from a run is not a gap. attestation precedes http-probe because the attestation verdict is the point of a TEE scenario and must not be gated on the workload serving traffic. gpu-check follows http-probe because it fetches over the scheme and host the probe proved working, so it cannot run until the probe has one, and like attestation it runs only for scenarios whose registry entry asks for it.",
       "type": "string",
       "minLength": 1,
       "examples": [
@@ -146,7 +146,8 @@
         "send-manifest",
         "wait-for-ready",
         "attestation",
-        "http-probe"
+        "http-probe",
+        "gpu-check"
       ]
     },
     "outcome": {
@@ -404,6 +405,54 @@
               }
             }
           ]
+        },
+        "gpu": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["url", "deviceCount", "devices"],
+          "description": "From the gpu-check step: nvidia-smi's own device table, fetched over the scheme and host the probe proved working. The raw CSV is deliberately absent and lives in the gpu-check.csv sidecar, for the same reason the raw attestation report is absent: a run file the site fetches carries the parsed result, not the artifact. Absent when the step never ran or never got a body, so an absent block and an empty devices list are different facts. A malformed line is dropped rather than failing the run, so a device's array position is not guaranteed to be nvidia-smi's own device index.",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The URL actually fetched, resolved against the probe's own working URL. Recorded so that reusing the probe's origin is machine-checkable rather than a convention."
+            },
+            "deviceCount": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "How many devices nvidia-smi reported. Zero on a passed run is the false green this step exists to prevent."
+            },
+            "devices": {
+              "type": "array",
+              "description": "One entry per nvidia-smi device row.",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "driverVersion", "computeCapability"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Verbatim from nvidia-smi, e.g. NVIDIA A100-SXM4-80GB."
+                  },
+                  "driverVersion": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Verbatim. Also what the parser uses to tell a device row from a stray warning line or from nvidia-smi's own header, because it is the oldest queryable field nvidia-smi has."
+                  },
+                  "memoryTotalMiB": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Parsed from the MiB figure nvidia-smi reports. Absent when it reported [N/A] or anything that is not a MiB count: a string field can carry [N/A] faithfully and an integer one cannot, and 0 would read as a GPU with no memory. The raw line is in the sidecar."
+                  },
+                  "computeCapability": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Verbatim, e.g. 8.0. A string and not a number: 8.0 as a float is 8, and this is a major.minor version rather than a quantity."
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },

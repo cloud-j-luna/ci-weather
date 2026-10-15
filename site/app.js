@@ -1097,6 +1097,7 @@ function renderDetail(row, run, day) {
       leaseBlock(run),
       probeBlock(run),
       attestationBlock(run),
+      gpuBlock(run),
       escrowBlock(run),
       reapBlock(run),
     ].filter(Boolean),
@@ -1164,7 +1165,7 @@ function metaItem(key, value) {
   return [el("dt", { text: key }), el("dd", {}, [value])];
 }
 
-const OPTIONAL_STEPS = new Set(["attestation"]);
+const OPTIONAL_STEPS = new Set(["attestation", "gpu-check"]);
 
 function stepModel(run) {
   const order = state.data.stepOrder || [];
@@ -1192,7 +1193,8 @@ function stepModel(run) {
       return a.rank - b.rank || a.seq - b.seq;
     });
   const missing = order.filter(function (s) {
-    // Only some scenarios ever run attestation, so its absence is never a gap.
+    // Only some scenarios ever run attestation or gpu-check, so either one's absence is
+    // never a gap.
     return !seen.has(s) && !OPTIONAL_STEPS.has(s);
   });
   return { steps: steps, ordered: ordered, missing: missing, rank: rank };
@@ -1773,6 +1775,87 @@ function attestationBlock(run) {
   }
 
   return block("Attestation", body);
+}
+
+function gpuFailureWord(record) {
+  if (!record) return "Could not read the GPU report";
+  if (record.deviceCount === 0) return "No GPU detected";
+  return "GPU report did not pass";
+}
+
+function gpuBlock(run) {
+  const step = (run.steps || []).find(function (s) {
+    return s.step === "gpu-check";
+  });
+  const record = run.lease && run.lease.gpu;
+  if (!step && !record) return null;
+
+  const body = [];
+
+  if (step && step.result === "failed") {
+    body.push(
+      el("p", { class: "gpu-badge gpu-alarm" }, [
+        el("b", { text: gpuFailureWord(record) }),
+        el("span", {
+          class: "gpu-note",
+          text: (step.errors && step.errors[0]) || "No further detail recorded.",
+        }),
+      ]),
+    );
+  } else if (step && step.result === "completed") {
+    body.push(
+      el("p", { class: "gpu-badge gpu-ok" }, [
+        el("b", {
+          text:
+            record.deviceCount + (record.deviceCount === 1 ? " GPU detected" : " GPUs detected"),
+        }),
+        el("span", {
+          class: "gpu-note",
+          text: "nvidia-smi ran inside the workload and reported this from the device it was handed.",
+        }),
+      ]),
+    );
+  } else {
+    body.push(
+      el("p", { class: "gpu-badge gpu-none" }, [
+        el("b", { text: "GPU check not reached" }),
+        el("span", { class: "gpu-note", text: "The run ended before this step ran." }),
+      ]),
+    );
+  }
+
+  if (record) {
+    const devices = Array.isArray(record.devices) ? record.devices : [];
+    const facts = [
+      metaItem(
+        "Devices",
+        el("span", {
+          class: "mono" + (record.deviceCount === 0 ? " is-bad" : ""),
+          text: String(record.deviceCount),
+        }),
+      ),
+    ];
+    devices.forEach(function (d, i) {
+      const parts = [d.name, "driver " + d.driverVersion];
+      if (Number.isFinite(d.memoryTotalMiB)) parts.push(d.memoryTotalMiB + " MiB");
+      parts.push("compute " + d.computeCapability);
+      facts.push(
+        metaItem(
+          devices.length === 1 ? "GPU" : "GPU " + (i + 1),
+          el("span", { class: "mono", text: parts.join(" · ") }),
+        ),
+      );
+    });
+    body.push(el("dl", { class: "block-facts" }, facts.flat()));
+    body.push(
+      el("p", {
+        class: "block-note",
+        text: "This is the workload's own nvidia-smi output, not an independent attestation. It proves what the container can enumerate, not a hardware-signed claim about it.",
+      }),
+    );
+  }
+
+  return block("GPU", body);
 }
 
 function escrowBlock(run) {
