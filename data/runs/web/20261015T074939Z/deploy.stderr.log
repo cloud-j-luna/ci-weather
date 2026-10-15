@@ -1,0 +1,3 @@
+workflow "deploy" failed: step "select-bid" failed: no item selected
+deployment DSEQ 29073024 remains open; escrow may continue to be consumed.
+explicit cleanup: akt close 29073024

@@ -1,0 +1,6 @@
+{"workflow":"close","id":"2dd861f08dc3622b","step":"close-deployment","result":"completed","errors":[],"txs":[{"hash":"9C6801BBDD9EC815C730B6086AF5CD988B0BB902FA73DED14823BE7C5E2A3EDA","code":0}],"outputs":{"dseq":"29073077","owner":"akash1r6pereplxg0j2cnnnyhqjmmkn3p3vvxfqd7ur8"}}
+{"workflow":"close","id":"2dd861f08dc3622b","step":"display-result","result":"completed","errors":[],"txs":[],"outputs":{"text":"Deployment closed.\n  DSEQ: 29073077"}}
+{"workflow":"close","id":"68ab4526fb0ce88e","step":"close-deployment","result":"completed","errors":[],"txs":[{"hash":"E665E9BAAF754DD905E234C009BAE4AE756B91120536F771C19E4E52AE2EA433","code":0}],"outputs":{"dseq":"29073134","owner":"akash1r6pereplxg0j2cnnnyhqjmmkn3p3vvxfqd7ur8"}}
+{"workflow":"close","id":"68ab4526fb0ce88e","step":"display-result","result":"completed","errors":[],"txs":[],"outputs":{"text":"Deployment closed.\n  DSEQ: 29073134"}}
+{"workflow":"close","id":"d735d7af245e9fbd","step":"close-deployment","result":"completed","errors":[],"txs":[{"hash":"3238D341FB319B8B6725AF460B47D755C9013A0A0E4E02E3E432632878C00028","code":0}],"outputs":{"dseq":"29073192","owner":"akash1r6pereplxg0j2cnnnyhqjmmkn3p3vvxfqd7ur8"}}
+{"workflow":"close","id":"d735d7af245e9fbd","step":"display-result","result":"completed","errors":[],"txs":[],"outputs":{"text":"Deployment closed.\n  DSEQ: 29073192"}}

@@ -1,0 +1,340 @@
+{
+  "schemaVersion": 1,
+  "scenario": "persistent-storage",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-10-15T07:52:24.877Z",
+  "finishedAt": "2026-10-15T07:53:29.849Z",
+  "outcome": {
+    "kind": "failed",
+    "atStep": "http-probe",
+    "message": "no scheme served the workload after 26 attempts over 28s: https returned 404 (x13); http returned 404 (x13)"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29073052",
+        "closeTxHash": "024C0318F75A95EE50C58C8F59550E2586791D9475579DF7AD557DF7A291ABE7"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-15T07:52:27.000Z",
+      "durationMs": 1197,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "8F68ADB1A5FDB7027D902CBB2B25C48B071CAF9D6C8EAB36BE6AA6A6125146FE",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-10-15T07:52:28.197Z",
+      "durationMs": 11624,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-10-15T07:52:39.821Z",
+      "durationMs": 1,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-10-15T07:52:39.822Z",
+      "durationMs": 369,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "71F36B4ECA86A750DA3194A195C6338D69621F910AC71B1FBAE80EC84427BFBD",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-10-15T07:52:40.191Z",
+      "durationMs": 7216,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "completed",
+      "startedAt": "2026-10-15T07:52:47.407Z",
+      "durationMs": 1121,
+      "durationSource": "derived"
+    },
+    {
+      "step": "http-probe",
+      "result": "failed",
+      "startedAt": "2026-10-15T07:52:48.528Z",
+      "durationMs": 31718,
+      "durationSource": "runner",
+      "errors": [
+        "no scheme served the workload after 26 attempts over 28s: https returned 404 (x13); http returned 404 (x13)"
+      ]
+    }
+  ],
+  "lease": {
+    "dseq": "29073052",
+    "bidCount": 4,
+    "provider": "akash1lgkv9ska3dseh2yvd7r7ct54rwz2a4e59d44qx",
+    "price": {
+      "amount": "1.654420000000000000",
+      "denom": "uact"
+    },
+    "uris": [
+      "71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za"
+    ],
+    "probe": {
+      "attempts": [
+        {
+          "scheme": "https",
+          "url": "https://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:52:49.908Z",
+          "durationMs": 1151,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:52:51.062Z",
+          "durationMs": 835,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:52:52.148Z",
+          "durationMs": 275,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:52:52.423Z",
+          "durationMs": 275,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:52:53.198Z",
+          "durationMs": 275,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:52:53.473Z",
+          "durationMs": 274,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:52:54.747Z",
+          "durationMs": 275,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:52:55.023Z",
+          "durationMs": 274,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:52:57.299Z",
+          "durationMs": 275,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:52:57.574Z",
+          "durationMs": 274,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:52:59.848Z",
+          "durationMs": 275,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:53:00.124Z",
+          "durationMs": 273,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:53:02.398Z",
+          "durationMs": 275,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:53:02.673Z",
+          "durationMs": 274,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:53:04.948Z",
+          "durationMs": 275,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:53:05.224Z",
+          "durationMs": 274,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:53:07.498Z",
+          "durationMs": 274,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:53:07.772Z",
+          "durationMs": 275,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:53:10.047Z",
+          "durationMs": 274,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:53:10.322Z",
+          "durationMs": 274,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:53:12.596Z",
+          "durationMs": 275,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:53:12.871Z",
+          "durationMs": 274,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:53:15.145Z",
+          "durationMs": 276,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:53:15.421Z",
+          "durationMs": 274,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:53:17.696Z",
+          "durationMs": 274,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://71d8o7q3nlca521nklc08h6d7s.ingress.dl2klab.co.za/",
+          "at": "2026-10-15T07:53:17.971Z",
+          "durationMs": 274,
+          "status": 404,
+          "bodyMatched": false
+        }
+      ]
+    }
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 1
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/38701349649",
+    "sha": "6994d9de611de5753ff0a53e7a577b39c0d82666",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "-13"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-24513"
+      }
+    ]
+  }
+}
