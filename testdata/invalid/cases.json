@@ -398,6 +398,115 @@
     }
   },
   {
+    "why": "outcome is passed but the GPU report listed no devices, the false green gpu-check exists to prevent",
+    "mutate": {
+      "lease": {
+        "dseq": "5715077",
+        "probe": {
+          "servedBy": "http",
+          "url": "http://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/",
+          "attempts": [
+            {
+              "scheme": "http",
+              "url": "http://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/",
+              "at": "2026-10-03T03:00:26.554000Z",
+              "durationMs": 716,
+              "status": 200,
+              "bodyMatched": true
+            }
+          ]
+        },
+        "gpu": {
+          "url": "http://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/gpu.csv",
+          "deviceCount": 0,
+          "devices": []
+        }
+      }
+    }
+  },
+  {
+    "why": "lease.gpu.deviceCount disagrees with the number of devices actually recorded",
+    "mutate": {
+      "lease": {
+        "dseq": "5715077",
+        "probe": {
+          "servedBy": "http",
+          "url": "http://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/",
+          "attempts": [
+            {
+              "scheme": "http",
+              "url": "http://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/",
+              "at": "2026-10-03T03:00:26.554000Z",
+              "durationMs": 716,
+              "status": 200,
+              "bodyMatched": true
+            }
+          ]
+        },
+        "gpu": {
+          "url": "http://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/gpu.csv",
+          "deviceCount": 2,
+          "devices": [
+            {
+              "name": "NVIDIA A100-SXM4-80GB",
+              "driverVersion": "535.183.01",
+              "memoryTotalMiB": 81920,
+              "computeCapability": "8.0"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "why": "a completed gpu-check step with no lease.gpu recorded, so nothing proves a device was seen",
+    "mutate": {
+      "steps": [
+        {
+          "step": "gpu-check",
+          "result": "completed",
+          "startedAt": "2026-10-03T03:00:26.554000Z",
+          "durationMs": 120,
+          "durationSource": "runner"
+        }
+      ]
+    }
+  },
+  {
+    "why": "the GPU report was fetched from a different origin than the one that served the probe",
+    "mutate": {
+      "lease": {
+        "dseq": "5715077",
+        "probe": {
+          "servedBy": "http",
+          "url": "http://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/",
+          "attempts": [
+            {
+              "scheme": "http",
+              "url": "http://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/",
+              "at": "2026-10-03T03:00:26.554000Z",
+              "durationMs": 716,
+              "status": 200,
+              "bodyMatched": true
+            }
+          ]
+        },
+        "gpu": {
+          "url": "http://evil.test/gpu.csv",
+          "deviceCount": 1,
+          "devices": [
+            {
+              "name": "NVIDIA A100-SXM4-80GB",
+              "driverVersion": "535.183.01",
+              "memoryTotalMiB": 81920,
+              "computeCapability": "8.0"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
     "why": "failed outcome whose message contradicts the failing step's own error, which would let the runner invent a reason akt never gave",
     "mutate": {
       "outcome": {

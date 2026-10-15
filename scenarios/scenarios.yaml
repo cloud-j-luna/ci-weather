@@ -93,6 +93,11 @@ scenarios:
       # The workload reports what CUDA handed it. Asserting the body is what
       # separates "a GPU was allocated" from "a GPU actually worked".
       expectBodyContains: "cuda True"
+    # torch reaching CUDA and NVML enumerating the device are different questions, and a
+    # provider can satisfy the first without the second. The SDL writes nvidia-smi's own
+    # CSV to this path, so a pass means the device was enumerable, not just allocated.
+    gpuCheck:
+      path: /gpu.csv
 
   - id: persistent-storage
     title: Persistent storage

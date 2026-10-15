@@ -884,3 +884,231 @@ describe("retrying a scenario whose pinned provider did not bid", () => {
     assert.equal(closes.length, 1);
   });
 });
+
+describe("the gpu-check step", () => {
+  let dir;
+
+  before(() => {
+    dir = mkdtempSync(join(tmpdir(), "gpu-check-"));
+  });
+
+  const makeRepo = ({ gpuCheck } = {}) => {
+    const root = mkdtempSync(join(dir, "repo-"));
+    mkdirSync(join(root, "scenarios", "sdl"), { recursive: true });
+    writeFileSync(join(root, "scenarios", "sdl", "web.yaml"), "");
+    const scenario = {
+      id: "web",
+      title: "Web service",
+      sdl: "sdl/web.yaml",
+      probe: { path: "/", expectStatus: 200, expectBodyContains: "Welcome to nginx!" },
+    };
+    if (gpuCheck !== undefined) scenario.gpuCheck = gpuCheck;
+    writeFileSync(
+      join(root, "scenarios", "scenarios.yaml"),
+      stringifyYaml({
+        budgets: {
+          bidTimeout: "1s",
+          leaseReadyTimeout: "1s",
+          probeTimeout: "1s",
+          totalRunTimeout: "30m",
+          deposit: "1000000uact",
+        },
+        scenarios: [scenario],
+      }),
+    );
+    return root;
+  };
+
+  const routingServer = (gpu = {}) => {
+    const requests = [];
+    const server = createServer((req, res) => {
+      requests.push(req.url);
+      if (req.url === "/gpu.csv") {
+        res.writeHead(gpu.status ?? 200, { "content-type": "text/plain" });
+        res.end(gpu.body ?? "");
+        return;
+      }
+      res.writeHead(200, { "content-type": "text/html" });
+      res.end("<html><body><h1>Welcome to nginx!</h1></body></html>");
+    });
+    return { server, requests };
+  };
+
+  const deploy = async (name, { gpuCheck, gpu, ...opts } = {}) => {
+    const { server, requests } = routingServer(gpu);
+    await new Promise((r) => server.listen(0, "127.0.0.1", r));
+    try {
+      const uri = `127.0.0.1:${server.address().port}`;
+      const bin = join(dir, `${name}-akt.mjs`);
+      writeFileSync(
+        bin,
+        fakeAkt({
+          statePath: join(dir, `${name}-state.json`),
+          argvLog: join(dir, `${name}-argv.log`),
+          uri,
+          ...opts,
+        }),
+      );
+      chmodSync(bin, 0o755);
+      const outRoot = join(dir, `${name}-runs`);
+      const doc = await runScenario({
+        bin,
+        contextName: "sandbox-2",
+        scenarioId: "web",
+        repoRoot: makeRepo({ gpuCheck }),
+        outRoot,
+        env: {},
+      });
+      const runDir = join(outRoot, "web", readdirSync(join(outRoot, "web"))[0]);
+      return { doc, runDir, requests };
+    } finally {
+      server.close();
+    }
+  };
+
+  const twoDeviceCsv = [
+    "NVIDIA A100-SXM4-80GB, 535.183.01, 81920 MiB, 8.0",
+    "NVIDIA A100-SXM4-80GB, 535.183.01, 81920 MiB, 8.0",
+  ].join("\n");
+
+  it("a clean two-device CSV passes, records both devices on lease.gpu with deviceCount 2, and the gpu-check step is last and completed", async () => {
+    const { doc } = await deploy("clean", {
+      gpuCheck: { path: "/gpu.csv" },
+      gpu: { body: twoDeviceCsv },
+    });
+
+    assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
+    assert.equal(doc.outcome.kind, "passed");
+    assert.equal(doc.lease.gpu.deviceCount, 2);
+    assert.equal(doc.lease.gpu.devices.length, 2);
+    assert.equal(doc.steps.at(-1).step, "gpu-check");
+    assert.equal(doc.steps.at(-1).result, "completed");
+  });
+
+  it("the gpu-check.csv sidecar exists in the run directory and holds the raw body verbatim", async () => {
+    const { runDir } = await deploy("sidecar", {
+      gpuCheck: { path: "/gpu.csv" },
+      gpu: { body: twoDeviceCsv },
+    });
+
+    assert.equal(readFileSync(join(runDir, "gpu-check.csv"), "utf8"), twoDeviceCsv);
+  });
+
+  it("run.json contains no raw CSV anywhere", async () => {
+    const { runDir } = await deploy("noraw", {
+      gpuCheck: { path: "/gpu.csv" },
+      gpu: { body: twoDeviceCsv },
+    });
+
+    const raw = readFileSync(join(runDir, "run.json"), "utf8");
+    // driverVersion, name and computeCapability are intentionally kept verbatim in the
+    // parsed record, so they are not a useful raw-vs-parsed marker. The MiB unit suffix
+    // is: nvidia-smi writes it in the raw line, but the schema carries memoryTotalMiB as
+    // a bare integer, so "81920 MiB" can only have come from the raw body.
+    assert.ok(!raw.includes(twoDeviceCsv), "the raw CSV body must never be embedded verbatim");
+    assert.doesNotMatch(raw, /81920 MiB/);
+  });
+
+  it("a 404 on /gpu.csv fails the run at gpu-check", async () => {
+    const { doc } = await deploy("notfound", {
+      gpuCheck: { path: "/gpu.csv" },
+      gpu: { status: 404, body: "not found" },
+    });
+
+    assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
+    assert.equal(doc.outcome.kind, "failed");
+    assert.equal(doc.outcome.atStep, "gpu-check");
+    assert.match(doc.outcome.message, /answered 404, not 200/);
+  });
+
+  it("a body that is not CSV fails at gpu-check with that text quoted in outcome.message", async () => {
+    const { doc } = await deploy("notcsv", {
+      gpuCheck: { path: "/gpu.csv" },
+      gpu: { body: "sh: nvidia-smi: command not found" },
+    });
+
+    assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
+    assert.equal(doc.outcome.kind, "failed");
+    assert.equal(doc.outcome.atStep, "gpu-check");
+    assert.match(doc.outcome.message, /command not found/);
+  });
+
+  it("a header-row-only body fails at gpu-check, the false green", async () => {
+    const { doc } = await deploy("header", {
+      gpuCheck: { path: "/gpu.csv" },
+      gpu: { body: "name, driver_version, memory.total [MiB], compute_cap" },
+    });
+
+    assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
+    assert.equal(doc.outcome.kind, "failed");
+    assert.equal(doc.outcome.atStep, "gpu-check");
+  });
+
+  it("an empty body fails at gpu-check", async () => {
+    const { doc } = await deploy("empty", {
+      gpuCheck: { path: "/gpu.csv" },
+      gpu: { body: "" },
+    });
+
+    assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
+    assert.equal(doc.outcome.kind, "failed");
+    assert.equal(doc.outcome.atStep, "gpu-check");
+    assert.match(doc.outcome.message, /is empty/);
+  });
+
+  it("a scenario with no gpuCheck block never requests /gpu.csv, and its run has no gpu-check step and no lease.gpu", async () => {
+    const { doc, requests } = await deploy("nogpu", {});
+
+    assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
+    assert.ok(!requests.includes("/gpu.csv"));
+    assert.ok(!doc.steps.some((s) => s.step === "gpu-check"));
+    assert.equal(doc.lease.gpu, undefined);
+  });
+
+  it("the real gpu scenario's own gpuCheck wiring in scenarios.yaml reaches the fetch", async () => {
+    const requests = [];
+    const server = createServer((req, res) => {
+      requests.push(req.url);
+      if (req.url === "/gpu.csv") {
+        res.writeHead(200, { "content-type": "text/plain" });
+        res.end("NVIDIA A100-SXM4-80GB, 535.183.01, 81920 MiB, 8.0");
+        return;
+      }
+      res.writeHead(200, { "content-type": "text/html" });
+      res.end("cuda True NVIDIA A100-SXM4-80GB");
+    });
+    await new Promise((r) => server.listen(0, "127.0.0.1", r));
+    try {
+      const uri = `127.0.0.1:${server.address().port}`;
+      const bin = join(dir, "real-gpu-akt.mjs");
+      writeFileSync(
+        bin,
+        fakeAkt({
+          statePath: join(dir, "real-gpu-state.json"),
+          argvLog: join(dir, "real-gpu-argv.log"),
+          uri,
+        }),
+      );
+      chmodSync(bin, 0o755);
+      const outRoot = join(dir, "real-gpu-runs");
+      const doc = await runScenario({
+        bin,
+        contextName: "sandbox-2",
+        scenarioId: "gpu",
+        repoRoot,
+        outRoot,
+        env: {},
+      });
+
+      assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
+      assert.equal(doc.outcome.kind, "passed");
+      assert.equal(doc.lease.gpu.deviceCount, 1);
+      assert.ok(
+        requests.includes("/gpu.csv"),
+        "scenarios.yaml's own gpuCheck.path must reach the fetch",
+      );
+    } finally {
+      server.close();
+    }
+  });
+});

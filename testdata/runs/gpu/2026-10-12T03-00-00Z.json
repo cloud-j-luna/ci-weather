@@ -6,7 +6,7 @@
     "chainId": "sandbox-2"
   },
   "startedAt": "2026-10-12T03:00:00Z",
-  "finishedAt": "2026-10-12T03:00:39.363000Z",
+  "finishedAt": "2026-10-12T03:00:39.604000Z",
   "outcome": {
     "kind": "passed"
   },
@@ -64,6 +64,13 @@
       "result": "completed",
       "startedAt": "2026-10-12T03:00:32.535000Z",
       "durationMs": 6828
+    },
+    {
+      "step": "gpu-check",
+      "result": "completed",
+      "startedAt": "2026-10-12T03:00:39.363000Z",
+      "durationMs": 241,
+      "durationSource": "runner"
     }
   ],
   "lease": {
@@ -98,6 +105,18 @@
           "durationMs": 527,
           "status": 200,
           "bodyMatched": true
+        }
+      ]
+    },
+    "gpu": {
+      "url": "http://074o2mvcghcod7bnciqbtfq4c8.ingress.provider-01.sandbox-2.aksh.pw/gpu.csv",
+      "deviceCount": 1,
+      "devices": [
+        {
+          "name": "NVIDIA A100-SXM4-80GB",
+          "driverVersion": "535.183.01",
+          "memoryTotalMiB": 81920,
+          "computeCapability": "8.0"
         }
       ]
     }

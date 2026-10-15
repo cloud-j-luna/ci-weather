@@ -4,6 +4,7 @@ import { parse as parseYaml } from "yaml";
 
 export const AKT_VERSION_PIN = "1.0.1";
 export const DEFAULT_CONTEXT = "sandbox-2";
+export const DEFAULT_GPU_CHECK_PATH = "/gpu.csv";
 
 // What `auto` resolves to, measured live per network. These differ by 40x, so a single
 // constant taken from sandbox told a mainnet operator their balance was fine when it
@@ -147,7 +148,37 @@ function validateScenario(entry, repoRoot) {
     }
   }
 
-  return { ...entry, probe: { ...entry.probe, target }, sdlPath };
+  let gpuCheck;
+  if (entry.gpuCheck !== undefined) {
+    if (
+      typeof entry.gpuCheck !== "object" ||
+      entry.gpuCheck === null ||
+      Array.isArray(entry.gpuCheck)
+    ) {
+      throw new Error(`scenario ${id}: gpuCheck must be an object`);
+    }
+    const keys = Object.keys(entry.gpuCheck);
+    if (keys.some((k) => k !== "path")) {
+      throw new Error(`scenario ${id}: gpuCheck's only key is path, got ${keys.join(", ")}`);
+    }
+    const path = entry.gpuCheck.path ?? DEFAULT_GPU_CHECK_PATH;
+    // The path is resolved against the probe's own URL with new URL(path, probeUrl), so an
+    // absolute URL here would silently ignore that base and record a different host's
+    // answer as this lease's GPU.
+    if (typeof path !== "string" || !path.startsWith("/")) {
+      throw new Error(
+        `scenario ${id}: gpuCheck.path must be a string starting with "/", got ${JSON.stringify(path)}`,
+      );
+    }
+    gpuCheck = { path };
+  }
+
+  return {
+    ...entry,
+    probe: { ...entry.probe, target },
+    sdlPath,
+    ...(gpuCheck ? { gpuCheck } : {}),
+  };
 }
 
 export function loadConfig(repoRoot) {

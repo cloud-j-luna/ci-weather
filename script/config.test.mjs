@@ -146,6 +146,57 @@ describe("depositPlan", () => {
   });
 });
 
+describe("loadConfig, gpuCheck", () => {
+  it("absent leaves scenario.gpuCheck undefined", () => {
+    const config = loadConfig(makeRepo());
+    assert.equal(config.scenarios.get("scenario-a").gpuCheck, undefined);
+  });
+
+  it("an empty object defaults path to /gpu.csv", () => {
+    const scenarios = baseScenarios();
+    scenarios[0].gpuCheck = {};
+    const config = loadConfig(makeRepo({ scenarios }));
+    assert.deepEqual(config.scenarios.get("scenario-a").gpuCheck, { path: "/gpu.csv" });
+  });
+
+  it("an explicit path is kept", () => {
+    const scenarios = baseScenarios();
+    scenarios[0].gpuCheck = { path: "/nvidia-smi.csv" };
+    const config = loadConfig(makeRepo({ scenarios }));
+    assert.deepEqual(config.scenarios.get("scenario-a").gpuCheck, { path: "/nvidia-smi.csv" });
+  });
+
+  it("rejects a relative path", () => {
+    const scenarios = baseScenarios();
+    scenarios[0].gpuCheck = { path: "gpu.csv" };
+    assert.throws(() => loadConfig(makeRepo({ scenarios })), /scenario-a/);
+  });
+
+  it("rejects an absolute URL, which would silently ignore the probe's own origin", () => {
+    const scenarios = baseScenarios();
+    scenarios[0].gpuCheck = { path: "http://evil.test/gpu.csv" };
+    assert.throws(() => loadConfig(makeRepo({ scenarios })), /scenario-a/);
+  });
+
+  it("rejects an unknown key", () => {
+    const scenarios = baseScenarios();
+    scenarios[0].gpuCheck = { path: "/gpu.csv", timeout: "5s" };
+    assert.throws(() => loadConfig(makeRepo({ scenarios })), /scenario-a/);
+  });
+
+  it("rejects an array", () => {
+    const scenarios = baseScenarios();
+    scenarios[0].gpuCheck = [];
+    assert.throws(() => loadConfig(makeRepo({ scenarios })), /scenario-a/);
+  });
+
+  it("rejects null", () => {
+    const scenarios = baseScenarios();
+    scenarios[0].gpuCheck = null;
+    assert.throws(() => loadConfig(makeRepo({ scenarios })), /scenario-a/);
+  });
+});
+
 describe("loadConfig, probe.target", () => {
   const cases = [
     { name: "defaults to uri when absent", target: undefined, expectTarget: "uri" },

@@ -20,10 +20,27 @@ Mainnet has over a hundred providers with inconsistent self-declared attributes,
 | Scenario             | Question                                                                  |
 | -------------------- | ------------------------------------------------------------------------- |
 | `web`                | Can anyone deploy an ordinary web workload right now?                     |
-| `gpu`                | Is GPU supply leasable, not just advertised?                              |
+| `gpu`                | Is GPU supply leasable, and does the device actually work?                |
 | `persistent-storage` | Do providers advertising persistent volumes honour a lease that uses one? |
 | `ip-lease`           | Can a workload still get a dedicated public IP?                           |
 | `tee`                | Is a confidential-compute lease really backed by TEE hardware?            |
+
+## What a green GPU cell means
+
+Three independent facts, not one.
+
+A provider leased the GPU. `torch.cuda.is_available()` returned true inside the
+container, so the CUDA runtime reached the device through libcuda. And `nvidia-smi`
+enumerated it through NVML, reporting the device name, driver version, memory and
+compute capability, which the run records under `lease.gpu`.
+
+The last two go through different paths, so "CUDA works but NVML cannot enumerate" is
+a real provider-configuration state. A row that only asserted torch would call that
+healthy.
+
+If the image has no `nvidia-smi` at all, the workload still starts and still serves,
+and the step fails saying so. A container that refuses to start would tell us nothing
+about the provider.
 
 ## Usage
 

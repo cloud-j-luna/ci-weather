@@ -13,12 +13,14 @@ import {
 } from "./akt.mjs";
 import { LIFECYCLE, SUPPLY_STEPS, applyTimings, mapStream } from "./steps.mjs";
 import { probe } from "./probe.mjs";
+import { fetchGpuReport, gpuFailure } from "./gpu.mjs";
 import { toZero } from "./tozero.mjs";
 import { bidSelectFor, loadConfig, scenario as findScenario } from "./config.mjs";
 import { ownedDseqs } from "./owned.mjs";
 
 const PROBE_STEP = "http-probe";
 const ATTESTATION_STEP = "attestation";
+const GPU_CHECK_STEP = "gpu-check";
 
 // On top of the bid and ready timeouts a retry has to cover: the three transactions an
 // attempt broadcasts, and the settle poll of the close that follows it. Enough that a
@@ -186,13 +188,28 @@ export function sealRun(state) {
     steps.push(step);
   }
 
+  if (state.gpuCheckStartedAtMs !== undefined) {
+    const failure = gpuFailure(state.gpu);
+    const step = {
+      step: GPU_CHECK_STEP,
+      result: failure ? "failed" : "completed",
+      startedAt: iso(state.gpuCheckStartedAtMs),
+      durationMs: Math.max(0, Math.round(state.gpuCheckFinishedAtMs - state.gpuCheckStartedAtMs)),
+      durationSource: "runner",
+    };
+    if (failure) step.errors = [failure];
+    steps.push(step);
+  }
+
   if (state.abortReason) {
     const seen = new Set(steps.map((s) => s.step));
     for (const name of LIFECYCLE) {
       if (seen.has(name)) continue;
-      // A cancelled web run never planned to attest, so recording a skipped attestation
-      // step for it would put a step in the file that was never part of its lifecycle.
+      // A cancelled web run never planned to attest or gpu-check, so recording a skipped
+      // step for either here would put a step in the file that was never part of its
+      // lifecycle.
       if (name === ATTESTATION_STEP && state.attestationExpect === undefined) continue;
+      if (name === GPU_CHECK_STEP && state.gpuCheckPath === undefined) continue;
       steps.push({
         step: name,
         result: "skipped",
@@ -366,6 +383,7 @@ export async function runScenario({
     lease: null,
     probe: undefined,
     attestationExpect: sc.attestation?.teeType,
+    gpuCheckPath: sc.gpuCheck?.path,
     reap: { closedDseqs: [] },
     epilogue: null,
     aktVersion: installed,
@@ -617,6 +635,32 @@ export async function runScenario({
         }
         state.probeFinishedAtMs = Date.now();
         log(`  http-probe ${state.probeError ?? state.probe.servedBy ?? "no scheme answered"}`);
+
+        // Gated on state.probe?.servedBy: when the probe never found a working scheme
+        // there is no origin to reuse, and the run already failed at http-probe.
+        if (sc.gpuCheck && !abortReason && state.probe?.servedBy) {
+          state.gpuCheckStartedAtMs = state.probeFinishedAtMs;
+          // new URL(path, state.probe.url) reuses the probe's scheme, host AND port rather
+          // than re-deriving them: for an ip target the host carries an external port that
+          // only probe.url has baked in.
+          const { body, lines, ...rest } = await fetchGpuReport({
+            url: new URL(sc.gpuCheck.path, state.probe.url).toString(),
+          });
+          // Assigned before the verdict is computed, so no future early return can skip
+          // the bytes a human needs precisely when the body did not parse.
+          sidecars["gpu-check.csv"] = body;
+          state.gpu = { ...rest, lines };
+          if (rest.status !== undefined) {
+            state.lease.gpu = {
+              url: rest.url,
+              deviceCount: rest.devices.length,
+              devices: rest.devices,
+            };
+          }
+          state.gpuCheckFinishedAtMs = Date.now();
+          const failure = gpuFailure(state.gpu);
+          log(`  gpu-check ${failure ?? `${rest.devices.length} device(s) reported`}`);
+        }
       }
     }
 
