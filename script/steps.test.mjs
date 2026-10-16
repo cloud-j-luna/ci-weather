@@ -217,3 +217,36 @@ describe("mapStream, synthetic streams", () => {
     });
   }
 });
+
+describe("akt outputs that are null rather than absent", () => {
+  let t = 0;
+  const ev = (step, outputs) => ({
+    at: (t += 1000),
+    event: { workflow: "deploy", step, result: "completed", errors: [], txs: [], outputs },
+  });
+
+  it("survives uris: null, which is what a provider that created no route reports", () => {
+    const mapped = mapStream({
+      events: [
+        ev("create-deployment", { dseq: "1" }),
+        ev("display-result", { uris: null, provider: "akash1x", price: "1uact" }),
+      ],
+    });
+    assert.deepEqual(mapped.lease.uris, []);
+    assert.equal(mapped.lease.dseq, "1");
+  });
+
+  it("drops null scalars instead of writing them into a document the schema rejects", () => {
+    const mapped = mapStream({
+      events: [
+        ev("create-deployment", { dseq: null }),
+        ev("wait-for-bids", { pagination: { total: null }, provider_metadata: null }),
+        ev("select-bid", { provider: null, price: null }),
+        ev("display-result", { uris: null }),
+      ],
+    });
+    for (const k of ["dseq", "provider", "bidCount", "providerAudited", "providerOrg"]) {
+      assert.ok(!(k in mapped.lease) || mapped.lease[k] !== null, `${k} must not be null`);
+    }
+  });
+});

@@ -21,7 +21,17 @@ export const SUPPLY_STEPS = Object.freeze(new Set(["wait-for-bids", "select-bid"
 
 const LIFECYCLE_SET = new Set(LIFECYCLE);
 
+// akt reports an absent value as null, not as a missing key. A guard testing only for
+// undefined lets null through, which either throws (Object.values) or writes a null the
+// schema rejects, and a rejected document costs the whole run file. Test presence.
+const has = (v) => v !== undefined && v !== null;
+
+// akt reports uris as null, not an absent key, when the provider created no route for
+// the lease. The guard at the call site tested only for undefined, so Object.values(null)
+// threw and the whole run aborted with "Cannot convert undefined or null to object",
+// losing a run that had otherwise deployed and attested.
 function flattenUris(uris) {
+  if (uris === null || uris === undefined) return [];
   return Object.values(uris).flat();
 }
 
@@ -34,20 +44,20 @@ function harvestLease(events) {
     const out = event.outputs;
     if (!out) continue;
 
-    if (event.step === "create-deployment" && out.dseq !== undefined) {
+    if (event.step === "create-deployment" && has(out.dseq)) {
       lease.dseq = out.dseq;
     }
 
     if (event.step === "wait-for-bids") {
       const total = out.pagination?.total;
-      if (total !== undefined) lease.bidCount = parseInt(total, 10);
-      if (out.provider_metadata !== undefined) providerMetadata = out.provider_metadata;
+      if (has(total)) lease.bidCount = parseInt(total, 10);
+      if (has(out.provider_metadata)) providerMetadata = out.provider_metadata;
     }
 
     if (event.step === "select-bid") {
-      if (out.provider !== undefined) lease.provider = out.provider;
+      if (has(out.provider)) lease.provider = out.provider;
       const selectedPrice = out.selected?.bid?.price;
-      if (selectedPrice?.amount !== undefined && selectedPrice?.denom !== undefined) {
+      if (has(selectedPrice?.amount) && has(selectedPrice?.denom)) {
         lease.price = { amount: selectedPrice.amount, denom: selectedPrice.denom };
       } else if (typeof out.price === "string") {
         const match = /^([0-9.]+)([a-zA-Z]+)$/.exec(out.price);
@@ -55,16 +65,19 @@ function harvestLease(events) {
       }
     }
 
+    // Deliberately not has(): a null uris means the provider reported zero routes,
+    // and recording [] says that, where dropping the key cannot be told apart from
+    // never having reached this step.
     if (out.uris !== undefined) lease.uris = flattenUris(out.uris);
   }
 
   const metadata = providerMetadata?.[lease.provider];
-  if (metadata !== undefined) {
-    if (metadata.audited !== undefined) lease.providerAudited = metadata.audited;
+  if (has(metadata)) {
+    if (has(metadata.audited)) lease.providerAudited = metadata.audited;
     const region = metadata.attributes?.["location-region"];
-    if (region !== undefined) lease.providerRegion = region;
+    if (has(region)) lease.providerRegion = region;
     const org = metadata.attributes?.organization;
-    if (org !== undefined) lease.providerOrg = org;
+    if (has(org)) lease.providerOrg = org;
   }
 
   return lease;
