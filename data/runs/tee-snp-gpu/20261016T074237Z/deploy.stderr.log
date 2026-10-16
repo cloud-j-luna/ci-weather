@@ -1,0 +1,6 @@
+workflow "deploy" failed: step "wait-for-bids" failed: no bids received (at least 1 required); timed out after 5m0s
+deployment DSEQ 29087615 remains open; escrow may continue to be consumed.
+explicit cleanup: akt close 29087615
+workflow "deploy" failed: deployment did not become ready within 8m0s: query lease status: Get "https://provider.tee.pro6000.hou.aes.akash.pub:8443/lease/29087673/1/1/status": context deadline exceeded
+deployment DSEQ 29087673 with provider akash1wcuwjuu59t22xp56a40jg3dty64xlyp4wkqcwd remains open; escrow may continue to be consumed.
+explicit cleanup: akt close 29087673

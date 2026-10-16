@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "scenario": "tee-snp-gpu",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-10-16T07:42:37.474Z",
+  "finishedAt": "2026-10-16T07:56:45.024Z",
+  "outcome": {
+    "kind": "aborted",
+    "reason": "runner error: Cannot convert undefined or null to object"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29087615",
+        "closeTxHash": "7F7E170027012C484215F3AE138714684FBE3281F27DE1560B407B5692916524"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-16T07:42:39.533Z",
+      "durationMs": 1546,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "E29AD8171C886A79C786B44C0BEFFCAD8F6634F9569ABE354880013EAB878EEF",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "failed",
+      "startedAt": "2026-10-16T07:42:41.079Z",
+      "durationMs": 300001,
+      "durationSource": "akt-log",
+      "errors": [
+        "no bids received (at least 1 required); timed out after 5m0s"
+      ]
+    },
+    {
+      "step": "select-bid",
+      "result": "skipped",
+      "startedAt": "2026-10-16T07:56:45.024Z",
+      "durationMs": 0,
+      "durationSource": "runner"
+    },
+    {
+      "step": "create-lease",
+      "result": "skipped",
+      "startedAt": "2026-10-16T07:56:45.024Z",
+      "durationMs": 0,
+      "durationSource": "runner"
+    },
+    {
+      "step": "send-manifest",
+      "result": "skipped",
+      "startedAt": "2026-10-16T07:56:45.024Z",
+      "durationMs": 0,
+      "durationSource": "runner"
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "skipped",
+      "startedAt": "2026-10-16T07:56:45.024Z",
+      "durationMs": 0,
+      "durationSource": "runner"
+    },
+    {
+      "step": "attestation",
+      "result": "skipped",
+      "startedAt": "2026-10-16T07:56:45.024Z",
+      "durationMs": 0,
+      "durationSource": "runner"
+    },
+    {
+      "step": "http-probe",
+      "result": "skipped",
+      "startedAt": "2026-10-16T07:56:45.024Z",
+      "durationMs": 0,
+      "durationSource": "runner"
+    }
+  ],
+  "lease": {
+    "dseq": "29087615",
+    "probe": null
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 2,
+    "earlier": [
+      {
+        "atStep": "wait-for-bids",
+        "message": "no bids received (at least 1 required); timed out after 5m0s",
+        "startedAt": "2026-10-16T07:42:39.533Z",
+        "durationMs": 301563,
+        "dseq": "29087615"
+      }
+    ]
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/38868511558",
+    "sha": "a55b5e53055e633323654f7dcf7b568dbe7c599f",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  }
+}
