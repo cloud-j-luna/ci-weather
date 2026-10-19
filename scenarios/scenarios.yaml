@@ -68,6 +68,12 @@ scenarios:
     title: Web service
     question: Can anyone deploy an ordinary web workload to Akash right now?
     sdl: sdl/web.yaml
+    # akt can report a lease ready in under half a second, before the provider's
+    # hostname operator has created the route, so the probe then 404s against a
+    # hostname that does not route yet. Runs where wait-for-ready took seconds
+    # passed; runs where it returned in ~370ms burned the full 30s budget. Probe
+    # long enough to outlast route propagation rather than sampling the gap.
+    probeTimeout: 3m
     # Unpinned on purpose. The SDL requires organization=overclock, so any of the
     # ~23 Overclock providers can win. Pinning one provider meant a single operator
     # pausing bids showed up as Akash being unable to run a web workload.
@@ -107,6 +113,12 @@ scenarios:
     # other providers bid each time, so pinning it measured one provider's appetite
     # rather than whether persistent storage is leasable on Akash at all.
     sdl: sdl/storage.yaml
+    # akt can report a lease ready in under half a second, before the provider's
+    # hostname operator has created the route, so the probe then 404s against a
+    # hostname that does not route yet. Runs where wait-for-ready took seconds
+    # passed; runs where it returned in ~370ms burned the full 30s budget. Probe
+    # long enough to outlast route propagation rather than sampling the gap.
+    probeTimeout: 3m
     bidSelect: cheapest
     tags: [storage]
     probe:
