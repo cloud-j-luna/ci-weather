@@ -1,0 +1,1466 @@
+{
+  "schemaVersion": 1,
+  "scenario": "tee-snp-gpu",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-10-20T08:07:22.154Z",
+  "finishedAt": "2026-10-20T08:11:24.093Z",
+  "outcome": {
+    "kind": "failed",
+    "atStep": "http-probe",
+    "message": "no scheme served the workload after 176 attempts over 180s: https fetch failed (x88); http returned 404 (x87); http This operation was aborted"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29146585",
+        "closeTxHash": "432E9789E04DE15B37AEE88704A50EFD1700E829B79FF835D053F1E3202EC267"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-20T08:07:23.601Z",
+      "durationMs": 1032,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "51A12F7AAE83182AC81148433C96DC5A9E4943EFFBF937CA13EF9EAF5705060F",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-10-20T08:07:24.633Z",
+      "durationMs": 15452,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-10-20T08:07:40.085Z",
+      "durationMs": 0,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-10-20T08:07:40.085Z",
+      "durationMs": 303,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "6C70CE4221F65C3224F17D72BB58370CE4DE2893E3A8E706D08982CF129F6E36",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-10-20T08:07:40.388Z",
+      "durationMs": 11332,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "completed",
+      "startedAt": "2026-10-20T08:07:51.720Z",
+      "durationMs": 21242,
+      "durationSource": "derived"
+    },
+    {
+      "step": "attestation",
+      "result": "completed",
+      "startedAt": "2026-10-20T08:08:12.962Z",
+      "durationMs": 1565,
+      "durationSource": "runner"
+    },
+    {
+      "step": "http-probe",
+      "result": "failed",
+      "startedAt": "2026-10-20T08:08:14.527Z",
+      "durationMs": 180683,
+      "durationSource": "runner",
+      "errors": [
+        "no scheme served the workload after 176 attempts over 180s: https fetch failed (x88); http returned 404 (x87); http This operation was aborted"
+      ]
+    }
+  ],
+  "lease": {
+    "dseq": "29146585",
+    "bidCount": 1,
+    "provider": "akash1wcuwjuu59t22xp56a40jg3dty64xlyp4wkqcwd",
+    "price": {
+      "amount": "3401.347727000000000000",
+      "denom": "uact"
+    },
+    "uris": [
+      "gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub"
+    ],
+    "attestation": {
+      "teeType": "snp-gpu",
+      "nonceVerified": true,
+      "mockReport": false,
+      "certChainPresent": false,
+      "gpuReportCount": 1,
+      "reportSizeBytes": 1184
+    },
+    "probe": {
+      "attempts": [
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:15.208Z",
+          "durationMs": 194,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:15.402Z",
+          "durationMs": 107,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:15.760Z",
+          "durationMs": 87,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:15.847Z",
+          "durationMs": 31,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:16.379Z",
+          "durationMs": 66,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:16.445Z",
+          "durationMs": 31,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:17.477Z",
+          "durationMs": 84,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:17.561Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:19.591Z",
+          "durationMs": 80,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:19.671Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:21.701Z",
+          "durationMs": 106,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:21.807Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:23.836Z",
+          "durationMs": 80,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:23.916Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:25.946Z",
+          "durationMs": 118,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:26.064Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:28.094Z",
+          "durationMs": 68,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:28.162Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:30.192Z",
+          "durationMs": 84,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:30.276Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:32.306Z",
+          "durationMs": 67,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:32.373Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:34.403Z",
+          "durationMs": 79,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:34.482Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:36.513Z",
+          "durationMs": 65,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:36.578Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:38.608Z",
+          "durationMs": 77,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:38.685Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:40.715Z",
+          "durationMs": 103,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:40.818Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:42.849Z",
+          "durationMs": 68,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:42.917Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:44.946Z",
+          "durationMs": 68,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:45.014Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:47.044Z",
+          "durationMs": 71,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:47.115Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:49.146Z",
+          "durationMs": 65,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:49.211Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:51.241Z",
+          "durationMs": 113,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:51.354Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:53.384Z",
+          "durationMs": 65,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:53.449Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:55.479Z",
+          "durationMs": 98,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:55.577Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:57.607Z",
+          "durationMs": 68,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:57.675Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:59.705Z",
+          "durationMs": 66,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:08:59.771Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:01.801Z",
+          "durationMs": 71,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:01.872Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:03.901Z",
+          "durationMs": 69,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:03.970Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:05.998Z",
+          "durationMs": 88,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:06.086Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:08.116Z",
+          "durationMs": 77,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:08.193Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:10.223Z",
+          "durationMs": 90,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:10.313Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:12.343Z",
+          "durationMs": 80,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:12.423Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:14.452Z",
+          "durationMs": 78,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:14.530Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:16.560Z",
+          "durationMs": 65,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:16.625Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:18.655Z",
+          "durationMs": 66,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:18.721Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:20.751Z",
+          "durationMs": 66,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:20.817Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:22.845Z",
+          "durationMs": 85,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:22.930Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:24.959Z",
+          "durationMs": 65,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:25.024Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:27.054Z",
+          "durationMs": 67,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:27.121Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:29.151Z",
+          "durationMs": 66,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:29.218Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:31.247Z",
+          "durationMs": 67,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:31.314Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:33.343Z",
+          "durationMs": 65,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:33.408Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:35.439Z",
+          "durationMs": 65,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:35.504Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:37.534Z",
+          "durationMs": 67,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:37.601Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:39.630Z",
+          "durationMs": 69,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:39.699Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:41.729Z",
+          "durationMs": 73,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:41.802Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:43.831Z",
+          "durationMs": 66,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:43.897Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:45.928Z",
+          "durationMs": 74,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:46.003Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:48.032Z",
+          "durationMs": 68,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:48.100Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:50.129Z",
+          "durationMs": 72,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:50.201Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:52.230Z",
+          "durationMs": 67,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:52.297Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:54.326Z",
+          "durationMs": 68,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:54.394Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:56.423Z",
+          "durationMs": 67,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:56.490Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:58.520Z",
+          "durationMs": 69,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:09:58.589Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:00.618Z",
+          "durationMs": 66,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:00.684Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:02.714Z",
+          "durationMs": 66,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:02.780Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:04.809Z",
+          "durationMs": 71,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:04.880Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:06.910Z",
+          "durationMs": 65,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:06.975Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:09.004Z",
+          "durationMs": 68,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:09.072Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:11.101Z",
+          "durationMs": 71,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:11.172Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:13.201Z",
+          "durationMs": 65,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:13.266Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:15.295Z",
+          "durationMs": 72,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:15.367Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:17.396Z",
+          "durationMs": 67,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:17.463Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:19.492Z",
+          "durationMs": 67,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:19.559Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:21.589Z",
+          "durationMs": 66,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:21.655Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:23.685Z",
+          "durationMs": 69,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:23.754Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:25.784Z",
+          "durationMs": 67,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:25.851Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:27.881Z",
+          "durationMs": 71,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:27.952Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:29.980Z",
+          "durationMs": 71,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:30.051Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:32.081Z",
+          "durationMs": 75,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:32.156Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:34.186Z",
+          "durationMs": 69,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:34.255Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:36.285Z",
+          "durationMs": 118,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:36.404Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:38.432Z",
+          "durationMs": 105,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:38.537Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:40.566Z",
+          "durationMs": 213,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:40.779Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:42.808Z",
+          "durationMs": 105,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:42.913Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:44.942Z",
+          "durationMs": 100,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:45.042Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:47.072Z",
+          "durationMs": 74,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:47.146Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:49.176Z",
+          "durationMs": 103,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:49.279Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:51.309Z",
+          "durationMs": 242,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:51.551Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:53.581Z",
+          "durationMs": 77,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:53.658Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:55.688Z",
+          "durationMs": 68,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:55.756Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:57.785Z",
+          "durationMs": 105,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:57.890Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:59.920Z",
+          "durationMs": 69,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:10:59.989Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:11:02.018Z",
+          "durationMs": 290,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:11:02.308Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:11:04.338Z",
+          "durationMs": 80,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:11:04.418Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:11:06.448Z",
+          "durationMs": 108,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:11:06.556Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:11:08.586Z",
+          "durationMs": 112,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:11:08.698Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:11:10.727Z",
+          "durationMs": 73,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:11:10.800Z",
+          "durationMs": 30,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:11:12.830Z",
+          "durationMs": 222,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:11:13.052Z",
+          "durationMs": 29,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:11:15.081Z",
+          "durationMs": 116,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gefajlsu218tr9934fjho0b238.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-20T08:11:15.197Z",
+          "durationMs": 13,
+          "error": "This operation was aborted"
+        }
+      ]
+    }
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 1
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/39390293650",
+    "sha": "eaea630e466e710971ebdbfa4225e038aa9d648a",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "-125849"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-20717"
+      }
+    ]
+  }
+}
