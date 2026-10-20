@@ -1,6 +1,6 @@
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { DEFAULT_CONTEXT } from "./lib/config.mjs";
+import { DEFAULT_CONTEXT, parseDuration } from "./lib/config.mjs";
 import { ownedDseqs } from "./lib/owned.mjs";
 import { doctor } from "./lib/doctor.mjs";
 import { runScenario } from "./lib/run.mjs";
@@ -11,6 +11,7 @@ const repoRoot = fileURLToPath(new URL("..", import.meta.url));
 const USAGE = `canary - the ci-weather deployment canary
 
   node script/canary.mjs run --scenario <id> [--context <name>] [--akt <path>] [--out <dir>] [--adopt <dseq>]
+                             [--probe-timeout <duration>]
   node script/canary.mjs reap [--context <name>] [--akt <path>] [--adopt <dseq>]
   node script/canary.mjs doctor [--context <name>] [--akt <path>]
 
@@ -18,7 +19,8 @@ const USAGE = `canary - the ci-weather deployment canary
 act, never a default. run and reap close only the deployments the committed run history
 proves this project created. Everything else active on the account is foreign and is left
 alone. --adopt adds a dseq to the owned set, for a deployment this project created but
-never recorded.`;
+never recorded. --probe-timeout overrides how long http-probe and gpu-check keep asking
+the workload whether it is serving, for diagnosing a provider without editing the registry.`;
 
 function parseArgs(argv) {
   const out = { adopt: [] };
@@ -29,6 +31,7 @@ function parseArgs(argv) {
     const value = argv[++i];
     if (value === undefined || value.startsWith("--")) throw new Error(`${a} needs a value`);
     if (key === "adopt") out.adopt.push(value);
+    else if (key === "probe-timeout") out.probeTimeoutMs = parseDuration(value);
     else if (["scenario", "context", "akt", "out"].includes(key)) out[key] = value;
     else throw new Error(`unknown flag ${a}`);
   }
@@ -56,6 +59,7 @@ async function main(argv) {
       repoRoot,
       outRoot,
       adopt: args.adopt,
+      probeTimeoutMs: args.probeTimeoutMs,
       log: (m) => console.log(m),
     });
     console.log(`outcome ${doc.outcome.kind}, escrow ${doc.escrow.kind}`);

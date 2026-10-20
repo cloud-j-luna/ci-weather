@@ -377,13 +377,33 @@ describe("canary run, end to end against a fake akt and a real server", () => {
   it("--scenario tee-snp-gpu records a completed attestation and fails at http-probe when the attestation verifies but the workload never serves", async () => {
     const bin = build("tee-dead-ingress", { ingress: "ingress.invalid.test" });
     const out = join(dir, "tee-dead-ingress-runs");
-    const r = await canary(["run", "--scenario", "tee-snp-gpu", "--akt", bin, "--out", out]);
+    // --probe-timeout 1s: the hostname does not resolve, so the probe can only ever
+    // exhaust its budget, and tee-snp-gpu's real budget is 3m. Left at the registry
+    // value this one test spent 182s of the suite's 247s waiting for DNS to keep
+    // failing, which proves nothing this assertion does not already prove in a second.
+    const r = await canary([
+      "run",
+      "--scenario",
+      "tee-snp-gpu",
+      "--akt",
+      bin,
+      "--out",
+      out,
+      "--probe-timeout",
+      "1s",
+    ]);
     assert.equal(r.code, 1, r.stderr ?? "");
 
     const { doc } = onlyRun(out, "tee-snp-gpu");
     assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
     assert.equal(doc.outcome.kind, "failed");
     assert.equal(doc.outcome.atStep, "http-probe");
+    // The flag reached the probe. Asserted on recorded attempts rather than on elapsed
+    // time: a budget silently ignored shows up here as the ~150 attempts 3m produces.
+    assert.ok(
+      doc.lease.probe.attempts.length < 20,
+      `--probe-timeout was ignored, the probe made ${doc.lease.probe.attempts.length} attempts`,
+    );
     const attestationStep = doc.steps.find((s) => s.step === "attestation");
     assert.equal(attestationStep.result, "completed");
     assert.deepEqual(doc.lease.attestation, {

@@ -301,10 +301,20 @@
             "additionalProperties": false,
             "required": ["ip", "port", "externalPort", "protocol"],
             "properties": {
-              "ip": { "type": "string" },
-              "port": { "type": "integer", "description": "Port inside the workload." },
-              "externalPort": { "type": "integer", "description": "Port to dial on the IP." },
-              "protocol": { "type": "string" }
+              "ip": {
+                "type": "string"
+              },
+              "port": {
+                "type": "integer",
+                "description": "Port inside the workload."
+              },
+              "externalPort": {
+                "type": "integer",
+                "description": "Port to dial on the IP."
+              },
+              "protocol": {
+                "type": "string"
+              }
             }
           }
         },
@@ -448,6 +458,33 @@
                     "type": "string",
                     "minLength": 1,
                     "description": "Verbatim, e.g. 8.0. A string and not a number: 8.0 as a float is 8, and this is a major.minor version rather than a quantity."
+                  }
+                }
+              }
+            },
+            "attempts": {
+              "type": "array",
+              "description": "Every fetch of the report, so a provider whose ingress flaps between the probe and this step is visible rather than reduced to one unlucky sample. The probe records the same evidence for the same reason. Optional: run files written before gpu-check retried carry a single implicit attempt and must stay valid.",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["at", "durationMs"],
+                "properties": {
+                  "at": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "durationMs": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "status": {
+                    "type": "integer",
+                    "description": "Absent when the request never completed."
+                  },
+                  "error": {
+                    "type": "string",
+                    "description": "Transport error, verbatim."
                   }
                 }
               }

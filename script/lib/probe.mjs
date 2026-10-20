@@ -1,4 +1,6 @@
-const BACKOFF_SCHEDULE_MS = [250, 500, 1000, 2000];
+// Exported so gpu-check waits on the same schedule. The two steps ask the same origin
+// the same question, and a workload that is still starting answers both the same way.
+export const BACKOFF_SCHEDULE_MS = [250, 500, 1000, 2000];
 
 function defaultSleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
