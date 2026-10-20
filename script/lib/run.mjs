@@ -368,10 +368,15 @@ export async function runScenario({
   adopt = [],
   env = process.env,
   log = () => {},
+  probeTimeoutMs,
 }) {
   const config = loadConfig(repoRoot);
   const sc = findScenario(config, scenarioId);
   const budgets = config.budgets;
+  // How long http-probe, and gpu-check after it, will keep asking the origin whether it
+  // is serving. One value, derived once: the two steps ask the same question, and the
+  // retry reservation below has to reserve exactly what they can spend.
+  const probeBudgetMs = probeTimeoutMs ?? sc.probeTimeoutMs ?? budgets.probeTimeoutMs;
   const own = new Set([...ownedDseqs(outRoot), ...adopt]);
   const ownNow = () => [...own, ...(state.lease?.dseq ? [state.lease.dseq] : [])];
 
@@ -509,7 +514,9 @@ export async function runScenario({
       budgets.bidRetryDelayMs +
       budgets.bidTimeoutMs +
       budgets.leaseReadyTimeoutMs +
-      (sc.probeTimeoutMs ?? budgets.probeTimeoutMs) +
+      probeBudgetMs +
+      // gpu-check can now spend a probe budget of its own, and it runs after the probe.
+      (sc.gpuCheck ? probeBudgetMs : 0) +
       RETRY_MARGIN_MS;
 
     for (;;) {
@@ -657,7 +664,7 @@ export async function runScenario({
             path: sc.probe.path,
             expectStatus: sc.probe.expectStatus,
             expectBodyContains: sc.probe.expectBodyContains,
-            budgetMs: sc.probeTimeoutMs ?? budgets.probeTimeoutMs,
+            budgetMs: probeBudgetMs,
           });
           if (error !== undefined) state.probeError = error;
           state.probe = outcome;
@@ -674,6 +681,10 @@ export async function runScenario({
           // only probe.url has baked in.
           const { body, lines, ...rest } = await fetchGpuReport({
             url: new URL(sc.gpuCheck.path, state.probe.url).toString(),
+            // The same budget the probe just used. Both steps ask one origin whether it
+            // is serving yet, so giving this one less patience than the probe makes a
+            // run fail on a question the probe had already answered yes.
+            budgetMs: probeBudgetMs,
           });
           // Assigned before the verdict is computed, so no future early return can skip
           // the bytes a human needs precisely when the body did not parse.
@@ -684,6 +695,7 @@ export async function runScenario({
               url: rest.url,
               deviceCount: rest.devices.length,
               devices: rest.devices,
+              attempts: rest.attempts,
             };
           }
           state.gpuCheckFinishedAtMs = Date.now();
