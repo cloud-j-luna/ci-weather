@@ -51,6 +51,8 @@ node script/canary.mjs run --scenario web      # defaults to sandbox-2
 npm run reap                                   # close what this project created, nothing else
 ```
 
+`--probe-timeout <duration>` overrides how long `http-probe` and `gpu-check` keep asking the workload whether it is serving, for diagnosing a provider without editing the registry.
+
 The default network is `sandbox-2`.
 CI opts into mainnet with `--context mainnet`, so a laptop cannot spend from the mainnet wallet by forgetting a flag.
 
@@ -96,7 +98,7 @@ akt deploy <sdl> --bid-select cheapest --bid-timeout 5m --ready-timeout 5m --yes
 
 The runner consumes that event stream, then probes the workload, then closes.
 
-Six details are non-obvious:
+Seven details are non-obvious:
 
 **Attribution never comes from the exit code.**
 `akt` defines eight exit codes and constructs none of them in the deploy path, so a bid timeout and a manifest failure both exit 1.
@@ -120,6 +122,16 @@ Finding no IP fails the run at `http-probe`; there is no fallback to the hostnam
 Akash injects an attestation sidecar into a TEE pod, and `akt provider lease-attestation` challenges it with a fresh 64-byte nonce and checks the hardware report echoes that nonce back.
 The one answer that looks like a pass without being one is a mock report: the sidecar's synthetic format echoes the nonce correctly with no TEE hardware behind it.
 A mock, a nonce that was not echoed, or a TEE type other than the one the scenario asked for each fail the run at `attestation`, so a green cell on that row cannot mean "labelled confidential".
+
+**A 503 is a workload still starting, not a verdict.**
+A provider's ingress answers 503 while the route exists but nothing is accepting connections behind it yet, which is every workload's first seconds.
+It is path-independent, so it says nothing about which file was asked for.
+Across every run recorded here, a probe that saw a 5xx went on to get a 200 within 0.5s to 7.1s; it has never once been terminal.
+Both `http-probe` and the `gpu-check` that follows it therefore retry on 5xx and on transport errors, on one shared backoff schedule and one shared budget.
+A status the origin itself produced, 404 included, is a real answer and is not retried.
+
+`gpu-check` used to fetch once with no retry, milliseconds after the probe's first success.
+On 2026-10-20 it sampled the tail of that startup window and reported a working A100 as a dead one.
 
 **`--bid-select` is always passed.**
 It defaults to `interactive`, which blocks on stdin and would hang CI until the job timeout.
