@@ -18,158 +18,10 @@ import { fileURLToPath } from "node:url";
 import { stringify as stringifyYaml } from "yaml";
 import { check } from "./validate-runs.mjs";
 import { runScenario } from "./lib/run.mjs";
+import { fakeAkt, verbs } from "./fixtures/fake-akt.mjs";
 
 const run = promisify(execFile);
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
-const ADDRESS = "akash18yw2yky7l7suahs8u29dvfq8v3w5q5hnnla655";
-
-function fakeAkt({
-  statePath,
-  argvLog,
-  uri,
-  ingress = uri,
-  failAt,
-  bidFailures = 0,
-  bidFailStep = "wait-for-bids",
-  leaseStatus = "none",
-  uact = "60000000",
-  attestPlatform = "snp-gpu",
-  attestNonceVerified = true,
-  attestMockReport = false,
-  attestFail = false,
-}) {
-  return `#!/usr/bin/env node
-import { readFileSync, writeFileSync, appendFileSync, existsSync } from "node:fs";
-
-const argv = process.argv.slice(2);
-appendFileSync(${JSON.stringify(argvLog)}, JSON.stringify(argv) + "\\n");
-
-const statePath = ${JSON.stringify(statePath)};
-const read = () => (existsSync(statePath) ? JSON.parse(readFileSync(statePath, "utf8")) : { active: [], next: 9000001 });
-const write = (s) => writeFileSync(statePath, JSON.stringify(s));
-const out = (o) => process.stdout.write(JSON.stringify(o) + "\\n");
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const has = (f) => argv.includes(f);
-const failAt = ${JSON.stringify(failAt)};
-const bidFailures = ${JSON.stringify(bidFailures)};
-const bidFailStep = ${JSON.stringify(bidFailStep)};
-const leaseStatus = ${JSON.stringify(leaseStatus)};
-const uact = ${JSON.stringify(uact)};
-const attestPlatform = ${JSON.stringify(attestPlatform)};
-const attestNonceVerified = ${JSON.stringify(attestNonceVerified)};
-const attestMockReport = ${JSON.stringify(attestMockReport)};
-const attestFail = ${JSON.stringify(attestFail)};
-
-if (argv[0] === "version") {
-  process.stdout.write("akt 1.0.1 (commit: fake, built: 2026-10-09T05:05:46Z)\\n");
-} else if (argv[0] === "context" && argv[1] === "list") {
-  out([{ current: false, name: "sandbox-2", network: "sandbox-2", keyring: "default", default_account: "mykey2", chain_id: "sandbox-2" }]);
-} else if (argv[0] === "context" && argv[1] === "keys" && argv[2] === "list") {
-  out([{ name: "mykey2", type: "local", address: ${JSON.stringify(ADDRESS)}, pubkey: "02" }]);
-} else if (argv[0] === "query" && argv[1] === "bank") {
-  out({ balances: [{ denom: "uact", amount: uact }, { denom: "uakt", amount: "7988246" }], pagination: { next_key: null, total: "0" } });
-} else if (argv[0] === "query" && argv[1] === "deployment" && argv[2] === "active") {
-  const s = read();
-  out({
-    deployments: s.active.map((dseq) => ({
-      deployment: { id: { owner: ${JSON.stringify(ADDRESS)}, dseq }, state: "active" },
-      groups: [],
-      escrow_account: { state: { funds: [{ denom: "uact", amount: "5000000.000000000000000000" }] } },
-    })),
-    pagination: { next_key: null, total: String(s.active.length) },
-  });
-} else if (argv[0] === "context" && argv[1] === "log") {
-  const s = read();
-  out(s.log ?? []);
-} else if (argv[0] === "sdl" && argv[1] === "validate") {
-  process.stdout.write("valid: 1 service(s), 1 group(s), 0 warning(s)\\n");
-} else if (argv[0] === "provider" && argv[1] === "lease-status") {
-  if (leaseStatus === "none") {
-    out({ ips: null, forwarded_ports: null });
-  } else {
-    const [host, port] = ${JSON.stringify(uri)}.split(":");
-    out({ ips: [{ port: 80, external_port: Number(port), protocol: "TCP", ip: host }], forwarded_ports: null });
-  }
-} else if (argv[0] === "provider" && argv[1] === "lease-attestation") {
-  if (attestFail) {
-    process.stderr.write("rpc error: attestation sidecar unreachable\\n");
-    process.exit(1);
-  } else {
-    out({
-      nonce: "bm9uY2U=",
-      quote: {
-        report: "cmVwb3J0",
-        cert_chain: "",
-        tee_platform: attestPlatform,
-        auxblob: "",
-        gpu_reports: [{ device_index: 0, report: "cmVwb3J0" }],
-        tls_bound: false,
-      },
-      report_size_bytes: 1184,
-      nonce_verified: attestNonceVerified,
-      mock_report: attestMockReport,
-    });
-  }
-} else if (argv[0] === "deploy") {
-  if (!has("--bid-select")) {
-    process.stderr.write("fake akt: --bid-select missing, real akt would block on stdin here\\n");
-    process.exit(1);
-  }
-  const s = read();
-  const dseq = String(s.next);
-  s.next += 1;
-  s.deploys = (s.deploys ?? 0) + 1;
-  const effectiveFailAt = s.deploys <= bidFailures ? bidFailStep : failAt;
-  const bidsTotal = effectiveFailAt === "wait-for-bids" ? "0" : effectiveFailAt === "select-bid" ? "2" : "3";
-  s.active.push(dseq);
-  write(s);
-  const provider = "akash1rk090a6mq9gvm0h6ljf8kz8mrxglwwxsk4srxh";
-  const t0 = Date.now();
-  const steps = [
-    ["create-deployment", { dseq, owner: ${JSON.stringify(ADDRESS)}, sdl_path: "sdl/web.yaml" }, [{ hash: "A".repeat(64), code: 0 }]],
-    ["wait-for-bids", { bids: [], pagination: { next_key: null, total: bidsTotal }, provider_metadata: { [provider]: { audited: true, attributes: { "location-region": "na-us-west", organization: "overclock" } } } }, []],
-    ["select-bid", { dseq, provider, price: "2.930853000000000000uact", selected: { bid: { price: { amount: "2.930853000000000000", denom: "uact" } } } }, []],
-    ["create-lease", { dseq, provider }, [{ hash: "B".repeat(64), code: 0 }]],
-    ["send-manifest", null, []],
-    ["display-result", { dseq, provider, ready: true, text: "Deployment created!", uris: { web: [${JSON.stringify(ingress)}] } }, []],
-    ["wait-for-ready", { dseq, provider, ready: true, uris: { web: [${JSON.stringify(ingress)}] } }, []],
-  ];
-  const emitted = [];
-  const entries = [];
-  for (let i = 0; i < steps.length; i++) {
-    const [step, outputs, txs] = steps[i];
-    await sleep(step === "wait-for-bids" ? 400 : 5);
-    const failing = step === effectiveFailAt;
-    const errorText = step === "wait-for-bids" ? "no bids received (at least 1 required); timed out after 5m0s" : step === "select-bid" ? "no item selected" : "the fake provider refused the manifest";
-    const e = { workflow: "deploy", id: "fake", step, result: failing ? "error" : "completed", errors: failing ? [errorText] : [], txs };
-    if (outputs) e.outputs = outputs;
-    emitted.push(e);
-    if (step !== "wait-for-ready") {
-      entries.unshift({ ts: new Date().toISOString(), type: "workflow", action: "deploy", workflow_id: "fake", step: entries.length, step_name: step, status: failing ? "error" : "success" });
-    }
-    if (failing) break;
-  }
-  const withLog = read();
-  withLog.log = entries;
-  write(withLog);
-  for (const e of emitted) out(e);
-  if (emitted.some((e) => e.result === "error")) process.exit(1);
-} else if (argv[0] === "close") {
-  const dseq = argv[1];
-  const s = read();
-  if (!s.active.includes(dseq)) {
-    out({ workflow: "close", step: "close-deployment", result: "error", errors: ["rpc error: Deployment closed: unknown request"], txs: [] });
-    process.exit(1);
-  }
-  s.active = s.active.filter((d) => d !== dseq);
-  write(s);
-  out({ workflow: "close", step: "close-deployment", result: "completed", errors: [], txs: [{ hash: "C".repeat(64), code: 0 }], outputs: { dseq, owner: ${JSON.stringify(ADDRESS)} } });
-} else {
-  process.stderr.write("fake akt: unhandled " + argv.join(" ") + "\\n");
-  process.exit(1);
-}
-`;
-}
 
 describe("canary run, end to end against a fake akt and a real server", () => {
   let server;
@@ -333,7 +185,12 @@ describe("canary run, end to end against a fake akt and a real server", () => {
   });
 
   it("--scenario ip-lease passes when a dedicated IP was allocated, probing it instead of the shared ingress", async () => {
-    const bin = build("ip-real", { leaseStatus: "ip", ingress: "ingress.invalid.test" });
+    const bin = build("ip-real", {
+      handlers: {
+        "provider lease-status": verbs.leaseStatus({ ip: true }),
+        deploy: verbs.deploy({ ingress: "ingress.invalid.test" }),
+      },
+    });
     const out = join(dir, "ip-real-runs");
     const r = await canary(["run", "--scenario", "ip-lease", "--akt", bin, "--out", out]);
     assert.equal(r.code ?? 0, 0, r.stderr ?? "");
@@ -375,7 +232,9 @@ describe("canary run, end to end against a fake akt and a real server", () => {
   });
 
   it("--scenario tee-snp-gpu records a completed attestation and fails at http-probe when the attestation verifies but the workload never serves", async () => {
-    const bin = build("tee-dead-ingress", { ingress: "ingress.invalid.test" });
+    const bin = build("tee-dead-ingress", {
+      handlers: { deploy: verbs.deploy({ ingress: "ingress.invalid.test" }) },
+    });
     const out = join(dir, "tee-dead-ingress-runs");
     // --probe-timeout 1s: the hostname does not resolve, so the probe can only ever
     // exhaust its budget, and tee-snp-gpu's real budget is 3m. Left at the registry
@@ -417,7 +276,9 @@ describe("canary run, end to end against a fake akt and a real server", () => {
   });
 
   it("--scenario tee-snp-gpu fails at attestation when mock_report is true, naming the mock and still recording the report", async () => {
-    const bin = build("tee-mock", { attestMockReport: true });
+    const bin = build("tee-mock", {
+      handlers: { "provider lease-attestation": verbs.leaseAttestation({ mockReport: true }) },
+    });
     const out = join(dir, "tee-mock-runs");
     const r = await canary(["run", "--scenario", "tee-snp-gpu", "--akt", bin, "--out", out]);
     assert.equal(r.code, 1, r.stderr ?? "");
@@ -431,7 +292,9 @@ describe("canary run, end to end against a fake akt and a real server", () => {
   });
 
   it("--scenario tee-snp-gpu fails at attestation when nonce_verified is false", async () => {
-    const bin = build("tee-nonce", { attestNonceVerified: false });
+    const bin = build("tee-nonce", {
+      handlers: { "provider lease-attestation": verbs.leaseAttestation({ nonceVerified: false }) },
+    });
     const out = join(dir, "tee-nonce-runs");
     const r = await canary(["run", "--scenario", "tee-snp-gpu", "--akt", bin, "--out", out]);
     assert.equal(r.code, 1, r.stderr ?? "");
@@ -444,7 +307,9 @@ describe("canary run, end to end against a fake akt and a real server", () => {
   });
 
   it("--scenario tee-snp-gpu fails at attestation when the platform is snp against the expected snp-gpu, naming both", async () => {
-    const bin = build("tee-platform", { attestPlatform: "snp" });
+    const bin = build("tee-platform", {
+      handlers: { "provider lease-attestation": verbs.leaseAttestation({ platform: "snp" }) },
+    });
     const out = join(dir, "tee-platform-runs");
     const r = await canary(["run", "--scenario", "tee-snp-gpu", "--akt", bin, "--out", out]);
     assert.equal(r.code, 1, r.stderr ?? "");
@@ -457,7 +322,9 @@ describe("canary run, end to end against a fake akt and a real server", () => {
   });
 
   it("--scenario tee-snp-gpu fails at attestation carrying akt's own stderr text verbatim when the command exits non-zero", async () => {
-    const bin = build("tee-exit", { attestFail: true });
+    const bin = build("tee-exit", {
+      handlers: { "provider lease-attestation": verbs.leaseAttestation({ fail: true }) },
+    });
     const out = join(dir, "tee-exit-runs");
     const r = await canary(["run", "--scenario", "tee-snp-gpu", "--akt", bin, "--out", out]);
     assert.equal(r.code, 1, r.stderr ?? "");
@@ -518,7 +385,7 @@ describe("canary run, end to end against a fake akt and a real server", () => {
   });
 
   it("attributes a failure to akt's own step and error, never to the exit code", async () => {
-    const bin = build("sad", { failAt: "send-manifest" });
+    const bin = build("sad", { handlers: { deploy: verbs.deploy({ failAt: "send-manifest" }) } });
     const out = join(dir, "sad-runs");
     await canary(["run", "--scenario", "web", "--akt", bin, "--out", out]);
 
@@ -708,7 +575,7 @@ describe("canary run, end to end against a fake akt and a real server", () => {
   });
 
   it("doctor fails the balance check when the account cannot fund every scenario's deposit", async () => {
-    const bin = build("thin", { uact: "1000000" });
+    const bin = build("thin", { handlers: { "query bank": verbs.bank({ uact: "1000000" }) } });
     const out = join(dir, "thin-runs");
     mkdirSync(out, { recursive: true });
 
@@ -811,7 +678,9 @@ describe("retrying a scenario whose pinned provider did not bid", () => {
   };
 
   it("closes the deployment of every failed attempt, so three attempts leak nothing", async () => {
-    const { doc, closes, active, runDir } = await deploy("three", { bidFailures: 9 });
+    const { doc, closes, active, runDir } = await deploy("three", {
+      handlers: { deploy: verbs.deploy({ bidFailures: 9 }) },
+    });
 
     assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
     assert.equal(closes.length, 3, "one close per attempt, or a deposit is abandoned on chain");
@@ -835,7 +704,9 @@ describe("retrying a scenario whose pinned provider did not bid", () => {
   });
 
   it("passes on the second attempt and still accounts for the first attempt's deposit", async () => {
-    const { doc, closes, active } = await deploy("second", { bidFailures: 1 });
+    const { doc, closes, active } = await deploy("second", {
+      handlers: { deploy: verbs.deploy({ bidFailures: 1 }) },
+    });
 
     assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
     assert.equal(doc.outcome.kind, "passed");
@@ -850,7 +721,9 @@ describe("retrying a scenario whose pinned provider did not bid", () => {
   });
 
   it("retries a select-bid failure, where others bid but the pinned provider did not", async () => {
-    const { doc } = await deploy("select", { bidFailures: 1, bidFailStep: "select-bid" });
+    const { doc } = await deploy("select", {
+      handlers: { deploy: verbs.deploy({ bidFailures: 1, bidFailStep: "select-bid" }) },
+    });
 
     assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
     assert.equal(doc.outcome.kind, "passed");
@@ -863,7 +736,9 @@ describe("retrying a scenario whose pinned provider did not bid", () => {
   });
 
   it("never retries a failure that is a real result about Akash rather than about supply", async () => {
-    const { doc, closes, active } = await deploy("manifest", { failAt: "send-manifest" });
+    const { doc, closes, active } = await deploy("manifest", {
+      handlers: { deploy: verbs.deploy({ failAt: "send-manifest" }) },
+    });
 
     assert.deepEqual(check(doc), [], JSON.stringify(check(doc)));
     assert.equal(doc.outcome.atStep, "send-manifest");
@@ -876,7 +751,7 @@ describe("retrying a scenario whose pinned provider did not bid", () => {
 
   it("does not start an attempt the wall clock cannot finish, reporting an honest failure instead of an abort", async () => {
     const { doc, closes, active } = await deploy("clock", {
-      bidFailures: 9,
+      handlers: { deploy: verbs.deploy({ bidFailures: 9 }) },
       budgets: { totalRunTimeout: "2m" },
     });
 
@@ -894,7 +769,7 @@ describe("retrying a scenario whose pinned provider did not bid", () => {
 
   it("honours a per-scenario bidAttempts of 1 by never retrying", async () => {
     const { doc, closes } = await deploy("once", {
-      bidFailures: 9,
+      handlers: { deploy: verbs.deploy({ bidFailures: 9 }) },
       budgets: { bidAttempts: 1 },
     });
 
