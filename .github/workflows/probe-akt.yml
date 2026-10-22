@@ -1,0 +1,137 @@
+# A throwaway lever, not part of the canary.
+#
+# Four of the six planned checks call akt verbs whose output shape nobody here has seen:
+# lease-shell, lease-logs and send-manifest. akt's shapes have been guessed wrong before.
+# normalizeIps exists because `ips` was assumed to be an array of snake_case objects when
+# it is a map keyed by service with Go-capitalised fields, and that guess crashed a live
+# mainnet run and reported it as Akash failing. This captures the real bytes once so the
+# check modules are written against evidence.
+#
+# Delete this file once script/lib/akt.mjs has the three wrappers and their fixtures.
+name: Probe akt shapes
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: canary
+  cancel-in-progress: false
+
+env:
+  AKT_KEYRING_BACKEND: test
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26"
+      - run: npm ci
+
+      - name: Install akt v1.0.1
+        env:
+          AKT_RELEASE_URL: https://github.com/akash-network/akt/releases/download/v1.0.1
+          AKT_ZIP_SHA256: 62b7eb88b2335bacdd8317beb244a4ddb3c32452dcc52776fb7be4bca4932d99
+        run: |
+          set -e
+          install_dir="$RUNNER_TEMP/akt-install"
+          mkdir -p "$install_dir"
+          cd "$install_dir"
+          curl -fsSL -o akt_1.0.1_linux_amd64.zip "$AKT_RELEASE_URL/akt_1.0.1_linux_amd64.zip"
+          curl -fsSL -o akt_1.0.1_checksums.txt "$AKT_RELEASE_URL/akt_1.0.1_checksums.txt"
+          echo "$AKT_ZIP_SHA256  akt_1.0.1_linux_amd64.zip" | sha256sum -c -
+          unzip -q akt_1.0.1_linux_amd64.zip -d extracted
+          mkdir -p "$install_dir/bin"
+          find extracted -type f -name akt -exec cp {} "$install_dir/bin/akt" \;
+          chmod +x "$install_dir/bin/akt"
+          echo "$install_dir/bin" >> "$GITHUB_PATH"
+
+      - name: Provision akt context
+        env:
+          CANARY_MNEMONIC: ${{ secrets.CANARY_MNEMONIC }}
+        run: |
+          set -e
+          mnemonic_file="$RUNNER_TEMP/canary-mnemonic.txt"
+          trap 'rm -f "$mnemonic_file"' EXIT
+          printf '%s' "$CANARY_MNEMONIC" > "$mnemonic_file"
+          akt context network create mainnet \
+            --chain-id akashnet-2 \
+            --gas-prices 0.025uakt \
+            --rpc https://rpc-akash.ecostake.com:443 \
+            --rpc https://rpc.lavenderfive.com:443/akash \
+            --rpc https://akash-rpc.polkachu.com \
+            --rpc https://akash-rpc.publicnode.com:443 \
+            --rpc https://rpc.akash.bronbro.io:443 \
+            --api https://rest-akash.ecostake.com \
+            --api https://akash-api.polkachu.com \
+            --api https://akash-rest.publicnode.com \
+            --grpc akash.lavenderfive.com:443 \
+            --grpc akash-grpc.publicnode.com:443
+          akt context create mainnet --network mainnet --default-account ci
+          akt context keys add ci --recover --source "$mnemonic_file" --no-backup --yes --context mainnet
+
+      - name: Deploy a web lease and hold it
+        id: deploy
+        run: |
+          set -e
+          akt deploy scenarios/sdl/web.yaml --context mainnet \
+            --bid-select cheapest --bid-timeout 5m --ready-timeout 5m \
+            --deposit 1000000uact --gas-prices 0.025uakt --yes -o jsonl \
+            | tee "$RUNNER_TEMP/deploy.jsonl"
+          dseq=$(grep -o '"dseq":"[0-9]*"' "$RUNNER_TEMP/deploy.jsonl" | head -1 | grep -o '[0-9]*')
+          [ -n "$dseq" ] || { echo "no dseq captured"; exit 1; }
+          echo "dseq=$dseq" >> "$GITHUB_OUTPUT"
+          echo "captured dseq $dseq"
+
+      - name: SHAPE lease-shell -o json
+        if: always() && steps.deploy.outputs.dseq != ''
+        run: |
+          echo "--- exit code is captured, never fatal ---"
+          akt provider lease-shell --dseq ${{ steps.deploy.outputs.dseq }} --service web \
+            --context mainnet -o json -- echo probe-ok > shell.json 2> shell.err || true
+          echo "### stdout raw:"; cat -A shell.json | head -40
+          echo "### parsed keys:"; node -e 'try{const d=JSON.parse(require("fs").readFileSync("shell.json","utf8"));console.log(JSON.stringify(d,null,2).slice(0,2000))}catch(e){console.log("NOT JSON:",e.message)}'
+          echo "### stderr:"; head -20 shell.err
+
+      - name: SHAPE lease-shell non-zero exit
+        if: always() && steps.deploy.outputs.dseq != ''
+        run: |
+          akt provider lease-shell --dseq ${{ steps.deploy.outputs.dseq }} --service web \
+            --context mainnet -o json -- sh -c 'echo to-stderr >&2; exit 7' > ex.json 2> ex.err || true
+          echo "### stdout:"; cat ex.json | head -30
+          echo "### stderr:"; head -20 ex.err
+
+      - name: SHAPE lease-logs
+        if: always() && steps.deploy.outputs.dseq != ''
+        run: |
+          akt provider lease-logs ${{ steps.deploy.outputs.dseq }} --service web \
+            --context mainnet --tail 5 > logs.txt 2> logs.err || true
+          echo "### stdout raw:"; cat -A logs.txt | head -20
+          echo "### stderr:"; head -20 logs.err
+          echo "### with -o json:"
+          akt provider lease-logs ${{ steps.deploy.outputs.dseq }} --service web \
+            --context mainnet --tail 5 -o json > logsj.txt 2>&1 || true
+          head -20 logsj.txt
+
+      - name: SHAPE send-manifest in place
+        if: always() && steps.deploy.outputs.dseq != ''
+        run: |
+          sed 's/nginx:1.27-alpine/nginx:1.27/' scenarios/sdl/web.yaml > updated.yaml
+          diff scenarios/sdl/web.yaml updated.yaml || true
+          akt provider send-manifest updated.yaml --dseq ${{ steps.deploy.outputs.dseq }} \
+            --context mainnet > sm.txt 2> sm.err || true
+          echo "### stdout:"; head -20 sm.txt
+          echo "### stderr:"; head -20 sm.err
+
+      - name: Close the lease
+        if: always() && steps.deploy.outputs.dseq != ''
+        run: |
+          akt close ${{ steps.deploy.outputs.dseq }} --context mainnet --gas-prices 0.025uakt --yes || true
+          echo "--- what is still open on this account ---"
+          node script/canary.mjs doctor --context mainnet || true
