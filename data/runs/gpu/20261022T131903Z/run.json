@@ -1,0 +1,230 @@
+{
+  "schemaVersion": 1,
+  "scenario": "gpu",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-10-22T13:19:03.618Z",
+  "finishedAt": "2026-10-22T13:19:41.454Z",
+  "outcome": {
+    "kind": "passed"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29179189",
+        "closeTxHash": "11846AD6241902250711E5F04AB035324E6514E3B3745C728A4474A27D7A3F8C"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-22T13:19:05.084Z",
+      "durationMs": 1029,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "89BC55AC8125938DF9ED5FDBDFCD1C922FFFAF7CAAC6D80B34571EEE3D4DCFAE",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-10-22T13:19:06.113Z",
+      "durationMs": 10358,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-10-22T13:19:16.471Z",
+      "durationMs": 0,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-10-22T13:19:16.471Z",
+      "durationMs": 229,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "2889229952A28F6AFA33DA4A545F251A7472F56CDE76E71DB74ED6D632FF39C4",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-10-22T13:19:16.700Z",
+      "durationMs": 5934,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "completed",
+      "startedAt": "2026-10-22T13:19:22.634Z",
+      "durationMs": 2797,
+      "durationSource": "derived"
+    },
+    {
+      "step": "http-probe",
+      "result": "completed",
+      "startedAt": "2026-10-22T13:19:25.431Z",
+      "durationMs": 6988,
+      "durationSource": "runner"
+    },
+    {
+      "step": "gpu-check",
+      "result": "completed",
+      "startedAt": "2026-10-22T13:19:32.419Z",
+      "durationMs": 42,
+      "durationSource": "runner"
+    }
+  ],
+  "lease": {
+    "dseq": "29179189",
+    "bidCount": 1,
+    "provider": "akash172k755dd82elslzcgkgtk3ux5ytdqvx5wq2a98",
+    "price": {
+      "amount": "3182.464196000000000000",
+      "denom": "uact"
+    },
+    "uris": [
+      "5gqn5l1rbdclbdkqfk52vein8s.ingress.a100.hou2.dd.akash.pub"
+    ],
+    "providerAudited": true,
+    "providerRegion": "na-us-southwest",
+    "providerOrg": "overclock",
+    "gpu": {
+      "url": "https://5gqn5l1rbdclbdkqfk52vein8s.ingress.a100.hou2.dd.akash.pub/gpu.csv",
+      "deviceCount": 1,
+      "devices": [
+        {
+          "name": "NVIDIA A100-SXM4-80GB",
+          "driverVersion": "580.126.20",
+          "memoryTotalMiB": 81920,
+          "computeCapability": "8.0"
+        }
+      ],
+      "attempts": [
+        {
+          "at": "2026-10-22T13:19:32.419Z",
+          "status": 200,
+          "durationMs": 42
+        }
+      ]
+    },
+    "probe": {
+      "attempts": [
+        {
+          "scheme": "https",
+          "url": "https://5gqn5l1rbdclbdkqfk52vein8s.ingress.a100.hou2.dd.akash.pub/",
+          "at": "2026-10-22T13:19:26.465Z",
+          "durationMs": 566,
+          "status": 503,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://5gqn5l1rbdclbdkqfk52vein8s.ingress.a100.hou2.dd.akash.pub/",
+          "at": "2026-10-22T13:19:27.034Z",
+          "durationMs": 124,
+          "status": 503,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://5gqn5l1rbdclbdkqfk52vein8s.ingress.a100.hou2.dd.akash.pub/",
+          "at": "2026-10-22T13:19:27.409Z",
+          "durationMs": 222,
+          "status": 503,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://5gqn5l1rbdclbdkqfk52vein8s.ingress.a100.hou2.dd.akash.pub/",
+          "at": "2026-10-22T13:19:27.631Z",
+          "durationMs": 41,
+          "status": 503,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://5gqn5l1rbdclbdkqfk52vein8s.ingress.a100.hou2.dd.akash.pub/",
+          "at": "2026-10-22T13:19:28.171Z",
+          "durationMs": 59,
+          "status": 503,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://5gqn5l1rbdclbdkqfk52vein8s.ingress.a100.hou2.dd.akash.pub/",
+          "at": "2026-10-22T13:19:28.230Z",
+          "durationMs": 41,
+          "status": 503,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://5gqn5l1rbdclbdkqfk52vein8s.ingress.a100.hou2.dd.akash.pub/",
+          "at": "2026-10-22T13:19:29.270Z",
+          "durationMs": 60,
+          "status": 503,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "http",
+          "url": "http://5gqn5l1rbdclbdkqfk52vein8s.ingress.a100.hou2.dd.akash.pub/",
+          "at": "2026-10-22T13:19:29.330Z",
+          "durationMs": 41,
+          "status": 503,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://5gqn5l1rbdclbdkqfk52vein8s.ingress.a100.hou2.dd.akash.pub/",
+          "at": "2026-10-22T13:19:31.370Z",
+          "durationMs": 1048,
+          "status": 200,
+          "bodyMatched": true
+        }
+      ],
+      "servedBy": "https",
+      "url": "https://5gqn5l1rbdclbdkqfk52vein8s.ingress.a100.hou2.dd.akash.pub/"
+    }
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 1
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/39785561085",
+    "sha": "77492f9dcc820a9e3f81fc17376da2874a3573f3",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "-9547"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-20777"
+      }
+    ]
+  }
+}
