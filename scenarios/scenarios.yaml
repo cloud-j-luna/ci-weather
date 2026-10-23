@@ -42,6 +42,16 @@ budgets:
   # holding an open lease. An abort is recorded as "aborted", never as a network failure.
   bidTimeout: 5m
   leaseReadyTimeout: 8m
+  # Thirty seconds, and deliberately not more. A 404 from a provider's ingress is a route
+  # that is wrong, not a route that is slow, and no scenario should override this to wait
+  # one out. That was tried: hurricane 404'd the web and persistent-storage rows from
+  # 2026-10-17 to 2026-10-20, the override gave those rows 3m, and across 179 attempts not
+  # one 404 ever became a 200. What localised the fault was the ip-lease row, which passed
+  # on hurricane every single day of that window because it dials the allocated IP instead
+  # of the shared ingress hostname, so the provider was healthy and only its hostname path
+  # was broken. Hurricane recovered on 2026-10-21 and has served 10/10 since. The longest
+  # probe in any passing run ever recorded here is 7.8s, which this budget clears four
+  # times over.
   probeTimeout: 30s
   bidAttempts: 3
   # The account-sequence settle, not politeness: tozero.mjs keeps BETWEEN_CLOSES_MS = 7000
@@ -68,15 +78,6 @@ scenarios:
     title: Web service
     question: Can anyone deploy an ordinary web workload to Akash right now?
     sdl: sdl/web.yaml
-    # No probeTimeout override. A previous one here guessed that a fast wait-for-ready
-    # meant akt had declared the lease ready before the route existed, and gave the probe
-    # 3m to outlast the gap. The next run refuted it: hurricane served this row with
-    # wait-for-ready at 231ms and 404'd it at 2595ms, and three full minutes of probing
-    # never once turned a 404 into a 200. The real split is by date, not by timing.
-    # Hurricane's ingress last served a lease on 2026-10-16 and has 404'd every one since,
-    # while every other provider went 10/10 over the same window, so this row is reporting
-    # one provider's broken ingress, which is a finding and not something to wait out.
-    # The longest probe in any passing run ever recorded here is 8.6s.
     # Unpinned on purpose. The SDL requires organization=overclock, so any of the
     # ~23 Overclock providers can win. Pinning one provider meant a single operator
     # pausing bids showed up as Akash being unable to run a web workload.
@@ -116,15 +117,6 @@ scenarios:
     # other providers bid each time, so pinning it measured one provider's appetite
     # rather than whether persistent storage is leasable on Akash at all.
     sdl: sdl/storage.yaml
-    # No probeTimeout override. A previous one here guessed that a fast wait-for-ready
-    # meant akt had declared the lease ready before the route existed, and gave the probe
-    # 3m to outlast the gap. The next run refuted it: hurricane served this row with
-    # wait-for-ready at 231ms and 404'd it at 2595ms, and three full minutes of probing
-    # never once turned a 404 into a 200. The real split is by date, not by timing.
-    # Hurricane's ingress last served a lease on 2026-10-16 and has 404'd every one since,
-    # while every other provider went 10/10 over the same window, so this row is reporting
-    # one provider's broken ingress, which is a finding and not something to wait out.
-    # The longest probe in any passing run ever recorded here is 8.6s.
     bidSelect: cheapest
     tags: [storage]
     probe:
@@ -162,10 +154,13 @@ scenarios:
     # is deliberate headroom over the 1 ACT default rather than a measured figure.
     deposit: 2000000uact
     tags: [tee, gpu]
-    # Two live runs both 404'd after only ~32s of probing, which is the shared 30s
-    # budget. That is too short to tell "the provider never created a route" from
-    # "a Kata pod's route takes longer than that to appear". Three minutes makes the
-    # next run answer it instead of leaving it a guess.
+    # The one override, and it has already earned itself. Two live runs 404'd at the shared
+    # 30s budget, which was too short to tell "the provider never created a route" from
+    # "a Kata pod's route takes longer to appear". Three minutes answered it: 180s of
+    # unbroken 404s is not a slow route, and the hunt that followed found operator-hostname
+    # dead on a stub HTTPRoute and NGF running without --snippets. Both were fixed on
+    # 2026-10-22 and this row now serves in about a second. The budget stays because it is
+    # what converts a silent red into that answer, and it costs nothing on a healthy run.
     probeTimeout: 3m
     attestation:
       # Attestation is a provider API answered by a sidecar Akash injects into the pod,
