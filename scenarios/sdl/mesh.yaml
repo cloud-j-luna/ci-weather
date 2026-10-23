@@ -25,9 +25,17 @@ services:
     # says nothing about whether DNS worked. Failure is served as {"ok":false,...} for
     # the probe and for whoever reads the lease afterwards.
     #
+    # The server starts FIRST and the fetch runs behind it. An earlier version resolved
+    # api before serving, which defeated the whole design: this row's probe budget is
+    # 30s, so a web that spends up to a minute resolving is simply a closed port for the
+    # probe's entire window, and the row reports "never served" rather than the DNS
+    # failure it exists to catch. Serving first makes the probe's own retry the wait,
+    # and mesh.json always holds the current verdict. os.replace publishes it, so the
+    # probe can never read a half-written file.
+    #
     # There is deliberately no `dependencies:` stanza on this service. It would imply
-    # api is listening before web starts, which does not hold, and the retry loop below
-    # is what actually absorbs the race. 60s covers a slow image pull on api's node.
+    # api is listening before web starts, which does not hold, and the retry loop is
+    # what actually absorbs the race.
     #
     # A literal block scalar, not a folded one, for the same reason as gpu.yaml: the
     # shell and the heredoc terminator both need real newlines. There is no `set -e`,
@@ -41,28 +49,31 @@ services:
     args:
       - |-
         mkdir -p /srv
-        python3 - <<'PY'
-        import json, time, urllib.request
+        printf '{"ok":false,"error":"no attempt made yet"}' > /srv/mesh.json
+        python3 - <<'PY' &
+        import json, os, time, urllib.request
         TOKEN = "akash-mesh-9f41c2e7"
-        deadline = time.monotonic() + 60
-        err = "no attempt made"
-        result = None
-        while result is None:
+
+        def publish(result):
+            tmp = "/srv/.mesh.json.tmp"
+            with open(tmp, "w") as f:
+                f.write(json.dumps(result, separators=(",", ":")))
+            os.replace(tmp, "/srv/mesh.json")
+
+        deadline = time.monotonic() + 300
+        while True:
             try:
                 body = urllib.request.urlopen("http://api:80/", timeout=3).read().decode("utf-8", "replace").strip()
                 if body == TOKEN:
-                    result = {"ok": True, "upstream": body}
-                else:
-                    err = "unexpected body: " + body
+                    publish({"ok": True, "upstream": body})
+                    break
+                err = "unexpected body: " + body
             except Exception as e:
                 err = type(e).__name__ + ": " + str(e)
-            if result is None:
-                if time.monotonic() >= deadline:
-                    result = {"ok": False, "error": err[:200]}
-                else:
-                    time.sleep(1)
-        with open("/srv/mesh.json", "w") as f:
-            f.write(json.dumps(result, separators=(",", ":")))
+            publish({"ok": False, "error": err[:200]})
+            if time.monotonic() >= deadline:
+                break
+            time.sleep(1)
         PY
         cd /srv && exec python3 -m http.server 80
     expose:
