@@ -1,0 +1,110 @@
+version: "2.0"
+services:
+  api:
+    image: python:3-alpine
+    # Only this service ever holds the token, which is what lets the probe tell a real
+    # hop to api from anything else answering on web's route. Exposed to web alone, so
+    # it has no public route.
+    command:
+      - sh
+      - -c
+    args:
+      - |-
+        mkdir -p /srv
+        printf 'akash-mesh-9f41c2e7' > /srv/index.html
+        cd /srv && exec python3 -m http.server 80
+    expose:
+      - port: 80
+        as: 80
+        to:
+          - service: web
+  web:
+    image: python:3-alpine
+    # The fetch of http://api:80/ by DNS name is the thing under test, so it must be
+    # able to fail without taking the container down: a container that refuses to start
+    # says nothing about whether DNS worked. Failure is served as {"ok":false,...} for
+    # the probe and for whoever reads the lease afterwards.
+    #
+    # There is deliberately no `dependencies:` stanza on this service. It would imply
+    # api is listening before web starts, which does not hold, and the retry loop below
+    # is what actually absorbs the race. 60s covers a slow image pull on api's node.
+    #
+    # A literal block scalar, not a folded one, for the same reason as gpu.yaml: the
+    # shell and the heredoc terminator both need real newlines. There is no `set -e`,
+    # so a failed fetch still falls through to serving. json.dumps owns the escaping,
+    # so quotes and newlines in the error text cannot corrupt the file, and the error
+    # is cut to 200 characters so it cannot bloat it. The body must equal the token
+    # exactly, so a 200 from anything that is not api counts as a failure.
+    command:
+      - sh
+      - -c
+    args:
+      - |-
+        mkdir -p /srv
+        python3 - <<'PY'
+        import json, time, urllib.request
+        TOKEN = "akash-mesh-9f41c2e7"
+        deadline = time.monotonic() + 60
+        err = "no attempt made"
+        result = None
+        while result is None:
+            try:
+                body = urllib.request.urlopen("http://api:80/", timeout=3).read().decode("utf-8", "replace").strip()
+                if body == TOKEN:
+                    result = {"ok": True, "upstream": body}
+                else:
+                    err = "unexpected body: " + body
+            except Exception as e:
+                err = type(e).__name__ + ": " + str(e)
+            if result is None:
+                if time.monotonic() >= deadline:
+                    result = {"ok": False, "error": err[:200]}
+                else:
+                    time.sleep(1)
+        with open("/srv/mesh.json", "w") as f:
+            f.write(json.dumps(result, separators=(",", ":")))
+        PY
+        cd /srv && exec python3 -m http.server 80
+    expose:
+      - port: 80
+        as: 80
+        to:
+          - global: true
+profiles:
+  compute:
+    api:
+      resources:
+        cpu:
+          units: 0.1
+        memory:
+          size: 256Mi
+        storage:
+          size: 256Mi
+    web:
+      resources:
+        cpu:
+          units: 0.1
+        memory:
+          size: 256Mi
+        storage:
+          size: 256Mi
+  placement:
+    dcloud:
+      attributes:
+        organization: overclock
+      pricing:
+        api:
+          denom: uact
+          amount: 10000
+        web:
+          denom: uact
+          amount: 10000
+deployment:
+  api:
+    dcloud:
+      profile: api
+      count: 1
+  web:
+    dcloud:
+      profile: web
+      count: 1
