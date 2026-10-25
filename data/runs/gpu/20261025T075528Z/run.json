@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 1,
+  "scenario": "gpu",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-10-25T07:55:28.123Z",
+  "finishedAt": "2026-10-25T08:09:10.292Z",
+  "outcome": {
+    "kind": "passed"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29219878",
+        "closeTxHash": "89A125B6F13D771E87D7D9DAA963E40A96A407909CCE7480249FD4DAE3FDA874"
+      },
+      {
+        "dseq": "29219936",
+        "closeTxHash": "201CFCC3B4C0F00E393D9C3FC9710124F2A2518280CF044A60CA0C556FB7736C"
+      },
+      {
+        "dseq": "29219994",
+        "closeTxHash": "FD755EC3319B25E84C28C49CBF2A8B745F66F61F7BA2D477266B8B8E749617DE"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-25T08:06:52.974Z",
+      "durationMs": 1350,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "03F2B6CC2243A87DD1212174C083EA60330B4C6FBD6454F9983A1E3218F61AB4",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-10-25T08:06:54.324Z",
+      "durationMs": 15602,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-10-25T08:07:09.926Z",
+      "durationMs": 1,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-10-25T08:07:09.927Z",
+      "durationMs": 393,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "1AED41D71A8712E767455D273C8744CB0D20D908A51CA464BD165F8E4924432E",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-10-25T08:07:10.320Z",
+      "durationMs": 6656,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "completed",
+      "startedAt": "2026-10-25T08:07:16.977Z",
+      "durationMs": 103889,
+      "durationSource": "derived"
+    },
+    {
+      "step": "http-probe",
+      "result": "completed",
+      "startedAt": "2026-10-25T08:09:00.866Z",
+      "durationMs": 3488,
+      "durationSource": "runner"
+    },
+    {
+      "step": "gpu-check",
+      "result": "completed",
+      "startedAt": "2026-10-25T08:09:04.354Z",
+      "durationMs": 62,
+      "durationSource": "runner"
+    }
+  ],
+  "lease": {
+    "dseq": "29219994",
+    "bidCount": 1,
+    "provider": "akash172k755dd82elslzcgkgtk3ux5ytdqvx5wq2a98",
+    "price": {
+      "amount": "3182.464196000000000000",
+      "denom": "uact"
+    },
+    "uris": [
+      "o1biujk4htavjaasfg20tb7qok.ingress.a100.hou2.dd.akash.pub"
+    ],
+    "providerAudited": true,
+    "providerRegion": "na-us-southwest",
+    "providerOrg": "overclock",
+    "gpu": {
+      "url": "https://o1biujk4htavjaasfg20tb7qok.ingress.a100.hou2.dd.akash.pub/gpu.csv",
+      "deviceCount": 1,
+      "devices": [
+        {
+          "name": "NVIDIA A100-SXM4-80GB",
+          "driverVersion": "580.126.20",
+          "memoryTotalMiB": 81920,
+          "computeCapability": "8.0"
+        }
+      ],
+      "attempts": [
+        {
+          "at": "2026-10-25T08:09:04.354Z",
+          "status": 200,
+          "durationMs": 62
+        }
+      ]
+    },
+    "probe": {
+      "attempts": [
+        {
+          "scheme": "https",
+          "url": "https://o1biujk4htavjaasfg20tb7qok.ingress.a100.hou2.dd.akash.pub/",
+          "at": "2026-10-25T08:09:01.959Z",
+          "durationMs": 2392,
+          "status": 200,
+          "bodyMatched": true
+        }
+      ],
+      "servedBy": "https",
+      "url": "https://o1biujk4htavjaasfg20tb7qok.ingress.a100.hou2.dd.akash.pub/"
+    }
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 3,
+    "earlier": [
+      {
+        "atStep": "wait-for-bids",
+        "message": "no bids received (at least 1 required); timed out after 5m0s",
+        "startedAt": "2026-10-25T07:55:30.374Z",
+        "durationMs": 301247,
+        "dseq": "29219878"
+      },
+      {
+        "atStep": "wait-for-bids",
+        "message": "no bids received (at least 1 required); timed out after 5m0s",
+        "startedAt": "2026-10-25T08:01:11.524Z",
+        "durationMs": 301599,
+        "dseq": "29219936"
+      }
+    ]
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/40174543903",
+    "sha": "78a8c8d936b7c4d8d4767897cc1eb60c9e2f83f5",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "-63649"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-40377"
+      }
+    ]
+  }
+}
