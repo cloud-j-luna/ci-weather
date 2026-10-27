@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "scenario": "gpu",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-10-27T08:30:28.083Z",
+  "finishedAt": "2026-10-27T08:33:19.727Z",
+  "outcome": {
+    "kind": "passed"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29249610",
+        "closeTxHash": "6201D060732E452A7F9B378E90289C35A66D7620FBFC331D03878858FE15D1F8"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-27T08:30:29.647Z",
+      "durationMs": 879,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "32109A72D83C6CFF703E0B2843D6A2C3E12991D0C30BA40DA7722475E3B98BC2",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-10-27T08:30:30.526Z",
+      "durationMs": 10394,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-10-27T08:30:40.920Z",
+      "durationMs": 0,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-10-27T08:30:40.920Z",
+      "durationMs": 253,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "0B7732034B36D3CFBBE71EDC104F7DF0B2C7955B2662E25468AAAAABD28BEFE5",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-10-27T08:30:41.173Z",
+      "durationMs": 5676,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "completed",
+      "startedAt": "2026-10-27T08:30:46.849Z",
+      "durationMs": 141858,
+      "durationSource": "derived"
+    },
+    {
+      "step": "http-probe",
+      "result": "completed",
+      "startedAt": "2026-10-27T08:33:08.707Z",
+      "durationMs": 1800,
+      "durationSource": "runner"
+    },
+    {
+      "step": "gpu-check",
+      "result": "completed",
+      "startedAt": "2026-10-27T08:33:10.507Z",
+      "durationMs": 122,
+      "durationSource": "runner"
+    }
+  ],
+  "lease": {
+    "dseq": "29249610",
+    "bidCount": 1,
+    "provider": "akash172k755dd82elslzcgkgtk3ux5ytdqvx5wq2a98",
+    "price": {
+      "amount": "3182.464196000000000000",
+      "denom": "uact"
+    },
+    "uris": [
+      "2qig7idlf1e4v5l5nip8fpukog.ingress.a100.hou2.dd.akash.pub"
+    ],
+    "providerAudited": true,
+    "providerRegion": "na-us-southwest",
+    "providerOrg": "overclock",
+    "gpu": {
+      "url": "http://2qig7idlf1e4v5l5nip8fpukog.ingress.a100.hou2.dd.akash.pub/gpu.csv",
+      "deviceCount": 1,
+      "devices": [
+        {
+          "name": "NVIDIA A100-SXM4-80GB",
+          "driverVersion": "580.126.20",
+          "memoryTotalMiB": 81920,
+          "computeCapability": "8.0"
+        }
+      ],
+      "attempts": [
+        {
+          "at": "2026-10-27T08:33:10.507Z",
+          "status": 200,
+          "durationMs": 122
+        }
+      ]
+    },
+    "probe": {
+      "attempts": [
+        {
+          "scheme": "https",
+          "url": "https://2qig7idlf1e4v5l5nip8fpukog.ingress.a100.hou2.dd.akash.pub/",
+          "at": "2026-10-27T08:33:09.641Z",
+          "durationMs": 765,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://2qig7idlf1e4v5l5nip8fpukog.ingress.a100.hou2.dd.akash.pub/",
+          "at": "2026-10-27T08:33:10.406Z",
+          "durationMs": 99,
+          "status": 200,
+          "bodyMatched": true
+        }
+      ],
+      "servedBy": "http",
+      "url": "http://2qig7idlf1e4v5l5nip8fpukog.ingress.a100.hou2.dd.akash.pub/"
+    }
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 1
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/40473771491",
+    "sha": "b99e6f5fa3f57d7542d56586e111936b375b3d8d",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "-82744"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-20780"
+      }
+    ]
+  }
+}
