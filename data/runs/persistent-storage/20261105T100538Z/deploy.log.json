@@ -1,0 +1,58 @@
+[
+  {
+    "ts": "2026-11-05T10:06:08.219100292Z",
+    "type": "workflow",
+    "action": "deploy",
+    "workflow_id": "a1b4b01ef33d3cc9",
+    "step": 5,
+    "step_name": "display-result",
+    "status": "success"
+  },
+  {
+    "ts": "2026-11-05T10:06:08.219007905Z",
+    "type": "workflow",
+    "action": "deploy",
+    "workflow_id": "a1b4b01ef33d3cc9",
+    "step": 4,
+    "step_name": "send-manifest",
+    "status": "success"
+  },
+  {
+    "ts": "2026-11-05T10:06:02.342681131Z",
+    "type": "workflow",
+    "action": "deploy",
+    "tx_hash": "CD36165941C499B7598298D86798ED914B6023660090F7471276655410631B8B",
+    "workflow_id": "a1b4b01ef33d3cc9",
+    "step": 3,
+    "step_name": "create-lease",
+    "status": "success"
+  },
+  {
+    "ts": "2026-11-05T10:06:02.02911777Z",
+    "type": "workflow",
+    "action": "deploy",
+    "workflow_id": "a1b4b01ef33d3cc9",
+    "step": 2,
+    "step_name": "select-bid",
+    "status": "success"
+  },
+  {
+    "ts": "2026-11-05T10:06:02.028882499Z",
+    "type": "workflow",
+    "action": "deploy",
+    "workflow_id": "a1b4b01ef33d3cc9",
+    "step": 1,
+    "step_name": "wait-for-bids",
+    "status": "success"
+  },
+  {
+    "ts": "2026-11-05T10:05:40.939905978Z",
+    "type": "workflow",
+    "action": "deploy",
+    "tx_hash": "4152923CED9C0BDAB9506E174E304BA83E417ECF3D148191E2F9D86A17BE9D16",
+    "workflow_id": "a1b4b01ef33d3cc9",
+    "step": 0,
+    "step_name": "create-deployment",
+    "status": "success"
+  }
+]
