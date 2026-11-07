@@ -1,0 +1,4 @@
+workflow "deploy" failed: step "send-manifest" failed: submit manifest: remote server returned 404
+deployment DSEQ 29409916 with provider akash15tl6v6gd0nte0syyxnv57zmmspgju4c3xfmdhk remains open; escrow may continue to be consumed.
+retry manifest delivery: akt provider send-manifest '/home/runner/work/ci-weather/ci-weather/scenarios/sdl/web.yaml' --dseq 29409916 --provider akash15tl6v6gd0nte0syyxnv57zmmspgju4c3xfmdhk
+explicit cleanup: akt close 29409916
