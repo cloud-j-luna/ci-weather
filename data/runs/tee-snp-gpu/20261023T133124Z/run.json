@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "scenario": "tee-snp-gpu",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-10-23T13:31:24.598Z",
+  "finishedAt": "2026-10-23T13:38:01.733Z",
+  "outcome": {
+    "kind": "passed"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29194036",
+        "closeTxHash": "031D7D2BA73A804672F6720DD887172864E863F1C57BE8DB1E4B6D46F11F21FA"
+      },
+      {
+        "dseq": "29194094",
+        "closeTxHash": "47629519A8BF79398346DE1A6A0C6D1221D5B5BFA304A82A3F9E6DB71FDB1C89"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-10-23T13:37:05.585Z",
+      "durationMs": 1093,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "26C05A2E72C131FF6DFDBA36049897B35EB517BA5430A5FE371E89C67D14FA28",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-10-23T13:37:06.678Z",
+      "durationMs": 15433,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-10-23T13:37:22.111Z",
+      "durationMs": 0,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-10-23T13:37:22.111Z",
+      "durationMs": 295,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "B59609ABA953FBAF3D687FF773D08D85282D01A3DB5314DB165D71B774A9A6ED",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-10-23T13:37:22.406Z",
+      "durationMs": 5733,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "completed",
+      "startedAt": "2026-10-23T13:37:28.139Z",
+      "durationMs": 21723,
+      "durationSource": "derived"
+    },
+    {
+      "step": "attestation",
+      "result": "completed",
+      "startedAt": "2026-10-23T13:37:49.862Z",
+      "durationMs": 2266,
+      "durationSource": "runner"
+    },
+    {
+      "step": "http-probe",
+      "result": "completed",
+      "startedAt": "2026-10-23T13:37:52.128Z",
+      "durationMs": 765,
+      "durationSource": "runner"
+    }
+  ],
+  "lease": {
+    "dseq": "29194094",
+    "bidCount": 1,
+    "provider": "akash1wcuwjuu59t22xp56a40jg3dty64xlyp4wkqcwd",
+    "price": {
+      "amount": "3401.347727000000000000",
+      "denom": "uact"
+    },
+    "uris": [
+      "m6ll95hgjtedn9hkplmc2123b0.ingress.tee.pro6000.hou.aes.akash.pub"
+    ],
+    "attestation": {
+      "teeType": "snp-gpu",
+      "nonceVerified": true,
+      "mockReport": false,
+      "certChainPresent": false,
+      "gpuReportCount": 1,
+      "reportSizeBytes": 1184
+    },
+    "probe": {
+      "attempts": [
+        {
+          "scheme": "https",
+          "url": "https://m6ll95hgjtedn9hkplmc2123b0.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-23T13:37:52.656Z",
+          "durationMs": 137,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://m6ll95hgjtedn9hkplmc2123b0.ingress.tee.pro6000.hou.aes.akash.pub/",
+          "at": "2026-10-23T13:37:52.793Z",
+          "durationMs": 99,
+          "status": 200,
+          "bodyMatched": true
+        }
+      ],
+      "servedBy": "http",
+      "url": "http://m6ll95hgjtedn9hkplmc2123b0.ingress.tee.pro6000.hou.aes.akash.pub/"
+    }
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 2,
+    "earlier": [
+      {
+        "atStep": "wait-for-bids",
+        "message": "no bids received (at least 1 required); timed out after 5m0s",
+        "startedAt": "2026-10-23T13:31:25.907Z",
+        "durationMs": 301108,
+        "dseq": "29194036"
+      }
+    ]
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/39961351138",
+    "sha": "a84bdfbacef4f05ba5a7441596c38abfe35258d5",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "-20408"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-30461"
+      }
+    ]
+  }
+}

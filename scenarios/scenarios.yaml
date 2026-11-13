@@ -2,8 +2,8 @@
 #
 # Scenario ids here drive the CI matrix; script/workflow.test.mjs fails if the two drift.
 #
-# Five scenarios. Each one answers a question nobody can currently answer about Akash
-# without deploying by hand. Adding a sixth needs a question the other five do not answer.
+# Six scenarios. Each one answers a question nobody can currently answer about Akash
+# without deploying by hand. Adding a seventh needs a question the other six do not answer.
 
 weather:
   # One lookback and one pass-rate definition, used by the runner, the site and any
@@ -173,3 +173,16 @@ scenarios:
       path: /
       expectStatus: 200
       expectBodyContains: "Welcome to nginx!"
+
+  - id: service-mesh
+    title: Service mesh
+    question: Can a workload reach another service in the same lease by DNS name?
+    sdl: sdl/mesh.yaml
+    bidSelect: cheapest
+    tags: [mesh]
+    probe:
+      path: /mesh.json
+      expectStatus: 200
+      # The token, not just "ok":true. Only the api service serves this string, so an
+      # answer from anything else, such as a captive-portal style catch-all, cannot pass.
+      expectBodyContains: '"upstream":"akash-mesh-9f41c2e7"'

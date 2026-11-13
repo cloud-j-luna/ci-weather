@@ -40,7 +40,7 @@ jobs:
       # run history proves it created.
       max-parallel: 1
       matrix:
-        scenario: ${{ inputs.adopt == '' && fromJSON('["web","gpu","persistent-storage","ip-lease","tee-snp-gpu"]') || fromJSON('["web"]') }}
+        scenario: ${{ inputs.adopt == '' && fromJSON('["web","gpu","persistent-storage","ip-lease","tee-snp-gpu","service-mesh"]') || fromJSON('["web"]') }}
     steps:
       - uses: actions/checkout@v4
 

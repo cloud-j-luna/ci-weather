@@ -7,6 +7,16 @@ import { loadConfig } from "./lib/config.mjs";
 
 const repoRoot = new URL("..", import.meta.url).pathname;
 
+// The service the probe reaches is the one with a global route; the others are only
+// reachable from inside the lease.
+function probedService(sdl, scenarioId) {
+  const entry = Object.entries(sdl.services).find(([, s]) =>
+    (s.expose ?? []).some((e) => (e.to ?? []).some((t) => t.global)),
+  );
+  if (!entry) throw new Error(`scenario "${scenarioId}" exposes no service globally`);
+  return entry;
+}
+
 describe("the CI matrix and the scenario registry", () => {
   it("list the same scenarios", () => {
     const workflow = readFileSync(join(repoRoot, ".github/workflows/canary.yml"), "utf8");
@@ -49,12 +59,27 @@ describe("the CI matrix and the scenario registry", () => {
     const config = loadConfig(repoRoot);
     for (const sc of config.scenarios.values()) {
       if (!sc.gpuCheck) continue;
-      const sdl = parseYaml(readFileSync(sc.sdlPath, "utf8"));
-      const args = sdl.services.app.args.join("\n");
+      const [name, service] = probedService(parseYaml(readFileSync(sc.sdlPath, "utf8")), sc.id);
       const written = `/srv${sc.gpuCheck.path}`;
       assert.ok(
-        args.includes(written),
-        `scenario "${sc.id}" points gpuCheck at ${sc.gpuCheck.path}, but its SDL never writes ${written}, so every run would 404`,
+        (service.args ?? []).join("\n").includes(written),
+        `scenario "${sc.id}" points gpuCheck at ${sc.gpuCheck.path}, but service "${name}" never writes ${written}, so every run would 404`,
+      );
+    }
+  });
+
+  // A scenario whose workload serves files it writes itself can have its probe path and
+  // its SDL drift apart silently. The row then 404s every day and reads as Akash being
+  // broken, which is the one thing this canary must never report falsely.
+  it("every scenario that serves files it writes itself writes the one the probe asks for", () => {
+    const config = loadConfig(repoRoot);
+    for (const sc of config.scenarios.values()) {
+      const [name, service] = probedService(parseYaml(readFileSync(sc.sdlPath, "utf8")), sc.id);
+      if (!service.args) continue;
+      const written = `/srv${sc.probe.path === "/" ? "/index.html" : sc.probe.path}`;
+      assert.ok(
+        service.args.join("\n").includes(written),
+        `scenario "${sc.id}" probes ${sc.probe.path}, but service "${name}" never writes ${written}`,
       );
     }
   });

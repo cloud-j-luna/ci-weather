@@ -1,0 +1,121 @@
+version: "2.0"
+services:
+  api:
+    image: python:3-alpine
+    # Only this service ever holds the token, which is what lets the probe tell a real
+    # hop to api from anything else answering on web's route. Exposed to web alone, so
+    # it has no public route.
+    command:
+      - sh
+      - -c
+    args:
+      - |-
+        mkdir -p /srv
+        printf 'akash-mesh-9f41c2e7' > /srv/index.html
+        cd /srv && exec python3 -m http.server 80
+    expose:
+      - port: 80
+        as: 80
+        to:
+          - service: web
+  web:
+    image: python:3-alpine
+    # The fetch of http://api:80/ by DNS name is the thing under test, so it must be
+    # able to fail without taking the container down: a container that refuses to start
+    # says nothing about whether DNS worked. Failure is served as {"ok":false,...} for
+    # the probe and for whoever reads the lease afterwards.
+    #
+    # The server starts FIRST and the fetch runs behind it. An earlier version resolved
+    # api before serving, which defeated the whole design: this row's probe budget is
+    # 30s, so a web that spends up to a minute resolving is simply a closed port for the
+    # probe's entire window, and the row reports "never served" rather than the DNS
+    # failure it exists to catch. Serving first makes the probe's own retry the wait,
+    # and mesh.json always holds the current verdict. os.replace publishes it, so the
+    # probe can never read a half-written file.
+    #
+    # There is deliberately no `dependencies:` stanza on this service. It would imply
+    # api is listening before web starts, which does not hold, and the retry loop is
+    # what actually absorbs the race.
+    #
+    # A literal block scalar, not a folded one, for the same reason as gpu.yaml: the
+    # shell and the heredoc terminator both need real newlines. There is no `set -e`,
+    # so a failed fetch still falls through to serving. json.dumps owns the escaping,
+    # so quotes and newlines in the error text cannot corrupt the file, and the error
+    # is cut to 200 characters so it cannot bloat it. The body must equal the token
+    # exactly, so a 200 from anything that is not api counts as a failure.
+    command:
+      - sh
+      - -c
+    args:
+      - |-
+        mkdir -p /srv
+        printf '{"ok":false,"error":"no attempt made yet"}' > /srv/mesh.json
+        python3 - <<'PY' &
+        import json, os, time, urllib.request
+        TOKEN = "akash-mesh-9f41c2e7"
+
+        def publish(result):
+            tmp = "/srv/.mesh.json.tmp"
+            with open(tmp, "w") as f:
+                f.write(json.dumps(result, separators=(",", ":")))
+            os.replace(tmp, "/srv/mesh.json")
+
+        deadline = time.monotonic() + 300
+        while True:
+            try:
+                body = urllib.request.urlopen("http://api:80/", timeout=3).read().decode("utf-8", "replace").strip()
+                if body == TOKEN:
+                    publish({"ok": True, "upstream": body})
+                    break
+                err = "unexpected body: " + body
+            except Exception as e:
+                err = type(e).__name__ + ": " + str(e)
+            publish({"ok": False, "error": err[:200]})
+            if time.monotonic() >= deadline:
+                break
+            time.sleep(1)
+        PY
+        cd /srv && exec python3 -m http.server 80
+    expose:
+      - port: 80
+        as: 80
+        to:
+          - global: true
+profiles:
+  compute:
+    api:
+      resources:
+        cpu:
+          units: 0.1
+        memory:
+          size: 256Mi
+        storage:
+          size: 256Mi
+    web:
+      resources:
+        cpu:
+          units: 0.1
+        memory:
+          size: 256Mi
+        storage:
+          size: 256Mi
+  placement:
+    dcloud:
+      attributes:
+        organization: overclock
+      pricing:
+        api:
+          denom: uact
+          amount: 10000
+        web:
+          denom: uact
+          amount: 10000
+deployment:
+  api:
+    dcloud:
+      profile: api
+      count: 1
+  web:
+    dcloud:
+      profile: web
+      count: 1
