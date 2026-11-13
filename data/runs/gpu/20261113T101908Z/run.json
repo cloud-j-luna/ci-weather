@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "scenario": "gpu",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-11-13T10:19:08.742Z",
+  "finishedAt": "2026-11-13T10:21:21.547Z",
+  "outcome": {
+    "kind": "passed"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29497767",
+        "closeTxHash": "71FEC8E6F190670C488191EB0A85865AF1501748AB3015B7BD9715D1DF7F512D"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-11-13T10:19:10.541Z",
+      "durationMs": 1120,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "A56FB82E13F1A8AA5D591F3CA7CC0EA05B60650DBB5B46ED9067DF73318E337E",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-11-13T10:19:11.661Z",
+      "durationMs": 10376,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-11-13T10:19:22.037Z",
+      "durationMs": 0,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-11-13T10:19:22.037Z",
+      "durationMs": 256,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "35FD19E77DEFCD986E3AD69225E15AEA1CD7E7759A4B48C6F4A7396E36477225",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-11-13T10:19:22.293Z",
+      "durationMs": 6578,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "completed",
+      "startedAt": "2026-11-13T10:19:28.871Z",
+      "durationMs": 101193,
+      "durationSource": "derived"
+    },
+    {
+      "step": "http-probe",
+      "result": "completed",
+      "startedAt": "2026-11-13T10:21:10.064Z",
+      "durationMs": 2847,
+      "durationSource": "runner"
+    },
+    {
+      "step": "gpu-check",
+      "result": "completed",
+      "startedAt": "2026-11-13T10:21:12.911Z",
+      "durationMs": 50,
+      "durationSource": "runner"
+    }
+  ],
+  "lease": {
+    "dseq": "29497767",
+    "bidCount": 1,
+    "provider": "akash172k755dd82elslzcgkgtk3ux5ytdqvx5wq2a98",
+    "price": {
+      "amount": "3182.464196000000000000",
+      "denom": "uact"
+    },
+    "uris": [
+      "7k7tli66ntdlh3ic22g6k10358.ingress.a100.hou2.dd.akash.pub"
+    ],
+    "providerAudited": true,
+    "providerRegion": "na-us-southwest",
+    "providerOrg": "overclock",
+    "gpu": {
+      "url": "https://7k7tli66ntdlh3ic22g6k10358.ingress.a100.hou2.dd.akash.pub/gpu.csv",
+      "deviceCount": 1,
+      "devices": [
+        {
+          "name": "NVIDIA A100-SXM4-80GB",
+          "driverVersion": "595.91.07",
+          "memoryTotalMiB": 81920,
+          "computeCapability": "8.0"
+        }
+      ],
+      "attempts": [
+        {
+          "at": "2026-11-13T10:21:12.911Z",
+          "status": 200,
+          "durationMs": 50
+        }
+      ]
+    },
+    "probe": {
+      "attempts": [
+        {
+          "scheme": "https",
+          "url": "https://7k7tli66ntdlh3ic22g6k10358.ingress.a100.hou2.dd.akash.pub/",
+          "at": "2026-11-13T10:21:10.936Z",
+          "durationMs": 1973,
+          "status": 200,
+          "bodyMatched": true
+        }
+      ],
+      "servedBy": "https",
+      "url": "https://7k7tli66ntdlh3ic22g6k10358.ingress.a100.hou2.dd.akash.pub/"
+    }
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 1
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/43408083364",
+    "sha": "3d13cfce4f43c86fe625a72bce7ba0214846351d",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "-60466"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-20399"
+      }
+    ]
+  }
+}
