@@ -1,0 +1,2 @@
+{"workflow":"close","id":"06d33958cb6b7ae7","step":"close-deployment","result":"completed","errors":[],"txs":[{"hash":"16362844AFF6935E92CDE9F5A316CE232C50CCF9F5F8ACBD36FFC1F63FAE5D7E","code":0}],"outputs":{"dseq":"29526988","owner":"akash1r6pereplxg0j2cnnnyhqjmmkn3p3vvxfqd7ur8"}}
+{"workflow":"close","id":"06d33958cb6b7ae7","step":"display-result","result":"completed","errors":[],"txs":[],"outputs":{"text":"Deployment closed.\n  DSEQ: 29526988"}}
