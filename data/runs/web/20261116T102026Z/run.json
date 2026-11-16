@@ -1,0 +1,390 @@
+{
+  "schemaVersion": 1,
+  "scenario": "web",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-11-16T10:20:26.592Z",
+  "finishedAt": "2026-11-16T10:21:42.644Z",
+  "outcome": {
+    "kind": "failed",
+    "atStep": "http-probe",
+    "message": "no scheme served the workload after 34 attempts over 28s: https fetch failed (x17); http returned 404 (x17)"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29541514",
+        "closeTxHash": "4FBD81E4C8A8AEDB4213C7CA45D6EE92292663E629554A7E0DC6EF2188028967"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-11-16T10:20:28.716Z",
+      "durationMs": 1303,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "9CB2E86D52FF22BE0CFB7AADC8EF6852A58A532448FE46B49C16C5C3997528D5",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-11-16T10:20:30.019Z",
+      "durationMs": 16756,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-11-16T10:20:46.775Z",
+      "durationMs": 0,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-11-16T10:20:46.775Z",
+      "durationMs": 408,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "87BE01B68886C372A6B8DC8ED40DB42FC0DD4D82CC969AAFD2D56486DCA36B97",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-11-16T10:20:47.183Z",
+      "durationMs": 11480,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "completed",
+      "startedAt": "2026-11-16T10:20:58.663Z",
+      "durationMs": 264,
+      "durationSource": "derived"
+    },
+    {
+      "step": "http-probe",
+      "result": "failed",
+      "startedAt": "2026-11-16T10:20:58.927Z",
+      "durationMs": 30749,
+      "durationSource": "runner",
+      "errors": [
+        "no scheme served the workload after 34 attempts over 28s: https fetch failed (x17); http returned 404 (x17)"
+      ]
+    }
+  ],
+  "lease": {
+    "dseq": "29541514",
+    "bidCount": 4,
+    "provider": "akash15tl6v6gd0nte0syyxnv57zmmspgju4c3xfmdhk",
+    "price": {
+      "amount": "0.965321000000000000",
+      "denom": "uact"
+    },
+    "uris": [
+      "gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub"
+    ],
+    "providerAudited": true,
+    "providerRegion": "na-us-west",
+    "providerOrg": "overclock",
+    "probe": {
+      "attempts": [
+        {
+          "scheme": "https",
+          "url": "https://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:20:59.560Z",
+          "durationMs": 61,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:20:59.621Z",
+          "durationMs": 31,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:20:59.905Z",
+          "durationMs": 22,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:20:59.927Z",
+          "durationMs": 3,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:00.430Z",
+          "durationMs": 24,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:00.454Z",
+          "durationMs": 2,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:01.456Z",
+          "durationMs": 21,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:01.477Z",
+          "durationMs": 2,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:03.481Z",
+          "durationMs": 10,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:03.491Z",
+          "durationMs": 2,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:05.493Z",
+          "durationMs": 11,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:05.504Z",
+          "durationMs": 2,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:07.506Z",
+          "durationMs": 22,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:07.528Z",
+          "durationMs": 2,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:09.531Z",
+          "durationMs": 10,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:09.541Z",
+          "durationMs": 3,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:11.543Z",
+          "durationMs": 12,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:11.555Z",
+          "durationMs": 3,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:13.558Z",
+          "durationMs": 22,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:13.580Z",
+          "durationMs": 2,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:15.582Z",
+          "durationMs": 23,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:15.605Z",
+          "durationMs": 2,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:17.607Z",
+          "durationMs": 9,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:17.616Z",
+          "durationMs": 1,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:19.617Z",
+          "durationMs": 10,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:19.627Z",
+          "durationMs": 2,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:21.629Z",
+          "durationMs": 10,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:21.639Z",
+          "durationMs": 2,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:23.641Z",
+          "durationMs": 10,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:23.651Z",
+          "durationMs": 2,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:25.652Z",
+          "durationMs": 9,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:25.661Z",
+          "durationMs": 3,
+          "status": 404,
+          "bodyMatched": false
+        },
+        {
+          "scheme": "https",
+          "url": "https://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:27.664Z",
+          "durationMs": 10,
+          "error": "fetch failed"
+        },
+        {
+          "scheme": "http",
+          "url": "http://gprf0lscil9tf1sds9srb65vuc.ingress.hurricane.akash.pub/",
+          "at": "2026-11-16T10:21:27.674Z",
+          "durationMs": 2,
+          "status": 404,
+          "bodyMatched": false
+        }
+      ]
+    }
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 1
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/43847899849",
+    "sha": "1f586acea29c18db50851439416dc3058ae41ef4",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "-7"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-22580"
+      }
+    ]
+  }
+}
