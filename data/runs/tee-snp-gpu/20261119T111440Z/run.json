@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "scenario": "tee-snp-gpu",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-11-19T11:14:40.220Z",
+  "finishedAt": "2026-11-19T11:15:30.981Z",
+  "outcome": {
+    "kind": "failed",
+    "atStep": "attestation",
+    "message": "akt could not attest the lease: request lease attestation: rpc error: code = Internal desc = attestation quote: proxy to attestation sidecar: the server is currently unable to handle the request (post pods https:web-7b4f658885-mvr79:8790)"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29585686",
+        "closeTxHash": "6345741C4922C9CE17DE3607DEDCFC86636E8C04410C7C1526584407F5F77A70"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-11-19T11:14:41.742Z",
+      "durationMs": 1074,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "C04B11DA0F7904D8EC0A9A808EF880C08302F3E59CEF86DE64F316B7DAA64354",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-11-19T11:14:42.816Z",
+      "durationMs": 10404,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-11-19T11:14:53.220Z",
+      "durationMs": 0,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-11-19T11:14:53.220Z",
+      "durationMs": 244,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "8BDB251AB4A789D23AB232E6412F2EBFA181E118752BD1D8EC09355BC8F6694F",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-11-19T11:14:53.464Z",
+      "durationMs": 5724,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "completed",
+      "startedAt": "2026-11-19T11:14:59.188Z",
+      "durationMs": 25463,
+      "durationSource": "derived"
+    },
+    {
+      "step": "attestation",
+      "result": "failed",
+      "startedAt": "2026-11-19T11:15:24.651Z",
+      "durationMs": 898,
+      "durationSource": "runner",
+      "errors": [
+        "akt could not attest the lease: request lease attestation: rpc error: code = Internal desc = attestation quote: proxy to attestation sidecar: the server is currently unable to handle the request (post pods https:web-7b4f658885-mvr79:8790)"
+      ]
+    }
+  ],
+  "lease": {
+    "dseq": "29585686",
+    "bidCount": 1,
+    "provider": "akash1wcuwjuu59t22xp56a40jg3dty64xlyp4wkqcwd",
+    "price": {
+      "amount": "3401.347727000000000000",
+      "denom": "uact"
+    },
+    "uris": [
+      "h6i9309srdd5ff729es97d9l8k.ingress.tee.pro6000.hou.aes.akash.pub"
+    ],
+    "probe": null
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 1
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/44509823339",
+    "sha": "a4fdbea937a09545f60faf4b00136aac39d97597",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "-17006"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-20334"
+      }
+    ]
+  }
+}
