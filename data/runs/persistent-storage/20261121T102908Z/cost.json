@@ -1,0 +1,27 @@
+{
+  "account": "akash1r6pereplxg0j2cnnnyhqjmmkn3p3vvxfqd7ur8",
+  "before": [
+    {
+      "denom": "uact",
+      "amount": "14806095"
+    },
+    {
+      "denom": "uakt",
+      "amount": "495583735"
+    }
+  ],
+  "after": [
+    {
+      "denom": "uact",
+      "amount": "14806090"
+    },
+    {
+      "denom": "uakt",
+      "amount": "495559177"
+    }
+  ],
+  "delta": {
+    "uact": "-5",
+    "uakt": "-24558"
+  }
+}

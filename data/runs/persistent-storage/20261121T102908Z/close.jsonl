@@ -1,0 +1,3 @@
+{"workflow":"close","id":"198374abb5acdc8c","step":"close-deployment","result":"error","errors":["transaction failed: code 32 (codespace sdk), tx hash : "],"txs":[]}
+{"workflow":"close","id":"2de138238362be4a","step":"close-deployment","result":"completed","errors":[],"txs":[{"hash":"11D9935749026DCF77F24DAF7913A18B1F6359061590A5FB4A016E0CBCEF2D1B","code":0}],"outputs":{"dseq":"29614390","owner":"akash1r6pereplxg0j2cnnnyhqjmmkn3p3vvxfqd7ur8"}}
+{"workflow":"close","id":"2de138238362be4a","step":"display-result","result":"completed","errors":[],"txs":[],"outputs":{"text":"Deployment closed.\n  DSEQ: 29614390"}}
