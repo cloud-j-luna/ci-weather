@@ -1,0 +1,3 @@
+workflow "deploy" failed: deployment did not become ready within 8m0s: query lease status: Get "https://provider.hurricane.akash.pub:8443/lease/29629106/1/1/status": context deadline exceeded
+deployment DSEQ 29629106 with provider akash15tl6v6gd0nte0syyxnv57zmmspgju4c3xfmdhk remains open; escrow may continue to be consumed.
+explicit cleanup: akt close 29629106
