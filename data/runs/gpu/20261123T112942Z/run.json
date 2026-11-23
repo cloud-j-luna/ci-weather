@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "scenario": "gpu",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-11-23T11:29:42.537Z",
+  "finishedAt": "2026-11-23T11:38:22.786Z",
+  "outcome": {
+    "kind": "failed",
+    "atStep": "wait-for-ready",
+    "message": "deployment did not become ready within 8m0s: query lease status: Get \"https://provider.a100.hou2.dd.akash.pub:8443/lease/29644225/1/1/status\": context deadline exceeded"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29644225",
+        "closeTxHash": "7D7BC29AB9149A33999861AA6BD0F1167BD279222570FF92C84B9BDB6216B6D5"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-11-23T11:29:44.361Z",
+      "durationMs": 1307,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "BBFA75EF9A55137E36F393B23226A7EA329D7177CC59FC456679A36DCAD40BB0",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-11-23T11:29:45.668Z",
+      "durationMs": 15620,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-11-23T11:30:01.288Z",
+      "durationMs": 0,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-11-23T11:30:01.288Z",
+      "durationMs": 420,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "F939FB2379B4E534FF1273796C6EEE9C1D915AAD8386A696C673DBE4C53A5FA4",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-11-23T11:30:01.708Z",
+      "durationMs": 11464,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "failed",
+      "startedAt": "2026-11-23T11:30:13.172Z",
+      "durationMs": 480009,
+      "durationSource": "derived",
+      "errors": [
+        "deployment did not become ready within 8m0s: query lease status: Get \"https://provider.a100.hou2.dd.akash.pub:8443/lease/29644225/1/1/status\": context deadline exceeded"
+      ]
+    }
+  ],
+  "lease": {
+    "dseq": "29644225",
+    "bidCount": 1,
+    "provider": "akash172k755dd82elslzcgkgtk3ux5ytdqvx5wq2a98",
+    "price": {
+      "amount": "3182.464196000000000000",
+      "denom": "uact"
+    },
+    "uris": [],
+    "providerAudited": true,
+    "providerRegion": "na-us-southwest",
+    "providerOrg": "overclock",
+    "probe": null
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 1
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/45165538184",
+    "sha": "73d26201e3f4a0587c560179cb7538c2109ca237",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "-264144"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-20403"
+      }
+    ]
+  }
+}

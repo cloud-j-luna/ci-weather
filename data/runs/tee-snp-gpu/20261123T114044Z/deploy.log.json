@@ -1,0 +1,50 @@
+[
+  {
+    "ts": "2026-11-23T11:41:15.544326428Z",
+    "type": "workflow",
+    "action": "deploy",
+    "workflow_id": "ac2ee2ec1eea843d",
+    "step": 4,
+    "step_name": "send-manifest",
+    "error": "submit manifest: remote server returned 404",
+    "status": "failed"
+  },
+  {
+    "ts": "2026-11-23T11:41:03.968034644Z",
+    "type": "workflow",
+    "action": "deploy",
+    "tx_hash": "BF89CD42AF1D52821D7EACBAF46A7E36FD8A3068E811711BA7B12661FBD1A9DD",
+    "workflow_id": "ac2ee2ec1eea843d",
+    "step": 3,
+    "step_name": "create-lease",
+    "status": "success"
+  },
+  {
+    "ts": "2026-11-23T11:41:03.582376201Z",
+    "type": "workflow",
+    "action": "deploy",
+    "workflow_id": "ac2ee2ec1eea843d",
+    "step": 2,
+    "step_name": "select-bid",
+    "status": "success"
+  },
+  {
+    "ts": "2026-11-23T11:41:03.582234808Z",
+    "type": "workflow",
+    "action": "deploy",
+    "workflow_id": "ac2ee2ec1eea843d",
+    "step": 1,
+    "step_name": "wait-for-bids",
+    "status": "success"
+  },
+  {
+    "ts": "2026-11-23T11:40:47.95725819Z",
+    "type": "workflow",
+    "action": "deploy",
+    "tx_hash": "805EBF084012D3E2C7AC8BA58931324C77CB91C2888374F7C95B0835A78C7346",
+    "workflow_id": "ac2ee2ec1eea843d",
+    "step": 0,
+    "step_name": "create-deployment",
+    "status": "success"
+  }
+]
