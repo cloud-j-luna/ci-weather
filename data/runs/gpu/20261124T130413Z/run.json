@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "scenario": "gpu",
+  "network": {
+    "name": "mainnet",
+    "chainId": "akashnet-2"
+  },
+  "startedAt": "2026-11-24T13:04:13.456Z",
+  "finishedAt": "2026-11-24T13:13:06.865Z",
+  "outcome": {
+    "kind": "failed",
+    "atStep": "wait-for-ready",
+    "message": "deployment did not become ready within 8m0s: query lease status: remote server returned 404"
+  },
+  "escrow": {
+    "kind": "returned",
+    "closed": [
+      {
+        "dseq": "29659821",
+        "closeTxHash": "C901E54EC022354BE30F788F0BE2A58D3FE94392840D47EAE9A41C93D233173F"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "create-deployment",
+      "result": "completed",
+      "startedAt": "2026-11-24T13:04:14.572Z",
+      "durationMs": 1157,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "4A6A3A6C11E9AF81620BF5F4091148CF76A3D57F144A3B64CA5FC390A1639CD3",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "wait-for-bids",
+      "result": "completed",
+      "startedAt": "2026-11-24T13:04:15.729Z",
+      "durationMs": 30382,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "select-bid",
+      "result": "completed",
+      "startedAt": "2026-11-24T13:04:46.111Z",
+      "durationMs": 0,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "create-lease",
+      "result": "completed",
+      "startedAt": "2026-11-24T13:04:46.111Z",
+      "durationMs": 252,
+      "durationSource": "akt-log",
+      "txs": [
+        {
+          "hash": "FFB610612D0545C623CF2F0EEEA5EDE33F44377A83B0A057250F45E19941E26D",
+          "code": 0
+        }
+      ]
+    },
+    {
+      "step": "send-manifest",
+      "result": "completed",
+      "startedAt": "2026-11-24T13:04:46.363Z",
+      "durationMs": 11341,
+      "durationSource": "akt-log"
+    },
+    {
+      "step": "wait-for-ready",
+      "result": "failed",
+      "startedAt": "2026-11-24T13:04:57.704Z",
+      "durationMs": 480016,
+      "durationSource": "derived",
+      "errors": [
+        "deployment did not become ready within 8m0s: query lease status: remote server returned 404"
+      ]
+    }
+  ],
+  "lease": {
+    "dseq": "29659821",
+    "bidCount": 1,
+    "provider": "akash172k755dd82elslzcgkgtk3ux5ytdqvx5wq2a98",
+    "price": {
+      "amount": "3182.464196000000000000",
+      "denom": "uact"
+    },
+    "uris": [],
+    "providerAudited": true,
+    "providerRegion": "na-us-southwest",
+    "providerOrg": "overclock",
+    "probe": null
+  },
+  "reap": {
+    "closedDseqs": []
+  },
+  "attempts": {
+    "count": 1
+  },
+  "ci": {
+    "runUrl": "https://github.com/cloud-j-luna/ci-weather/actions/runs/45399455430",
+    "sha": "01022a6c7ce04a0731f203b05dc4901673e161da",
+    "attempt": 1
+  },
+  "akt": {
+    "version": "1.0.1"
+  },
+  "cost": {
+    "delta": [
+      {
+        "denom": "uact",
+        "amount": "-264144"
+      },
+      {
+        "denom": "uakt",
+        "amount": "-20403"
+      }
+    ]
+  }
+}
